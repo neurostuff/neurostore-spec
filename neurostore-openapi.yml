@@ -127,6 +127,7 @@ paths:
               $ref: '#/components/schemas/study'
       tags:
         - studies
+      description: Push a list of Studies
   /analyses/:
     get:
       summary: Your GET endpoint
@@ -143,7 +144,7 @@ paths:
                   anyOf:
                     - $ref: '#/components/schemas/analysis'
                     - $ref: '#/components/schemas/id-only'
-      description: List all analyses performed across studies and datasets
+      description: List all analyses performed across studies.
       parameters:
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
@@ -163,6 +164,7 @@ paths:
               $ref: '#/components/schemas/analysis'
       tags:
         - analyses
+      description: Push a list of analyses performed across studies.
   '/analyses/{id}':
     parameters:
       - schema:
@@ -185,7 +187,7 @@ paths:
                   - $ref: '#/components/schemas/id-only'
         '404':
           $ref: '#/components/responses/404'
-      description: Information pertaining to a particular analysis within a study/dataset
+      description: Information pertaining to a particular analysis within a study.
       parameters:
         - $ref: '#/components/parameters/nested'
     put:
@@ -202,6 +204,7 @@ paths:
               $ref: '#/components/schemas/analysis'
       tags:
         - analyses
+      description: Create or update an existing analysis
   '/points/{id}':
     parameters:
       - schema:
@@ -240,6 +243,7 @@ paths:
               $ref: '#/components/schemas/point'
       tags:
         - points
+      description: Update/Create a particular MRI coordinate
   '/images/{id}':
     parameters:
       - schema:
@@ -313,6 +317,7 @@ paths:
               $ref: '#/components/schemas/image'
       tags:
         - images
+      description: Push a list of Images
   '/conditions/{id}':
     parameters:
       - schema:
@@ -335,7 +340,7 @@ paths:
                   - $ref: '#/components/schemas/id-only'
         '404':
           $ref: '#/components/responses/404'
-      description: I do not rightly know (?)
+      description: 'retrieve conditions that can be used in contrasts (e.g., 2-back - 1-back)'
     put:
       summary: ''
       responses:
@@ -351,6 +356,7 @@ paths:
         description: ''
       tags:
         - conditions
+      description: 'place conditions that can be used in contrasts (e.g., 2-back - 1-back)'
 components:
   schemas:
     dataset:
