@@ -420,7 +420,7 @@ components:
               items:
                 anyOf:
                   - $ref: '#/components/schemas/analysis'
-                  - $ref: '#/components/schemas/id-only'
+                  - $ref: '#/components/schemas/read-only'
           description: URL(s) to Analyses associated with the study
         doi:
           type: string
