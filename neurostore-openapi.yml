@@ -114,7 +114,6 @@ paths:
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/nested'
-      operationId: ''
     parameters: []
     post:
       summary: ''
@@ -364,6 +363,30 @@ paths:
       tags:
         - conditions
       description: 'place conditions that can be used in contrasts (e.g., 2-back - 1-back)'
+  /datasets/:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: '#/components/schemas/dataset'
+                    - $ref: '#/components/schemas/read-only'
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dataset'
 components:
   schemas:
     dataset:
@@ -375,14 +398,19 @@ components:
         name:
           type: string
           description: ''
+          nullable: true
         description:
           type: string
+          nullable: true
         publication:
           type: string
+          nullable: true
         doi:
           type: string
+          nullable: true
         pmid:
           type: string
+          nullable: true
         nimads_data:
           description: ''
           type: object
@@ -393,15 +421,11 @@ components:
                 $ref: '#/components/schemas/study'
         user:
           type: string
+          nullable: true
           readOnly: true
-        analysis:
-          type: array
-          items:
-            $ref: '#/components/schemas/analysis'
       required:
         - name
         - nimads_data
-        - analysis
     study:
       description: elements of a study/published paper
       type: object
@@ -645,6 +669,7 @@ components:
           format: date-time
           example: '2021-01-16T20:50:38.009318+00:00'
           description: time the resource was created on the database
+          readOnly: true
     point-value:
       title: point-value
       type: object
