@@ -393,6 +393,7 @@ components:
                 $ref: '#/components/schemas/study'
         user:
           type: string
+          readOnly: true
         analysis:
           type: array
           items:
@@ -400,7 +401,6 @@ components:
       required:
         - name
         - nimads_data
-        - user
         - analysis
     study:
       description: elements of a study/published paper
