@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: neurostore draft api
+  title: neurostore api
   version: '1.0'
   description: Query dataset and meta-analyses
 servers:
@@ -66,7 +66,6 @@ paths:
                 anyOf:
                   - $ref: '#/components/schemas/study'
                   - $ref: '#/components/schemas/read-only'
-                  - $ref: '#/components/schemas/study-read-only'
               examples: {}
         '404':
           $ref: '#/components/responses/404'
@@ -106,7 +105,6 @@ paths:
                   anyOf:
                     - $ref: '#/components/schemas/study'
                     - $ref: '#/components/schemas/read-only'
-                    - $ref: '#/components/schemas/study-read-only'
               examples: {}
       description: List all available studies
       parameters:
@@ -232,7 +230,6 @@ paths:
                 anyOf:
                   - $ref: '#/components/schemas/point'
                   - $ref: '#/components/schemas/read-only'
-                  - $ref: '#/components/schemas/point-read-only'
               examples: {}
         '404':
           description: Not Found
@@ -272,7 +269,6 @@ paths:
                 anyOf:
                   - $ref: '#/components/schemas/image'
                   - $ref: '#/components/schemas/read-only'
-                  - $ref: '#/components/schemas/image-read-only'
         '404':
           $ref: '#/components/responses/404'
       description: Retrieve information about a particular image from an analysis
@@ -307,7 +303,6 @@ paths:
                   anyOf:
                     - $ref: '#/components/schemas/image'
                     - $ref: '#/components/schemas/read-only'
-                    - $ref: '#/components/schemas/image-read-only'
       description: Retrieve and list all images
       parameters:
         - $ref: '#/components/parameters/search'
@@ -425,41 +420,41 @@ components:
             - type: array
               items:
                 $ref: '#/components/schemas/analysis'
+            - type: array
+              behavior: Read Only
+              items:
+                anyOf:
+                  - $ref: '#/components/schemas/analysis'
+                  - $ref: '#/components/schemas/read-only'
           description: URL(s) to Analyses associated with the study
         doi:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
           example: 10.1016/S0926-6410(97)00020-7
           description: digital object identifier of the study
         name:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
           example: 'Functional magnetic resonance imaging of category-specific cortical activation: evidence for semantic maps.'
           description: title of the study
         metadata:
           description: other metadata associated with the study
-          type:
-            - object
-            - 'null'
+          type: object
           nullable: true
         description:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
         publication:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
         pmid:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
     analysis:
       title: analysis
       type: object
       x-examples: {}
+      description: ''
       properties:
         condition:
           anyOf:
@@ -484,10 +479,9 @@ components:
                 $ref: '#/components/schemas/image'
           description: URL(s) pointing towards image endpoints
         name:
-          type:
-            - string
-            - 'null'
+          type: string
           example: '"20356"'
+          nullable: true
         point:
           anyOf:
             - type: string
@@ -507,9 +501,11 @@ components:
           items:
             type: number
         description:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
+        study:
+          type: string
+          readOnly: true
     point:
       title: point
       type: object
@@ -538,14 +534,22 @@ components:
           type: string
         x:
           type: number
+          writeOnly: true
         'y':
           type: number
+          writeOnly: true
         z:
           type: number
+          writeOnly: true
         value:
           type: array
           items:
             type: number
+        analysis:
+          type: string
+          format: uri
+          example: 'http://neurostore.org/api/analyses/6kwPw6p79Ljm'
+          readOnly: true
     image:
       title: image
       type: object
@@ -553,41 +557,44 @@ components:
       x-examples: {}
       properties:
         metadata:
-          type:
-            - object
-            - 'null'
+          type: object
+          nullable: true
           description: metadata from image
         url:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
           format: uri
           example: 'https://neurovault.org/media/images/4778/Positive_RPEs_zstat.nii.gz'
           description: URL to image file
         filename:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
           example: Positive_RPEs_zstat.nii.gz
           description: name of the image file
         space:
-          type:
-            - string
-            - 'null'
-          example: unknown
+          type: string
+          nullable: true
+          example: TAL
           description: the template space the image is in
         value_type:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
           example: Z
           description: The values the image represents
         analysis_name:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
           example: Positive RPEs
           description: name of the analysis
+        analysis:
+          type: string
+          format: uri
+          example: 'http://neurostore.org/api/analyses/7UvrsaALJU9g'
+          readOnly: true
+        add_date:
+          type: string
+          format: date-time
+          readOnly: true
     condition:
       title: condition
       type: object
@@ -595,14 +602,12 @@ components:
       description: ''
       properties:
         name:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
           description: condition name
         description:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
           description: condition description
     json-ld:
       title: json-ld
@@ -638,69 +643,16 @@ components:
           format: date-time
           example: '2021-01-16T20:50:38.009318+00:00'
           description: time the resource was created on the database
-    image-read-only:
-      title: image-read-only
-      type: object
-      properties:
-        analysis:
-          type: string
-          format: uri
-          example: 'http://neurostore.org/api/analyses/7UvrsaALJU9g'
-          description: URL to associated analysis this image is derived from
-        add_date:
-          type: string
-          format: date-time
     point-value:
       title: point-value
       type: object
       properties:
         kind:
-          type:
-            - string
-            - 'null'
-        value:
-          type:
-            - number
-            - 'null'
-    point-read-only:
-      title: point-read-only
-      type: object
-      properties:
-        analysis:
           type: string
-          format: uri
-          example: 'http://neurostore.org/api/analyses/6kwPw6p79Ljm'
+          nullable: true
         value:
-          type: array
-          items:
-            type: number
-    analysis-read-only:
-      title: analysis-read-only
-      type: object
-      properties:
-        study:
-          type: string
-          format: uri
-          example: 'http://neurostore.org/api/studies/3SLFqPmGJVsC'
-    study-read-only:
-      title: study-read-only
-      type: object
-      properties:
-        analysis:
-          anyOf:
-            - type: string
-              format: uri
-              example: 'http://neurostore.org/api/analyses/6kwPw6p79Ljm'
-            - type: array
-              items:
-                type: string
-                format: uri
-            - type: array
-              items:
-                anyOf:
-                  - $ref: '#/components/schemas/analysis'
-                  - $ref: '#/components/schemas/read-only'
-          description: URL(s) to Analyses associated with the study
+          type: number
+          nullable: true
   responses:
     '404':
       description: Example response
