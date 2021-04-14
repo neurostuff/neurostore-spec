@@ -421,7 +421,6 @@ components:
               items:
                 $ref: '#/components/schemas/analysis'
             - type: array
-              behavior: Read Only
               items:
                 anyOf:
                   - $ref: '#/components/schemas/analysis'
