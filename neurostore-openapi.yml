@@ -25,7 +25,7 @@ paths:
               schema:
                 anyOf:
                   - $ref: '#/components/schemas/dataset'
-                  - $ref: '#/components/schemas/id-only'
+                  - $ref: '#/components/schemas/read-only'
               examples: {}
         '404':
           $ref: '#/components/responses/404'
@@ -65,7 +65,7 @@ paths:
               schema:
                 anyOf:
                   - $ref: '#/components/schemas/study'
-                  - $ref: '#/components/schemas/id-only'
+                  - $ref: '#/components/schemas/read-only'
               examples: {}
         '404':
           $ref: '#/components/responses/404'
@@ -104,7 +104,7 @@ paths:
                 items:
                   anyOf:
                     - $ref: '#/components/schemas/study'
-                    - $ref: '#/components/schemas/id-only'
+                    - $ref: '#/components/schemas/read-only'
               examples: {}
       description: List all available studies
       parameters:
@@ -124,7 +124,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/study'
+              type: array
+              items:
+                $ref: '#/components/schemas/study'
       tags:
         - studies
       description: Push a list of Studies
@@ -143,7 +145,7 @@ paths:
                 items:
                   anyOf:
                     - $ref: '#/components/schemas/analysis'
-                    - $ref: '#/components/schemas/id-only'
+                    - $ref: '#/components/schemas/read-only'
       description: List all analyses performed across studies.
       parameters:
         - $ref: '#/components/parameters/search'
@@ -161,7 +163,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/analysis'
+              type: array
+              items:
+                $ref: '#/components/schemas/analysis'
       tags:
         - analyses
       description: Push a list of analyses performed across studies.
@@ -184,7 +188,7 @@ paths:
               schema:
                 anyOf:
                   - $ref: '#/components/schemas/analysis'
-                  - $ref: '#/components/schemas/id-only'
+                  - $ref: '#/components/schemas/read-only'
         '404':
           $ref: '#/components/responses/404'
       description: Information pertaining to a particular analysis within a study.
@@ -224,7 +228,7 @@ paths:
               schema:
                 anyOf:
                   - $ref: '#/components/schemas/point'
-                  - $ref: '#/components/schemas/id-only'
+                  - $ref: '#/components/schemas/read-only'
               examples: {}
         '404':
           description: Not Found
@@ -263,7 +267,7 @@ paths:
               schema:
                 anyOf:
                   - $ref: '#/components/schemas/image'
-                  - $ref: '#/components/schemas/id-only'
+                  - $ref: '#/components/schemas/read-only'
         '404':
           $ref: '#/components/responses/404'
       description: Retrieve information about a particular image from an analysis
@@ -297,7 +301,7 @@ paths:
                 items:
                   anyOf:
                     - $ref: '#/components/schemas/image'
-                    - $ref: '#/components/schemas/id-only'
+                    - $ref: '#/components/schemas/read-only'
       description: Retrieve and list all images
       parameters:
         - $ref: '#/components/parameters/search'
@@ -314,7 +318,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/image'
+              type: array
+              items:
+                $ref: '#/components/schemas/image'
       tags:
         - images
       description: Push a list of Images
@@ -337,7 +343,7 @@ paths:
               schema:
                 anyOf:
                   - $ref: '#/components/schemas/condition'
-                  - $ref: '#/components/schemas/id-only'
+                  - $ref: '#/components/schemas/read-only'
         '404':
           $ref: '#/components/responses/404'
       description: 'retrieve conditions that can be used in contrasts (e.g., 2-back - 1-back)'
@@ -376,17 +382,25 @@ components:
           type: string
         pmid:
           type: string
-        public:
-          description: ''
-          type: boolean
         nimads_data:
-          format: date
           description: ''
           type: object
-        user_id:
-          type: string
+          properties:
+            dataset:
+              type: array
+              items:
+                $ref: '#/components/schemas/study'
         user:
           type: string
+        analysis:
+          type: array
+          items:
+            $ref: '#/components/schemas/analysis'
+      required:
+        - name
+        - nimads_data
+        - user
+        - analysis
     study:
       description: elements of a study/published paper
       type: object
@@ -408,11 +422,6 @@ components:
                   - $ref: '#/components/schemas/analysis'
                   - $ref: '#/components/schemas/id-only'
           description: URL(s) to Analyses associated with the study
-        created_at:
-          type: string
-          format: date-time
-          example: '2021-01-14T03:33:07.996179+00:00'
-          description: The time this study was ingested into the database
         doi:
           type: string
           example: 10.1016/S0926-6410(97)00020-7
@@ -437,11 +446,6 @@ components:
                 type: string
             - type: string
           description: 'term that describes '
-        created_at:
-          type: string
-          format: date-time
-          example: '2021-01-14T03:33:07.996179+00:00'
-          description: the time this analysis entry was added to the database.
         image:
           anyOf:
             - type: array
@@ -485,6 +489,7 @@ components:
       title: point
       type: object
       x-examples: {}
+      description: a coordinate in the brain
       properties:
         analysis:
           type: string
@@ -500,11 +505,6 @@ components:
             type: number
             format: float
             example: 63
-        created_at:
-          type: string
-          format: date-time
-          description: time point was ingested into the database
-          example: '2021-01-16T20:50:38.009318+00:00'
         space:
           type: string
           example: UNKNOWN
@@ -517,7 +517,6 @@ components:
           description: I do not know what this is supposed to represent?
           items:
             type: string
-      description: a coordinate in the brain
     image:
       title: image
       type: object
@@ -598,14 +597,19 @@ components:
           type: string
           description: One of the NiMADS data types
           example: Study
-    id-only:
-      title: id-only
+    read-only:
+      title: read-only
       type: object
       properties:
         id:
           type: string
           format: uri
           description: URI specifying the location of this resource
+        created_at:
+          type: string
+          format: date-time
+          example: '2021-01-16T20:50:38.009318+00:00'
+          description: time the resource was created on the database
   responses:
     '404':
       description: Example response
