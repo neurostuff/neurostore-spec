@@ -160,7 +160,7 @@ paths:
         - $ref: '#/components/parameters/page_size'
     parameters: []
     post:
-      summary: Post/create an analysis
+      summary: POST/create an analysis
       responses:
         '200':
           description: OK
@@ -454,7 +454,6 @@ components:
             - description: id of the analysis (when nested=false)
               items:
                 type: string
-                format: uri
             - description: analyses representations (for PUT/POST)
               items:
                 $ref: '#/components/schemas/analysis'
@@ -507,12 +506,14 @@ components:
             - allOf:
                 - $ref: '#/components/schemas/condition'
                 - $ref: '#/components/schemas/read-only'
-          description: 'term that describes '
+          description: 'array of conditions (e.g., 2-back, memory, etc.) that must be the same length as weight.'
         image:
           anyOf:
             - items:
                 type: string
-                format: uri
+                minLength: 12
+                maxLength: 12
+                example: 38jobTomPDqt
             - items:
                 $ref: '#/components/schemas/image'
           description: URL(s) pointing towards image endpoints
@@ -525,7 +526,9 @@ components:
           anyOf:
             - items:
                 type: string
-                format: uri
+                minLength: 12
+                maxLength: 12
+                example: 38jobTomPDqt
             - items:
                 $ref: '#/components/schemas/point'
           type: array
@@ -539,6 +542,9 @@ components:
           nullable: true
         study:
           type: string
+          example: 38jobTomPDqt
+          minLength: 12
+          maxLength: 12
           readOnly: true
     point:
       title: point
@@ -584,8 +590,9 @@ components:
             type: number
         analysis:
           type: string
-          format: uri
-          example: 'http://neurostore.org/api/analyses/6kwPw6p79Ljm'
+          example: 6kwPw6p79Ljm
+          minLength: 12
+          maxLength: 12
           readOnly: true
     image:
       title: image
@@ -623,11 +630,13 @@ components:
           nullable: true
           example: Positive RPEs
           description: name of the analysis
+          readOnly: true
         analysis:
           type: string
-          format: uri
-          example: 'http://neurostore.org/api/analyses/7UvrsaALJU9g'
+          example: 7UvrsaALJU9g
           description: ID of the analysis this image came from
+          minLength: 12
+          maxLength: 12
           readOnly: true
         add_date:
           type: string
