@@ -3,8 +3,13 @@ info:
   title: neurostore api
   version: '1.0'
   description: Query dataset and meta-analyses
+  contact:
+    name: James D Kent
+    email: jamesdkent21@gmail.com
+    url: 'https://github.com/jdkent'
 servers:
   - url: 'http://localhost:80/api'
+    description: James D Kent
 paths:
   '/datasets/{id}':
     parameters:
@@ -286,6 +291,7 @@ paths:
         description: ''
       tags:
         - images
+      description: update a specific image
   /images/:
     get:
       summary: Your GET endpoint
