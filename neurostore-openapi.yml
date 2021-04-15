@@ -659,8 +659,9 @@ components:
       properties:
         id:
           type: string
-          format: uri
+          format: uuid
           description: URI specifying the location of this resource
+          example: 38jobTomPDqt
           readOnly: true
         created_at:
           type: string
