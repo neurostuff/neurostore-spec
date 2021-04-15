@@ -366,7 +366,8 @@ paths:
   /datasets/:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - datasets
       responses:
         '200':
           description: OK
@@ -378,6 +379,13 @@ paths:
                   anyOf:
                     - $ref: '#/components/schemas/dataset'
                     - $ref: '#/components/schemas/read-only'
+      description: get a list of datasets
+      parameters:
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/page_size'
     post:
       summary: ''
       responses:
@@ -387,6 +395,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/dataset'
+      tags:
+        - datasets
+      description: create a dataset
 components:
   schemas:
     dataset:
