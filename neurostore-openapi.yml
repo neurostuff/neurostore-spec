@@ -19,7 +19,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Get User Info by User ID
+      summary: GET a dataset
       tags:
         - datasets
       responses:
@@ -37,13 +37,13 @@ paths:
       description: Retrieve the information of a dataset with the matching dataset ID.
       parameters: []
     put:
-      summary: ''
+      summary: PUT/update a dataset
       responses:
         '200':
           description: OK
         '422':
           $ref: '#/components/responses/422'
-      description: Update/Create Dataset
+      description: Update a dataset.
       requestBody:
         content:
           application/json:
@@ -59,7 +59,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: GET a study
       tags:
         - studies
       responses:
@@ -74,17 +74,17 @@ paths:
               examples: {}
         '404':
           $ref: '#/components/responses/404'
-      description: Get Study ID
+      description: Get a study.
       parameters:
         - $ref: '#/components/parameters/nested'
     put:
-      summary: ''
+      summary: PUT/update a study
       responses:
         '200':
           description: OK
         '422':
           $ref: '#/components/responses/422'
-      description: Create/Update Study
+      description: Update a study.
       parameters: []
       requestBody:
         content:
@@ -95,7 +95,7 @@ paths:
         - studies
   /studies/:
     get:
-      summary: Your GET endpoint
+      summary: GET a list of studies
       tags:
         - studies
       responses:
@@ -111,7 +111,7 @@ paths:
                     - $ref: '#/components/schemas/study'
                     - $ref: '#/components/schemas/read-only'
               examples: {}
-      description: List all available studies
+      description: List studies
       parameters:
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
@@ -121,7 +121,7 @@ paths:
         - $ref: '#/components/parameters/nested'
     parameters: []
     post:
-      summary: ''
+      summary: POST/create a study
       responses:
         '200':
           description: OK
@@ -134,10 +134,10 @@ paths:
                 $ref: '#/components/schemas/study'
       tags:
         - studies
-      description: Push a list of Studies
+      description: Create a study
   /analyses/:
     get:
-      summary: Your GET endpoint
+      summary: GET list of analyses
       tags:
         - analyses
       responses:
@@ -160,7 +160,7 @@ paths:
         - $ref: '#/components/parameters/page_size'
     parameters: []
     post:
-      summary: ''
+      summary: Post/create an analysis
       responses:
         '200':
           description: OK
@@ -173,7 +173,7 @@ paths:
                 $ref: '#/components/schemas/analysis'
       tags:
         - analyses
-      description: Push a list of analyses performed across studies.
+      description: create an analysis
   '/analyses/{id}':
     parameters:
       - schema:
@@ -182,7 +182,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: GET an analysis
       tags:
         - analyses
       responses:
@@ -200,7 +200,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/nested'
     put:
-      summary: ''
+      summary: PUT/update an analysis
       responses:
         '200':
           description: OK
@@ -213,7 +213,7 @@ paths:
               $ref: '#/components/schemas/analysis'
       tags:
         - analyses
-      description: Create or update an existing analysis
+      description: Update an existing analysis.
   '/points/{id}':
     parameters:
       - schema:
@@ -222,7 +222,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: GET a point
       tags:
         - points
       responses:
@@ -239,7 +239,7 @@ paths:
           description: Not Found
       description: Information about a particular MRI coordinate
     put:
-      summary: ''
+      summary: PUT/update a point
       responses:
         '200':
           description: OK
@@ -252,7 +252,7 @@ paths:
               $ref: '#/components/schemas/point'
       tags:
         - points
-      description: Update/Create a particular MRI coordinate
+      description: Update a particular MRI coordinate.
   '/images/{id}':
     parameters:
       - schema:
@@ -261,7 +261,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: GET an image
       tags:
         - images
       responses:
@@ -275,9 +275,9 @@ paths:
                   - $ref: '#/components/schemas/read-only'
         '404':
           $ref: '#/components/responses/404'
-      description: Retrieve information about a particular image from an analysis
+      description: Retrieve information about a particular image from an analysis.
     put:
-      summary: ''
+      summary: PUT/update an image
       responses:
         '200':
           description: OK
@@ -291,10 +291,10 @@ paths:
         description: ''
       tags:
         - images
-      description: update a specific image
+      description: Update a specific image.
   /images/:
     get:
-      summary: Your GET endpoint
+      summary: GET a list of images
       tags:
         - images
       responses:
@@ -308,7 +308,7 @@ paths:
                   anyOf:
                     - $ref: '#/components/schemas/image'
                     - $ref: '#/components/schemas/read-only'
-      description: Retrieve and list all images
+      description: Retrieve and list images.
       parameters:
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
@@ -316,7 +316,7 @@ paths:
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
     post:
-      summary: ''
+      summary: POST/create an image
       responses:
         '200':
           description: OK
@@ -329,7 +329,7 @@ paths:
                 $ref: '#/components/schemas/image'
       tags:
         - images
-      description: Push a list of Images
+      description: Create an image
   '/conditions/{id}':
     parameters:
       - schema:
@@ -338,7 +338,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: GET a condition
       tags:
         - conditions
       responses:
@@ -352,9 +352,9 @@ paths:
                   - $ref: '#/components/schemas/read-only'
         '404':
           $ref: '#/components/responses/404'
-      description: 'retrieve conditions that can be used in contrasts (e.g., 2-back - 1-back)'
+      description: 'Retrieve a condition (e.g., 2-back) that can be used in contrasts (e.g., 2-back - 1-back)'
     put:
-      summary: ''
+      summary: PUT/update a condition
       responses:
         '200':
           description: OK
@@ -368,10 +368,10 @@ paths:
         description: ''
       tags:
         - conditions
-      description: 'place conditions that can be used in contrasts (e.g., 2-back - 1-back)'
+      description: update a condition
   /datasets/:
     get:
-      summary: Your GET endpoint
+      summary: GET a list of datasets
       tags:
         - datasets
       responses:
@@ -385,7 +385,7 @@ paths:
                   anyOf:
                     - $ref: '#/components/schemas/dataset'
                     - $ref: '#/components/schemas/read-only'
-      description: get a list of datasets
+      description: Get a list of datasets.
       parameters:
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
@@ -393,7 +393,7 @@ paths:
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
     post:
-      summary: ''
+      summary: POST/create a dataset
       responses:
         '200':
           description: OK
@@ -403,7 +403,7 @@ paths:
                 $ref: '#/components/schemas/dataset'
       tags:
         - datasets
-      description: create a dataset
+      description: Create a dataset.
 components:
   schemas:
     dataset:
