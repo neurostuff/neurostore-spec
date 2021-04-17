@@ -405,6 +405,32 @@ paths:
       tags:
         - datasets
       description: Create a dataset.
+  /login:
+    post:
+      summary: Login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+      description: login with username and password
+      tags:
+        - user
+  /register:
+    post:
+      summary: Register Account
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+      description: Create an account.
+      tags:
+        - user
 components:
   schemas:
     dataset:
@@ -707,6 +733,27 @@ components:
         value:
           type: number
           nullable: true
+    user:
+      title: user
+      type: object
+      description: ''
+      properties:
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+          description: full name of user
+        username:
+          type: string
+          readOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access_token:
+          type: string
+          description: JWT
+          readOnly: true
   responses:
     '404':
       description: Example response
@@ -810,3 +857,4 @@ tags:
   - name: points
   - name: studies
   - name: conditions
+  - name: user
