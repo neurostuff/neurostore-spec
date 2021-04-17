@@ -846,7 +846,7 @@ components:
         type: boolean
       description: whether to show the URI to a resource (false) or to embed the object in the response (true)
   securitySchemes:
-    JSON Web Token:
+    JSON-Web-Token:
       type: http
       scheme: bearer
       description: ''
