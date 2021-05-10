@@ -93,6 +93,8 @@ paths:
               $ref: '#/components/schemas/study'
       tags:
         - studies
+      security:
+        - JSON-Web-Token: []
   /studies/:
     get:
       summary: GET a list of studies
