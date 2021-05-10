@@ -51,6 +51,8 @@ paths:
               $ref: '#/components/schemas/dataset'
       tags:
         - datasets
+      security:
+        - JSON-Web-Token: []
   '/studies/{id}':
     parameters:
       - schema:
@@ -137,6 +139,8 @@ paths:
       tags:
         - studies
       description: Create a study
+      security:
+        - JSON-Web-Token: []
   /analyses/:
     get:
       summary: GET list of analyses
@@ -177,6 +181,8 @@ paths:
         - analyses
       description: create an analysis
       parameters: []
+      security:
+        - JSON-Web-Token: []
   '/analyses/{id}':
     parameters:
       - schema:
@@ -217,6 +223,8 @@ paths:
       tags:
         - analyses
       description: Update an existing analysis.
+      security:
+        - JSON-Web-Token: []
   '/points/{id}':
     parameters:
       - schema:
@@ -256,6 +264,8 @@ paths:
       tags:
         - points
       description: Update a particular MRI coordinate.
+      security:
+        - JSON-Web-Token: []
   '/images/{id}':
     parameters:
       - schema:
@@ -295,6 +305,8 @@ paths:
       tags:
         - images
       description: Update a specific image.
+      security:
+        - JSON-Web-Token: []
   /images/:
     get:
       summary: GET a list of images
@@ -333,6 +345,8 @@ paths:
       tags:
         - images
       description: Create an image
+      security:
+        - JSON-Web-Token: []
   '/conditions/{id}':
     parameters:
       - schema:
@@ -372,6 +386,8 @@ paths:
       tags:
         - conditions
       description: update a condition
+      security:
+        - JSON-Web-Token: []
   /datasets/:
     get:
       summary: GET a list of datasets
@@ -407,6 +423,8 @@ paths:
       tags:
         - datasets
       description: Create a dataset.
+      security:
+        - JSON-Web-Token: []
   /login:
     post:
       summary: Login
@@ -851,7 +869,7 @@ components:
     JSON-Web-Token:
       type: http
       scheme: bearer
-      description: ''
+      description: authentication method
 tags:
   - name: analyses
   - name: datasets
