@@ -451,6 +451,44 @@ paths:
       description: Create an account.
       tags:
         - user
+  '/studies/{id}/clone':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    post:
+      summary: Clone Study
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/study'
+      description: clone a study for editing
+      tags:
+        - studies
+  '/analyses/{id}/clone':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    post:
+      summary: Clone Analysis
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/analysis'
+      tags:
+        - analyses
+      description: clone an exisiting analysis
 components:
   schemas:
     dataset:
@@ -491,7 +529,7 @@ components:
         - name
         - nimads_data
     study:
-      description: elements of a study/published paper
+      description: attributes of a study/published paper
       type: object
       title: study
       x-examples: {}
@@ -611,16 +649,10 @@ components:
         space:
           type: string
           example: UNKNOWN
-          description: template space used to determine coordinate
+          description: template space used to determine coordinate (TAL or MNI or UNKNOWN)
         kind:
           type: string
-          description: I do not know what this is supposed to represent?
-          nullable: true
-        image:
-          type: string
-          nullable: true
-        label_id:
-          type: string
+          description: 'method of how point was derived (e.g., center of mass)'
           nullable: true
         x:
           type: number
@@ -631,10 +663,6 @@ components:
         z:
           type: number
           writeOnly: true
-        value:
-          type: array
-          items:
-            type: number
         analysis:
           type: string
           example: 6kwPw6p79Ljm
