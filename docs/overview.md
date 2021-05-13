@@ -1,7 +1,6 @@
 # overview
 
 ## Components
-
 The following components will be used to support the study editing interface.
 What would you most likely want to edit?
 - Study
@@ -53,7 +52,6 @@ about the type of image.
 A collection of coordinates specified in a known coordinate system (MNI or TAL)
 
 ## Editing
-
 If you would like to edit a study, there are two questions to ask:
 1. Did I originally upload the study? (Do I own the study)
 2. Would I like the original study to remain?
@@ -61,6 +59,8 @@ If you would like to edit a study, there are two questions to ask:
 
 If you answered yes to either 1 or 2, then you will use the `/clone` endpoint,
 if you own the study and do not want the original to remain, then use the `edit` endpoint.
+
+### Creating a Dataset
 
 
 
