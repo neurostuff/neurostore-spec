@@ -1,11 +1,6 @@
-# overview
+# Study Editor
 
-Neurostore seeks to complete three separate/modular functions:
-
-1) adding/editing studies
-2) constructing analyses
-3) visualizing results
-
+The study editor supports adding/cloning/editing existing studies on neurostore
 
 ## Components
 The following components will be used to support the study editing interface.
@@ -68,6 +63,3 @@ If you answered yes to either 1 or 2, then you will use the `/clone` endpoint,
 if you own the study and do not want the original to remain, then use the `edit` endpoint.
 
 ### Creating a Dataset
-
-
-
