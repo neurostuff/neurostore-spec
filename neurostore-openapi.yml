@@ -470,25 +470,6 @@ paths:
       description: clone a study for editing
       tags:
         - studies
-  '/analyses/{id}/clone':
-    parameters:
-      - schema:
-          type: string
-        name: id
-        in: path
-        required: true
-    post:
-      summary: Clone Analysis
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/analysis'
-      tags:
-        - analyses
-      description: clone an exisiting analysis
 components:
   schemas:
     dataset:
