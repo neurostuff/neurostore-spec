@@ -144,7 +144,8 @@ paths:
       security:
         - JSON-Web-Token: []
       parameters:
-        - $ref: '#/components/parameters/clone'
+        - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/source_id'
   /analyses/:
     get:
       summary: GET list of analyses
@@ -859,16 +860,26 @@ components:
       schema:
         type: boolean
       description: whether to show the URI to a resource (false) or to embed the object in the response (true)
-    clone:
-      name: clone
+    source:
+      name: source
       in: query
       required: false
       schema:
         type: string
+        example: neurostore
+        default: neurostore
+        enum:
+          - neurostore
+          - neurovault
+          - pubmed
+      description: 'the source of the study you would like to copy from, use in conjunction with source_id'
+    source_id:
+      name: source_id
+      in: query
+      schema:
+        type: string
         example: 1234567890ab
-        minLength: 12
-        maxLength: 12
-      description: the study ID you wish to clone
+      description: id of the study you would like to copy from
   securitySchemes:
     JSON-Web-Token:
       type: http
