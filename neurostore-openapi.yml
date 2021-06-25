@@ -352,6 +352,34 @@ paths:
       description: Create an image
       security:
         - JSON-Web-Token: []
+  /conditions/:
+    get:
+      summary: GET Conditions
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: '#/components/schemas/condition'
+                    - $ref: '#/components/schemas/read-only'
+      description: Get all conditions
+    post:
+      summary: POST/Create a condition
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/condition'
+      description: Create a condition
+      security:
+        - JSON-Web-Token: []
   '/conditions/{id}':
     parameters:
       - schema:
@@ -456,30 +484,6 @@ paths:
       description: Create an account.
       tags:
         - user
-  /conditions/:
-    get:
-      summary: GET Conditions
-      tags: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/condition'
-      description: Get all conditions
-    post:
-      summary: POST/Create a condition
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/condition'
-      description: Create a condition
 components:
   schemas:
     dataset:
