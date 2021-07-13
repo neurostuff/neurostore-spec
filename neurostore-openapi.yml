@@ -458,7 +458,7 @@ paths:
       description: Create a dataset.
       security:
         - JSON-Web-Token: []
-  /users/login/:
+  /login:
     post:
       summary: Login
       responses:
@@ -471,8 +471,7 @@ paths:
       description: login with username and password
       tags:
         - user
-    parameters: []
-  /users/register/:
+  /register:
     post:
       summary: Register Account
       responses:
@@ -485,21 +484,6 @@ paths:
       description: Create an account.
       tags:
         - user
-    parameters: []
-  /users/:
-    get:
-      summary: Your GET endpoint
-      tags: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/user'
-      description: get a list of users
 components:
   schemas:
     dataset:
