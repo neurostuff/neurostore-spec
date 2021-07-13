@@ -355,7 +355,8 @@ paths:
   /conditions/:
     get:
       summary: GET Conditions
-      tags: []
+      tags:
+        - conditions
       responses:
         '200':
           description: OK
@@ -380,6 +381,8 @@ paths:
       description: Create a condition
       security:
         - JSON-Web-Token: []
+      tags:
+        - conditions
   '/conditions/{id}':
     parameters:
       - schema:
