@@ -9,7 +9,9 @@ info:
     url: 'https://github.com/jdkent'
 servers:
   - url: 'http://localhost:80/api'
-    description: James D Kent
+    description: testing
+  - url: 'https://neurostore.org/api'
+    description: production
 paths:
   '/datasets/{id}':
     parameters:
