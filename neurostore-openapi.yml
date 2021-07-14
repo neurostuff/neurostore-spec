@@ -135,10 +135,7 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/study'
-                - properties: {}
-                  nullable: true
+              $ref: '#/components/schemas/study'
         description: ''
       tags:
         - studies
