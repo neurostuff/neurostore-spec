@@ -9,7 +9,9 @@ info:
     url: 'https://github.com/jdkent'
 servers:
   - url: 'http://localhost:80/api'
-    description: James D Kent
+    description: testing
+  - url: 'https://neurostore.org/api'
+    description: production
 paths:
   '/datasets/{id}':
     parameters:
@@ -28,7 +30,7 @@ paths:
           content:
             application/json:
               schema:
-                anyOf:
+                allOf:
                   - $ref: '#/components/schemas/dataset'
                   - $ref: '#/components/schemas/read-only'
               examples: {}
@@ -70,7 +72,7 @@ paths:
           content:
             application/json:
               schema:
-                anyOf:
+                allOf:
                   - $ref: '#/components/schemas/study'
                   - $ref: '#/components/schemas/read-only'
               examples: {}
@@ -111,7 +113,7 @@ paths:
                 description: ''
                 type: array
                 items:
-                  anyOf:
+                  allOf:
                     - $ref: '#/components/schemas/study'
                     - $ref: '#/components/schemas/read-only'
               examples: {}
@@ -133,10 +135,7 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-                - properties: {}
-                  nullable: true
-                - $ref: '#/components/schemas/study'
+              $ref: '#/components/schemas/study'
         description: ''
       tags:
         - studies
@@ -159,7 +158,7 @@ paths:
               schema:
                 type: array
                 items:
-                  anyOf:
+                  allOf:
                     - $ref: '#/components/schemas/analysis'
                     - $ref: '#/components/schemas/read-only'
       description: List all analyses performed across studies.
@@ -205,7 +204,7 @@ paths:
           content:
             application/json:
               schema:
-                anyOf:
+                allOf:
                   - $ref: '#/components/schemas/analysis'
                   - $ref: '#/components/schemas/read-only'
         '404':
@@ -247,7 +246,7 @@ paths:
           content:
             application/json:
               schema:
-                anyOf:
+                allOf:
                   - $ref: '#/components/schemas/point'
                   - $ref: '#/components/schemas/read-only'
               examples: {}
@@ -288,7 +287,7 @@ paths:
           content:
             application/json:
               schema:
-                anyOf:
+                allOf:
                   - $ref: '#/components/schemas/image'
                   - $ref: '#/components/schemas/read-only'
         '404':
@@ -325,7 +324,7 @@ paths:
               schema:
                 type: array
                 items:
-                  anyOf:
+                  allOf:
                     - $ref: '#/components/schemas/image'
                     - $ref: '#/components/schemas/read-only'
       description: Retrieve and list images.
@@ -365,7 +364,7 @@ paths:
               schema:
                 type: array
                 items:
-                  anyOf:
+                  allOf:
                     - $ref: '#/components/schemas/condition'
                     - $ref: '#/components/schemas/read-only'
       description: Get all conditions
@@ -400,7 +399,7 @@ paths:
           content:
             application/json:
               schema:
-                anyOf:
+                allOf:
                   - $ref: '#/components/schemas/condition'
                   - $ref: '#/components/schemas/read-only'
         '404':
@@ -437,7 +436,7 @@ paths:
               schema:
                 type: array
                 items:
-                  anyOf:
+                  allOf:
                     - $ref: '#/components/schemas/dataset'
                     - $ref: '#/components/schemas/read-only'
       description: Get a list of datasets.
@@ -533,8 +532,10 @@ components:
       x-examples: {}
       properties:
         analysis:
+          type: array
           items:
-            anyOf:
+            description: Representations of Analyses associated with the study
+            oneOf:
               - description: id of the analysis (when nested=false)
                 items:
                   type: string
@@ -546,18 +547,16 @@ components:
                     - $ref: '#/components/schemas/analysis'
                     - $ref: '#/components/schemas/read-only'
                   description: representation of Analysis from GET (when nested=true)
-            description: Representations of Analyses associated with the study
-          type: array
         doi:
           type: string
-          nullable: true
           example: 10.1016/S0926-6410(97)00020-7
           description: digital object identifier of the study
+          nullable: true
         name:
           type: string
-          nullable: true
           example: 'Functional magnetic resonance imaging of category-specific cortical activation: evidence for semantic maps.'
           description: title of the study
+          nullable: true
         metadata:
           description: other metadata associated with the study
           type: object
@@ -578,7 +577,8 @@ components:
       description: ''
       properties:
         condition:
-          anyOf:
+          description: 'array of conditions (e.g., 2-back, memory, etc.) that must be the same length as weight.'
+          oneOf:
             - type: array
               description: GET when nested=false
               items:
@@ -590,10 +590,11 @@ components:
             - allOf:
                 - $ref: '#/components/schemas/condition'
                 - $ref: '#/components/schemas/read-only'
-          description: 'array of conditions (e.g., 2-back, memory, etc.) that must be the same length as weight.'
         image:
+          type: array
           items:
-            anyOf:
+            description: URL(s) pointing towards image endpoints
+            oneOf:
               - items:
                   type: string
                   minLength: 12
@@ -601,15 +602,14 @@ components:
                   example: 38jobTomPDqt
               - items:
                   $ref: '#/components/schemas/image'
-            description: URL(s) pointing towards image endpoints
-          type: array
         name:
           type: string
           example: '"20356"'
           nullable: true
         point:
+          type: array
           items:
-            anyOf:
+            oneOf:
               - items:
                   type: string
                   minLength: 12
@@ -617,7 +617,6 @@ components:
                   example: 38jobTomPDqt
               - items:
                   $ref: '#/components/schemas/point'
-          type: array
         weight:
           type: array
           description: 'weight applied to each condition, must be the same length as condition'
