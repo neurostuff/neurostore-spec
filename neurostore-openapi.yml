@@ -533,7 +533,6 @@ components:
       x-examples: {}
       properties:
         analysis:
-          type: array
           items:
             description: Representations of Analyses associated with the study
             oneOf:
@@ -593,7 +592,6 @@ components:
                 - $ref: '#/components/schemas/condition'
                 - $ref: '#/components/schemas/read-only'
         image:
-          type: array
           items:
             description: URL(s) pointing towards image endpoints
             oneOf:
@@ -610,7 +608,6 @@ components:
           example: '"20356"'
           nullable: true
         point:
-          type: array
           items:
             oneOf:
               - items:
