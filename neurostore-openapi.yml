@@ -13,92 +13,6 @@ servers:
   - url: 'https://neurostore.org/api'
     description: production
 paths:
-  '/datasets/{id}':
-    parameters:
-      - schema:
-          type: string
-        name: id
-        in: path
-        required: true
-    get:
-      summary: GET a dataset
-      tags:
-        - datasets
-      responses:
-        '200':
-          description: Dataset found
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/dataset'
-                  - $ref: '#/components/schemas/read-only'
-              examples: {}
-        '404':
-          $ref: '#/components/responses/404'
-      description: Retrieve the information of a dataset with the matching dataset ID.
-      parameters: []
-    put:
-      summary: PUT/update a dataset
-      responses:
-        '200':
-          description: OK
-        '422':
-          $ref: '#/components/responses/422'
-      description: Update a dataset.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/dataset'
-      tags:
-        - datasets
-      security:
-        - JSON-Web-Token: []
-  '/studies/{id}':
-    parameters:
-      - schema:
-          type: string
-        name: id
-        in: path
-        required: true
-    get:
-      summary: GET a study
-      tags:
-        - studies
-      responses:
-        '200':
-          description: Study Found
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/study'
-                  - $ref: '#/components/schemas/read-only'
-              examples: {}
-        '404':
-          $ref: '#/components/responses/404'
-      description: Get a study.
-      parameters:
-        - $ref: '#/components/parameters/nested'
-    put:
-      summary: PUT/update a study
-      responses:
-        '200':
-          description: OK
-        '422':
-          $ref: '#/components/responses/422'
-      description: Update a study.
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/study'
-      tags:
-        - studies
-      security:
-        - JSON-Web-Token: []
   /studies/:
     get:
       summary: GET a list of studies
@@ -145,6 +59,50 @@ paths:
       parameters:
         - $ref: '#/components/parameters/source'
         - $ref: '#/components/parameters/source_id'
+  '/studies/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: GET a study
+      tags:
+        - studies
+      responses:
+        '200':
+          description: Study Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/study'
+                  - $ref: '#/components/schemas/read-only'
+              examples: {}
+        '404':
+          $ref: '#/components/responses/404'
+      description: Get a study.
+      parameters:
+        - $ref: '#/components/parameters/nested'
+    put:
+      summary: PUT/update a study
+      responses:
+        '200':
+          description: OK
+        '422':
+          $ref: '#/components/responses/422'
+      description: Update a study.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/study'
+      tags:
+        - studies
+      security:
+        - JSON-Web-Token: []
   /analyses/:
     get:
       summary: GET list of analyses
@@ -270,6 +228,46 @@ paths:
       description: Update a particular MRI coordinate.
       security:
         - JSON-Web-Token: []
+  /images/:
+    get:
+      summary: GET a list of images
+      tags:
+        - images
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/image'
+                    - $ref: '#/components/schemas/read-only'
+      description: Retrieve and list images.
+      parameters:
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/page_size'
+    post:
+      summary: POST/create an image
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/image'
+      tags:
+        - images
+      description: Create an image
+      security:
+        - JSON-Web-Token: []
   '/images/{id}':
     parameters:
       - schema:
@@ -309,46 +307,6 @@ paths:
       tags:
         - images
       description: Update a specific image.
-      security:
-        - JSON-Web-Token: []
-  /images/:
-    get:
-      summary: GET a list of images
-      tags:
-        - images
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/image'
-                    - $ref: '#/components/schemas/read-only'
-      description: Retrieve and list images.
-      parameters:
-        - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/desc'
-        - $ref: '#/components/parameters/page_size'
-    post:
-      summary: POST/create an image
-      responses:
-        '200':
-          description: OK
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/image'
-      tags:
-        - images
-      description: Create an image
       security:
         - JSON-Web-Token: []
   /conditions/:
@@ -421,43 +379,6 @@ paths:
       tags:
         - conditions
       description: update a condition
-      security:
-        - JSON-Web-Token: []
-  /datasets/:
-    get:
-      summary: GET a list of datasets
-      tags:
-        - datasets
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/dataset'
-                    - $ref: '#/components/schemas/read-only'
-      description: Get a list of datasets.
-      parameters:
-        - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/desc'
-        - $ref: '#/components/parameters/page_size'
-    post:
-      summary: POST/create a dataset
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/dataset'
-      tags:
-        - datasets
-      description: Create a dataset.
       security:
         - JSON-Web-Token: []
   /login:
