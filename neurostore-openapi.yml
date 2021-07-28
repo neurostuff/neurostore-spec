@@ -479,6 +479,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/user'
       description: get list of users
+      security:
+        - JSON-Web-Token: []
     post:
       summary: ''
       operationId: post-users
