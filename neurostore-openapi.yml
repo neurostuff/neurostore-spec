@@ -468,7 +468,8 @@ paths:
   /users/:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - user
       responses:
         '200':
           description: OK
@@ -483,7 +484,6 @@ paths:
         - JSON-Web-Token: []
     post:
       summary: ''
-      operationId: post-users
       responses:
         '200':
           description: OK
@@ -499,6 +499,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/user'
+      tags:
+        - user
 components:
   schemas:
     dataset:
