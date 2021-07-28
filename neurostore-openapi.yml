@@ -178,9 +178,7 @@ paths:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/analysis'
+              $ref: '#/components/schemas/analysis'
       tags:
         - analyses
       description: create an analysis
@@ -339,13 +337,15 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/image'
       requestBody:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/image'
+              $ref: '#/components/schemas/image'
       tags:
         - images
       description: Create an image
@@ -382,6 +382,11 @@ paths:
         - JSON-Web-Token: []
       tags:
         - conditions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/condition'
   '/conditions/{id}':
     parameters:
       - schema:
@@ -460,9 +465,23 @@ paths:
       description: Create a dataset.
       security:
         - JSON-Web-Token: []
-  /login:
+  /users/:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/user'
+      description: get list of users
     post:
-      summary: Login
+      summary: ''
+      operationId: post-users
       responses:
         '200':
           description: OK
@@ -470,22 +489,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/user'
-      description: login with username and password
-      tags:
-        - user
-  /register:
-    post:
-      summary: Register Account
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/user'
-      description: Create an account.
-      tags:
-        - user
+      description: create a user
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
 components:
   schemas:
     dataset:
@@ -786,22 +797,11 @@ components:
       type: object
       description: ''
       properties:
-        email:
-          type: string
-          format: email
         name:
           type: string
           description: full name of user
-        username:
+        neuroid:
           type: string
-          readOnly: true
-        password:
-          type: string
-          writeOnly: true
-        access_token:
-          type: string
-          description: JWT
-          readOnly: true
   responses:
     '404':
       description: Example response
