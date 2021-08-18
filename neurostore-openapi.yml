@@ -843,6 +843,10 @@ components:
           description: |
             total number of entries
           readOnly: true
+        unique_count:
+          type: integer
+          description: count of elements for unique entries
+          readOnly: true
   responses:
     '404':
       description: Example response
