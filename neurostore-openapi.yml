@@ -111,11 +111,16 @@ paths:
             application/json:
               schema:
                 description: ''
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/study'
-                    - $ref: '#/components/schemas/read-only'
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/study'
+                        - $ref: '#/components/schemas/read-only'
+                  metadata:
+                    $ref: '#/components/schemas/metadata'
               examples: {}
       description: List studies
       parameters:
@@ -156,11 +161,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/analysis'
-                    - $ref: '#/components/schemas/read-only'
+                type: object
+                properties:
+                  metadata:
+                    $ref: '#/components/schemas/metadata'
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/analysis'
+                        - $ref: '#/components/schemas/read-only'
+              examples: {}
       description: List all analyses performed across studies.
       parameters:
         - $ref: '#/components/parameters/search'
@@ -320,11 +331,16 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/image'
-                    - $ref: '#/components/schemas/read-only'
+                type: object
+                properties:
+                  metadata:
+                    $ref: '#/components/schemas/metadata'
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/image'
+                        - $ref: '#/components/schemas/read-only'
       description: Retrieve and list images.
       parameters:
         - $ref: '#/components/parameters/search'
@@ -362,11 +378,16 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/condition'
-                    - $ref: '#/components/schemas/read-only'
+                type: object
+                properties:
+                  metadata:
+                    $ref: '#/components/schemas/metadata'
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/condition'
+                        - $ref: '#/components/schemas/read-only'
       description: Get all conditions
     post:
       summary: POST/Create a condition
@@ -476,9 +497,15 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/user'
+                type: object
+                properties:
+                  metadata:
+                    $ref: '#/components/schemas/metadata'
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/user'
       description: get list of users
       security:
         - JSON-Web-Token: []
@@ -806,6 +833,16 @@ components:
           description: full name of user
         neuroid:
           type: string
+    metadata:
+      title: metadata
+      type: object
+      description: data included in every list response
+      properties:
+        total_count:
+          type: integer
+          description: |
+            total number of entries
+          readOnly: true
   responses:
     '404':
       description: Example response
