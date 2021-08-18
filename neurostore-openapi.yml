@@ -838,7 +838,7 @@ components:
       type: object
       description: data included in every list response
       properties:
-        total-count:
+        total_count:
           type: integer
           description: |
             total number of entries
