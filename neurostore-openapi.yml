@@ -130,6 +130,9 @@ paths:
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/nested'
+      security:
+        - JSON-Web-Token: []
+        - {}
     parameters: []
     post:
       summary: POST/create a study
@@ -589,6 +592,7 @@ components:
                     - $ref: '#/components/schemas/analysis'
                     - $ref: '#/components/schemas/read-only'
                   description: representation of Analysis from GET (when nested=true)
+            type: array
         doi:
           type: string
           example: 10.1016/S0926-6410(97)00020-7
@@ -612,6 +616,9 @@ components:
         pmid:
           type: string
           nullable: true
+        public:
+          type: boolean
+          description: whether the study is visible to everyone or just you
     analysis:
       title: analysis
       type: object
