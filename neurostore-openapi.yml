@@ -130,6 +130,10 @@ paths:
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/description'
+        - $ref: '#/components/parameters/source_id'
+        - $ref: '#/components/parameters/unique'
       security:
         - JSON-Web-Token: []
         - {}
@@ -182,6 +186,8 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/description'
     parameters: []
     post:
       summary: POST/create an analysis
@@ -351,6 +357,10 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/filename'
+        - $ref: '#/components/parameters/analysis_name'
+        - $ref: '#/components/parameters/value_type'
+        - $ref: '#/components/parameters/space'
     post:
       summary: POST/create an image
       responses:
@@ -392,6 +402,14 @@ paths:
                         - $ref: '#/components/schemas/condition'
                         - $ref: '#/components/schemas/read-only'
       description: Get all conditions
+      parameters:
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/description'
     post:
       summary: POST/Create a condition
       responses:
@@ -965,6 +983,54 @@ components:
         type: string
         example: 1234567890ab
       description: id of the study you would like to copy from
+    name:
+      name: name
+      in: query
+      required: false
+      schema:
+        type: string
+      description: search the name field for a term
+    description:
+      name: description
+      in: query
+      required: false
+      schema:
+        type: string
+      description: search description field for a term
+    filename:
+      name: filename
+      in: query
+      required: false
+      schema:
+        type: string
+      description: search filename field
+    space:
+      name: space
+      in: query
+      schema:
+        type: string
+      description: search space field
+    value_type:
+      name: value_type
+      in: query
+      required: false
+      schema:
+        type: string
+      description: search value_type field
+    analysis_name:
+      name: analysis_name
+      in: query
+      required: false
+      schema:
+        type: string
+      description: search analysis_name field
+    unique:
+      name: unique
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: whether to list clones with originals
   securitySchemes:
     JSON-Web-Token:
       type: http
