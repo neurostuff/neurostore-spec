@@ -837,6 +837,9 @@ components:
           example: '2021-01-16T20:50:38.009318+00:00'
           description: time the resource was created on the database
           readOnly: true
+        user:
+          type: string
+          description: who owns the resource
     point-value:
       title: point-value
       type: object
