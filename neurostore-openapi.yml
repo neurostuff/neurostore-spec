@@ -134,6 +134,8 @@ paths:
         - $ref: '#/components/parameters/description'
         - $ref: '#/components/parameters/source_id'
         - $ref: '#/components/parameters/unique'
+        - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/authors'
       security:
         - JSON-Web-Token: []
         - {}
@@ -636,6 +638,9 @@ components:
         public:
           type: boolean
           description: whether the study is visible to everyone or just you
+        authors:
+          type: string
+          nullable: true
     analysis:
       title: analysis
       type: object
@@ -978,14 +983,16 @@ components:
           - neurostore
           - neurovault
           - pubmed
-      description: 'the source of the study you would like to copy from, use in conjunction with source_id'
+          - neurosynth
+          - neuroquery
+      description: the source of the study you would like to filter/copy from
     source_id:
       name: source_id
       in: query
       schema:
         type: string
         example: 1234567890ab
-      description: id of the study you would like to copy from
+      description: id of the study you are either filtering/copying on
     name:
       name: name
       in: query
@@ -1034,6 +1041,13 @@ components:
       schema:
         type: boolean
       description: whether to list clones with originals
+    authors:
+      name: authors
+      in: query
+      required: false
+      schema:
+        type: string
+      description: search authors
   securitySchemes:
     JSON-Web-Token:
       type: http
