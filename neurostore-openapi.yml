@@ -838,8 +838,9 @@ components:
           description: time the resource was created on the database
           readOnly: true
         user:
-          type: string
           description: who owns the resource
+          type: string
+          nullable: true
     point-value:
       title: point-value
       type: object
