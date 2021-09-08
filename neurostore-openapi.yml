@@ -983,6 +983,8 @@ components:
           - neurostore
           - neurovault
           - pubmed
+          - neurosynth
+          - neuroquery
       description: the source of the study you would like to filter/copy from
     source_id:
       name: source_id
