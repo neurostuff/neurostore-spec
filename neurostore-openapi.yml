@@ -135,6 +135,7 @@ paths:
         - $ref: '#/components/parameters/source_id'
         - $ref: '#/components/parameters/unique'
         - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/authors'
       security:
         - JSON-Web-Token: []
         - {}
@@ -1041,6 +1042,13 @@ components:
       schema:
         type: boolean
       description: whether to list clones with originals
+    authors:
+      name: authors
+      in: query
+      required: false
+      schema:
+        type: string
+      description: search authors
   securitySchemes:
     JSON-Web-Token:
       type: http
