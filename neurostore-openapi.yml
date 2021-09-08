@@ -612,7 +612,6 @@ components:
                     - $ref: '#/components/schemas/analysis'
                     - $ref: '#/components/schemas/read-only'
                   description: representation of Analysis from GET (when nested=true)
-            type: array
         doi:
           type: string
           example: 10.1016/S0926-6410(97)00020-7
