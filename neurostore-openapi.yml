@@ -1049,6 +1049,13 @@ components:
       schema:
         type: string
       description: search authors
+    user_id:
+      name: user_id
+      in: query
+      required: false
+      schema:
+        type: string
+      description: user you would like filter by
   securitySchemes:
     JSON-Web-Token:
       type: http
