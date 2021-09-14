@@ -136,6 +136,7 @@ paths:
         - $ref: '#/components/parameters/unique'
         - $ref: '#/components/parameters/source'
         - $ref: '#/components/parameters/authors'
+        - $ref: '#/components/parameters/user_id'
       security:
         - JSON-Web-Token: []
         - {}
@@ -191,6 +192,7 @@ paths:
         - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/description'
         - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/user_id'
     parameters: []
     post:
       summary: POST/create an analysis
@@ -364,6 +366,7 @@ paths:
         - $ref: '#/components/parameters/analysis_name'
         - $ref: '#/components/parameters/value_type'
         - $ref: '#/components/parameters/space'
+        - $ref: '#/components/parameters/user_id'
     post:
       summary: POST/create an image
       responses:
@@ -413,6 +416,7 @@ paths:
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/description'
+        - $ref: '#/components/parameters/user_id'
     post:
       summary: POST/Create a condition
       responses:
