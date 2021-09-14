@@ -190,6 +190,7 @@ paths:
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/description'
+        - $ref: '#/components/parameters/nested'
     parameters: []
     post:
       summary: POST/create an analysis
