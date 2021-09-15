@@ -658,29 +658,34 @@ components:
           items:
             oneOf:
               - type: string
-                properties: {}
               - $ref: '#/components/schemas/condition'
               - allOf:
                   - $ref: '#/components/schemas/condition'
                   - $ref: '#/components/schemas/read-only'
-        image:
+        images:
           type: array
           items:
             description: URL(s) pointing towards image endpoints
             oneOf:
               - type: string
               - $ref: '#/components/schemas/image'
+              - allOf:
+                  - $ref: '#/components/schemas/image'
+                  - $ref: '#/components/schemas/read-only'
         name:
           type: string
           example: '"20356"'
           nullable: true
-        point:
+        points:
           type: array
           items:
             oneOf:
               - type: string
               - $ref: '#/components/schemas/point'
-        weight:
+              - allOf:
+                  - $ref: '#/components/schemas/point'
+                  - $ref: '#/components/schemas/read-only'
+        weights:
           type: array
           description: 'weight applied to each condition, must be the same length as condition'
           items:
