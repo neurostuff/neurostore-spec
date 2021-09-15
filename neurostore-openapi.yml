@@ -637,6 +637,15 @@ components:
         authors:
           type: string
           nullable: true
+        source:
+          type: string
+          nullable: true
+        source_id:
+          type: string
+          nullable: true
+        source_updated_at:
+          type: string
+          nullable: true
     analysis:
       title: analysis
       type: object
