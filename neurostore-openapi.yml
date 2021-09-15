@@ -603,16 +603,11 @@ components:
             description: Representations of Analyses associated with the study
             oneOf:
               - description: id of the analysis (when nested=false)
-                items:
-                  type: string
-              - description: analyses representations (for PUT/POST)
-                items:
-                  $ref: '#/components/schemas/analysis'
-              - items:
-                  allOf:
-                    - $ref: '#/components/schemas/analysis'
-                    - $ref: '#/components/schemas/read-only'
-                  description: representation of Analysis from GET (when nested=true)
+                type: string
+              - $ref: '#/components/schemas/analysis'
+              - allOf:
+                  - $ref: '#/components/schemas/analysis'
+                  - $ref: '#/components/schemas/read-only'
         doi:
           type: string
           example: 10.1016/S0926-6410(97)00020-7
