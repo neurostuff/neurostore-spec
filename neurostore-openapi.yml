@@ -598,16 +598,16 @@ components:
       x-examples: {}
       properties:
         analyses:
-          type: array
-          items:
-            description: Representations of Analyses associated with the study
-            oneOf:
-              - description: id of the analysis (when nested=false)
+          oneOf:
+            - items:
                 type: string
-              - $ref: '#/components/schemas/analysis'
-              - allOf:
+            - items:
+                $ref: '#/components/schemas/analysis'
+            - items:
+                allOf:
                   - $ref: '#/components/schemas/analysis'
                   - $ref: '#/components/schemas/read-only'
+          type: array
         doi:
           type: string
           example: 10.1016/S0926-6410(97)00020-7
