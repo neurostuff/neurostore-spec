@@ -597,7 +597,7 @@ components:
       title: study
       x-examples: {}
       properties:
-        analysis:
+        analyses:
           type: array
           items:
             description: Representations of Analyses associated with the study
