@@ -599,16 +599,15 @@ components:
       x-examples: {}
       properties:
         analyses:
-          oneOf:
-            - items:
-                type: string
-            - items:
-                $ref: '#/components/schemas/analysis'
-            - items:
-                allOf:
-                  - $ref: '#/components/schemas/analysis'
-                  - $ref: '#/components/schemas/read-only'
           type: array
+          items:
+            oneOf:
+              - type: string
+                properties: {}
+              - $ref: '#/components/schemas/analysis'
+              - allOf:
+                  - $ref: '#/components/schemas/read-only'
+                  - $ref: '#/components/schemas/analysis'
         doi:
           type: string
           example: 10.1016/S0926-6410(97)00020-7
