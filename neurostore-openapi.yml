@@ -690,6 +690,7 @@ components:
           description: 'weight applied to each condition, must be the same length as condition'
           items:
             type: number
+            nullable: true
         description:
           type: string
           nullable: true
