@@ -690,7 +690,6 @@ components:
           description: 'weight applied to each condition, must be the same length as condition'
           items:
             type: number
-            nullable: true
         description:
           type: string
           nullable: true
@@ -719,6 +718,7 @@ components:
           type: string
           example: UNKNOWN
           description: template space used to determine coordinate (TAL or MNI or UNKNOWN)
+          nullable: true
         kind:
           type: string
           description: 'method of how point was derived (e.g., center of mass)'
@@ -738,6 +738,21 @@ components:
           minLength: 12
           maxLength: 12
           readOnly: true
+        image:
+          type: string
+        label_id:
+          type: string
+          nullable: true
+        value:
+          type: array
+          items:
+            oneOf:
+              - type: string
+                properties: {}
+              - $ref: '#/components/schemas/point-value'
+              - allOf:
+                  - $ref: '#/components/schemas/point-value'
+                  - $ref: '#/components/schemas/read-only'
     image:
       title: image
       type: object
