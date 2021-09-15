@@ -652,32 +652,24 @@ components:
       x-examples: {}
       description: ''
       properties:
-        condition:
+        conditions:
           description: 'array of conditions (e.g., 2-back, memory, etc.) that must be the same length as weight.'
-          oneOf:
-            - type: array
-              description: GET when nested=false
-              items:
-                type: string
-            - type: array
-              description: for PUT/POST
-              items:
-                $ref: '#/components/schemas/condition'
-            - allOf:
-                - $ref: '#/components/schemas/condition'
-                - $ref: '#/components/schemas/read-only'
+          type: array
+          items:
+            oneOf:
+              - type: string
+                properties: {}
+              - $ref: '#/components/schemas/condition'
+              - allOf:
+                  - $ref: '#/components/schemas/condition'
+                  - $ref: '#/components/schemas/read-only'
         image:
           type: array
           items:
             description: URL(s) pointing towards image endpoints
             oneOf:
-              - items:
-                  type: string
-                  minLength: 12
-                  maxLength: 12
-                  example: 38jobTomPDqt
-              - items:
-                  $ref: '#/components/schemas/image'
+              - type: string
+              - $ref: '#/components/schemas/image'
         name:
           type: string
           example: '"20356"'
@@ -686,13 +678,8 @@ components:
           type: array
           items:
             oneOf:
-              - items:
-                  type: string
-                  minLength: 12
-                  maxLength: 12
-                  example: 38jobTomPDqt
-              - items:
-                  $ref: '#/components/schemas/point'
+              - type: string
+              - $ref: '#/components/schemas/point'
         weight:
           type: array
           description: 'weight applied to each condition, must be the same length as condition'
