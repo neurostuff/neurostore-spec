@@ -624,8 +624,6 @@ components:
           items:
             oneOf:
               - type: string
-                properties: {}
-              - $ref: '#/components/schemas/analysis'
               - allOf:
                   - $ref: '#/components/schemas/read-only'
                   - $ref: '#/components/schemas/analysis'
@@ -679,7 +677,6 @@ components:
           items:
             oneOf:
               - type: string
-              - $ref: '#/components/schemas/condition'
               - allOf:
                   - $ref: '#/components/schemas/condition'
                   - $ref: '#/components/schemas/read-only'
@@ -689,7 +686,6 @@ components:
             description: URL(s) pointing towards image endpoints
             oneOf:
               - type: string
-              - $ref: '#/components/schemas/image'
               - allOf:
                   - $ref: '#/components/schemas/image'
                   - $ref: '#/components/schemas/read-only'
@@ -702,67 +698,9 @@ components:
           items:
             oneOf:
               - type: string
-              - $ref: '#/components/schemas/point'
-#              - allOf:
-#                  - $ref: '#/components/schemas/point'
-#                  - $ref: '#/components/schemas/read-only'
-              - type: object
-                properties:
-                  id:
-                    type: string
-                  created_at:
-                    type: string
-                  user:
-                    type: string
-                    nullable: true
-                  coordinates:
-                    type: array
-                    minItems: 3
-                    maxItems: 3
-                    description: location of the point
-                    items:
-                      type: number
-                      format: float
-                      example: 63
-                  space:
-                    type: string
-                    example: UNKNOWN
-                    description: template space used to determine coordinate (TAL or MNI or UNKNOWN)
-                    nullable: true
-                  kind:
-                    type: string
-                    description: 'method of how point was derived (e.g., center of mass)'
-                    nullable: true
-                  x:
-                    type: number
-                    writeOnly: true
-                  'y':
-                    type: number
-                    writeOnly: true
-                  z:
-                    type: number
-                    writeOnly: true
-                  analysis:
-                    type: string
-                    example: 6kwPw6p79Ljm
-                    minLength: 12
-                    maxLength: 12
-                    readOnly: true
-                  image:
-                    type: string
-                    nullable: true
-                  label_id:
-                    type: string
-                    nullable: true
-                  value:
-                    type: array
-                    items:
-                      oneOf:
-                        - type: string
-                        - $ref: '#/components/schemas/point-value'
-                        - allOf:
-                            - $ref: '#/components/schemas/point-value'
-                            - $ref: '#/components/schemas/read-only'
+              - allOf:
+                  - $ref: '#/components/schemas/point'
+                  - $ref: '#/components/schemas/read-only'
         weights:
           type: array
           description: 'weight applied to each condition, must be the same length as condition'
@@ -827,7 +765,6 @@ components:
           items:
             oneOf:
               - type: string
-              - $ref: '#/components/schemas/point-value'
               - allOf:
                   - $ref: '#/components/schemas/point-value'
                   - $ref: '#/components/schemas/read-only'
@@ -934,9 +871,10 @@ components:
           description: time the resource was created on the database
           readOnly: true
         user:
-          description: who owns the resource
           type: string
+          description: who owns the resource
           nullable: true
+          readOnly: true
     point-value:
       title: point-value
       type: object
