@@ -712,6 +712,9 @@ components:
                     - $ref: '#/components/schemas/read-only'
                     - $ref: '#/components/schemas/point'
               - type: object
+                properties:
+                  id:
+                    type: string
         weights:
           type: array
           description: 'weight applied to each condition, must be the same length as condition'
