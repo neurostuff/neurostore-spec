@@ -272,7 +272,6 @@ paths:
                   metadata:
                     $ref: '#/components/schemas/metadata'
       description: list points in database
-      operationId: ''
   '/points/{id}':
     parameters:
       - schema:
@@ -720,6 +719,54 @@ components:
                   user:
                     type: string
                     nullable: true
+                  coordinates:
+                    type: array
+                    minItems: 3
+                    maxItems: 3
+                    description: location of the point
+                    items:
+                      type: number
+                      format: float
+                      example: 63
+                  space:
+                    type: string
+                    example: UNKNOWN
+                    description: template space used to determine coordinate (TAL or MNI or UNKNOWN)
+                    nullable: true
+                  kind:
+                    type: string
+                    description: 'method of how point was derived (e.g., center of mass)'
+                    nullable: true
+                  x:
+                    type: number
+                    writeOnly: true
+                  'y':
+                    type: number
+                    writeOnly: true
+                  z:
+                    type: number
+                    writeOnly: true
+                  analysis:
+                    type: string
+                    example: 6kwPw6p79Ljm
+                    minLength: 12
+                    maxLength: 12
+                    readOnly: true
+                  image:
+                    type: string
+                    nullable: true
+                  label_id:
+                    type: string
+                    nullable: true
+                  value:
+                    type: array
+                    items:
+                      oneOf:
+                        - type: string
+                        - $ref: '#/components/schemas/point-value'
+                        - allOf:
+                            - $ref: '#/components/schemas/point-value'
+                            - $ref: '#/components/schemas/read-only'
         weights:
           type: array
           description: 'weight applied to each condition, must be the same length as condition'
