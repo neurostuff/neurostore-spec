@@ -136,6 +136,7 @@ paths:
         - $ref: '#/components/parameters/unique'
         - $ref: '#/components/parameters/source'
         - $ref: '#/components/parameters/authors'
+        - $ref: '#/components/parameters/user_id'
       security:
         - JSON-Web-Token: []
         - {}
@@ -250,6 +251,27 @@ paths:
       description: Update an existing analysis.
       security:
         - JSON-Web-Token: []
+  /points/:
+    get:
+      summary: Get Points
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/point'
+                        - $ref: '#/components/schemas/read-only'
+                  metadata:
+                    $ref: '#/components/schemas/metadata'
+      description: list points in database
   '/points/{id}':
     parameters:
       - schema:
@@ -600,14 +622,11 @@ components:
         analyses:
           type: array
           items:
-            description: Representations of Analyses associated with the study
             oneOf:
-              - description: id of the analysis (when nested=false)
-                type: string
-              - $ref: '#/components/schemas/analysis'
+              - type: string
               - allOf:
-                  - $ref: '#/components/schemas/analysis'
                   - $ref: '#/components/schemas/read-only'
+                  - $ref: '#/components/schemas/analysis'
         doi:
           type: string
           example: 10.1016/S0926-6410(97)00020-7
@@ -652,48 +671,37 @@ components:
       x-examples: {}
       description: ''
       properties:
-        condition:
+        conditions:
           description: 'array of conditions (e.g., 2-back, memory, etc.) that must be the same length as weight.'
-          oneOf:
-            - type: array
-              description: GET when nested=false
-              items:
-                type: string
-            - type: array
-              description: for PUT/POST
-              items:
-                $ref: '#/components/schemas/condition'
-            - allOf:
-                - $ref: '#/components/schemas/condition'
-                - $ref: '#/components/schemas/read-only'
-        image:
+          type: array
+          items:
+            oneOf:
+              - type: string
+              - allOf:
+                  - $ref: '#/components/schemas/condition'
+                  - $ref: '#/components/schemas/read-only'
+        images:
           type: array
           items:
             description: URL(s) pointing towards image endpoints
             oneOf:
-              - items:
-                  type: string
-                  minLength: 12
-                  maxLength: 12
-                  example: 38jobTomPDqt
-              - items:
-                  $ref: '#/components/schemas/image'
+              - type: string
+              - allOf:
+                  - $ref: '#/components/schemas/image'
+                  - $ref: '#/components/schemas/read-only'
         name:
           type: string
           example: '"20356"'
           nullable: true
-        point:
+        points:
           type: array
           items:
             oneOf:
-              - items:
-                  type: string
-                  minLength: 12
-                  maxLength: 12
-                  example: 38jobTomPDqt
-              - items:
-                  $ref: '#/components/schemas/point'
-        weight:
+              - type: string
+              - allOf:
+                  - $ref: '#/components/schemas/point'
+                  - $ref: '#/components/schemas/read-only'
+        weights:
           type: array
           description: 'weight applied to each condition, must be the same length as condition'
           items:
@@ -726,6 +734,7 @@ components:
           type: string
           example: UNKNOWN
           description: template space used to determine coordinate (TAL or MNI or UNKNOWN)
+          nullable: true
         kind:
           type: string
           description: 'method of how point was derived (e.g., center of mass)'
@@ -745,6 +754,20 @@ components:
           minLength: 12
           maxLength: 12
           readOnly: true
+        image:
+          type: string
+          nullable: true
+        label_id:
+          type: string
+          nullable: true
+        value:
+          type: array
+          items:
+            oneOf:
+              - type: string
+              - allOf:
+                  - $ref: '#/components/schemas/point-value'
+                  - $ref: '#/components/schemas/read-only'
     image:
       title: image
       type: object
@@ -840,7 +863,6 @@ components:
           example: 38jobTomPDqt
           minLength: 12
           maxLength: 12
-          readOnly: true
         created_at:
           type: string
           format: date-time
@@ -848,9 +870,10 @@ components:
           description: time the resource was created on the database
           readOnly: true
         user:
-          description: who owns the resource
           type: string
+          description: who owns the resource
           nullable: true
+          readOnly: true
     point-value:
       title: point-value
       type: object
@@ -1053,6 +1076,13 @@ components:
       schema:
         type: string
       description: search authors
+    user_id:
+      name: user_id
+      in: query
+      required: false
+      schema:
+        type: string
+      description: user id you want to filter by
   securitySchemes:
     JSON-Web-Token:
       type: http
