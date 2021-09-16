@@ -658,6 +658,7 @@ components:
           items:
             oneOf:
               - type: string
+                nullable: true
               - $ref: '#/components/schemas/condition'
               - allOf:
                   - $ref: '#/components/schemas/condition'
@@ -668,6 +669,7 @@ components:
             description: URL(s) pointing towards image endpoints
             oneOf:
               - type: string
+                nullable: true
               - $ref: '#/components/schemas/image'
               - allOf:
                   - $ref: '#/components/schemas/image'
@@ -681,6 +683,7 @@ components:
           items:
             oneOf:
               - type: string
+                nullable: true
               - $ref: '#/components/schemas/point'
               - allOf:
                   - $ref: '#/components/schemas/point'
@@ -690,6 +693,7 @@ components:
           description: 'weight applied to each condition, must be the same length as condition'
           items:
             type: number
+            nullable: true
         description:
           type: string
           nullable: true
