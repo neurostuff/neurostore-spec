@@ -251,6 +251,28 @@ paths:
       description: Update an existing analysis.
       security:
         - JSON-Web-Token: []
+  /points/:
+    get:
+      summary: Get Points
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/point'
+                        - $ref: '#/components/schemas/read-only'
+                  metadata:
+                    $ref: '#/components/schemas/metadata'
+      description: list points in database
+      operationId: ''
   '/points/{id}':
     parameters:
       - schema:
