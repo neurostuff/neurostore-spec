@@ -744,7 +744,6 @@ components:
           readOnly: true
         image:
           type: string
-          nullable: true
         label_id:
           type: string
           nullable: true
