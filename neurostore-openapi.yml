@@ -762,6 +762,7 @@ components:
           readOnly: true
         image:
           type: string
+          nullable: true
         label_id:
           type: string
           nullable: true
@@ -770,7 +771,6 @@ components:
           items:
             oneOf:
               - type: string
-                properties: {}
               - $ref: '#/components/schemas/point-value'
               - allOf:
                   - $ref: '#/components/schemas/point-value'
