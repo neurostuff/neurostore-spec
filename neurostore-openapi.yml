@@ -715,6 +715,11 @@ components:
                 properties:
                   id:
                     type: string
+                  created_at:
+                    type: string
+                  user:
+                    type: string
+                    nullable: true
         weights:
           type: array
           description: 'weight applied to each condition, must be the same length as condition'
