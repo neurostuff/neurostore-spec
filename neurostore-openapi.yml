@@ -703,10 +703,14 @@ components:
           items:
             oneOf:
               - type: string
-              - $ref: '#/components/schemas/point'
-              - allOf:
-                  - $ref: '#/components/schemas/point'
-                  - $ref: '#/components/schemas/read-only'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/point'
+              - type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/read-only'
+                    - $ref: '#/components/schemas/point'
         weights:
           type: array
           description: 'weight applied to each condition, must be the same length as condition'
