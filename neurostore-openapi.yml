@@ -703,9 +703,9 @@ components:
             oneOf:
               - type: string
               - $ref: '#/components/schemas/point'
-              - allOf:
-                  - $ref: '#/components/schemas/point'
-                  - $ref: '#/components/schemas/read-only'
+#              - allOf:
+#                  - $ref: '#/components/schemas/point'
+#                  - $ref: '#/components/schemas/read-only'
               - type: object
                 properties:
                   id:
