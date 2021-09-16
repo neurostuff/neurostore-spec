@@ -702,14 +702,10 @@ components:
           items:
             oneOf:
               - type: string
-              - type: array
-                items:
-                  $ref: '#/components/schemas/point'
-              - type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/read-only'
-                    - $ref: '#/components/schemas/point'
+              - $ref: '#/components/schemas/point'
+              - allOf:
+                  - $ref: '#/components/schemas/point'
+                  - $ref: '#/components/schemas/read-only'
               - type: object
                 properties:
                   id:
