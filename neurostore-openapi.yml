@@ -272,6 +272,23 @@ paths:
                   metadata:
                     $ref: '#/components/schemas/metadata'
       description: list points in database
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/point'
+      description: create a point
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/point'
   '/points/{id}':
     parameters:
       - schema:
