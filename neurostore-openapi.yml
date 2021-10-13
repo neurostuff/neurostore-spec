@@ -607,7 +607,12 @@ components:
           description: ''
           type: array
           items:
-            $ref: '#/components/schemas/study'
+            oneOf:
+              - allOf:
+                  - $ref: '#/components/schemas/study'
+                  - $ref: '#/components/schemas/read-only'
+              - type: string
+                properties: {}
         user:
           type: string
           nullable: true
