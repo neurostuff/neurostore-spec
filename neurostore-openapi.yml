@@ -598,21 +598,21 @@ components:
         pmid:
           type: string
           nullable: true
-        nimads_data:
+        studies:
           description: ''
-          type: object
-          properties:
-            dataset:
-              type: array
-              items:
-                $ref: '#/components/schemas/study'
+          type: array
+          items:
+            $ref: '#/components/schemas/study'
         user:
           type: string
           nullable: true
           readOnly: true
+        annotations:
+          type: array
+          items: {}
       required:
         - name
-        - nimads_data
+        - studies
     study:
       description: attributes of a study/published paper
       type: object
@@ -908,6 +908,14 @@ components:
           type: integer
           description: count of elements for unique entries
           readOnly: true
+    annotation:
+      title: annotation
+      type: object
+      properties:
+        id:
+          type: string
+        dataset_id:
+          type: string
   responses:
     '404':
       description: Example response
