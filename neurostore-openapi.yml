@@ -506,11 +506,16 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/dataset'
-                    - $ref: '#/components/schemas/read-only'
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/dataset'
+                        - $ref: '#/components/schemas/read-only'
+                  metadata:
+                    $ref: '#/components/schemas/metadata'
       description: Get a list of datasets.
       parameters:
         - $ref: '#/components/parameters/search'
