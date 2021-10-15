@@ -610,7 +610,9 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/annotation'
+                      allOf:
+                        - $ref: '#/components/schemas/annotation'
+                        - $ref: '#/components/schemas/read-only'
       description: get annotations for an available dataset
     post:
       summary: Post Annotation
@@ -643,7 +645,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/annotation'
+                allOf:
+                  - $ref: '#/components/schemas/annotation'
+                  - $ref: '#/components/schemas/read-only'
       description: get an individual annotation
     put:
       summary: Update an annotation
@@ -1195,3 +1199,4 @@ tags:
   - name: studies
   - name: conditions
   - name: user
+  - name: annotations
