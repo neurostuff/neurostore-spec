@@ -613,7 +613,7 @@ paths:
                       $ref: '#/components/schemas/annotation'
       description: get annotations for an available dataset
     post:
-      summary: ''
+      summary: Post Annotation
       responses:
         '200':
           description: OK
@@ -624,6 +624,8 @@ paths:
       description: Create an annotation
       security:
         - JSON-Web-Token: []
+      tags:
+        - annotations
   '/annotations/{id}':
     parameters:
       - schema:
@@ -653,6 +655,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/annotation'
       description: edit an existing annotation
+      tags:
+        - annotations
 components:
   schemas:
     dataset:
