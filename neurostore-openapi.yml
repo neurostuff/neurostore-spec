@@ -591,6 +591,68 @@ paths:
               $ref: '#/components/schemas/user'
       tags:
         - user
+  /annotations/:
+    parameters: []
+    get:
+      summary: Your GET endpoint
+      tags:
+        - annotations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    $ref: '#/components/schemas/metadata'
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/annotation'
+      description: get annotations for an available dataset
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/annotation'
+      description: Create an annotation
+      security:
+        - JSON-Web-Token: []
+  '/annotations/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags:
+        - annotations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/annotation'
+      description: get an individual annotation
+    put:
+      summary: Update an annotation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/annotation'
+      description: edit an existing annotation
 components:
   schemas:
     dataset:
@@ -933,8 +995,14 @@ components:
       properties:
         id:
           type: string
-        dataset_id:
+        dataset:
           type: string
+        name:
+          type: string
+        description:
+          type: string
+        notes:
+          type: object
   responses:
     '404':
       description: Example response
