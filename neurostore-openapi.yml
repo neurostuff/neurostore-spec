@@ -37,7 +37,8 @@ paths:
         '404':
           $ref: '#/components/responses/404'
       description: Retrieve the information of a dataset with the matching dataset ID.
-      parameters: []
+      parameters:
+        - $ref: '#/components/parameters/nested'
     put:
       summary: PUT/update a dataset
       responses:
