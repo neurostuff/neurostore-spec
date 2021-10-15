@@ -523,6 +523,17 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/description'
+        - $ref: '#/components/parameters/source_id'
+        - $ref: '#/components/parameters/unique'
+        - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/authors'
+        - $ref: '#/components/parameters/user_id'
+      security:
+        - JSON-Web-Token: []
+        - {}
     post:
       summary: POST/create a dataset
       responses:
