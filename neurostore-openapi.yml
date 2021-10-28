@@ -614,6 +614,8 @@ paths:
                         - $ref: '#/components/schemas/annotation'
                         - $ref: '#/components/schemas/read-only'
       description: get annotations for an available dataset
+      parameters:
+        - $ref: '#/components/parameters/dataset_id'
     post:
       summary: Post Annotation
       responses:
@@ -1192,6 +1194,13 @@ components:
       schema:
         type: string
       description: user id you want to filter by
+    dataset_id:
+      name: dataset_id
+      in: query
+      required: false
+      schema:
+        type: string
+      description: see all annotations connected to this dataset
   securitySchemes:
     JSON-Web-Token:
       type: http
