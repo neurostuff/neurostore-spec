@@ -628,6 +628,9 @@ paths:
         - JSON-Web-Token: []
       tags:
         - annotations
+      parameters:
+        - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/source_id'
   '/annotations/{id}':
     parameters:
       - schema:
@@ -1119,14 +1122,14 @@ components:
           - pubmed
           - neurosynth
           - neuroquery
-      description: the source of the study you would like to filter/copy from
+      description: the source of the resource you would like to filter/copy from
     source_id:
       name: source_id
       in: query
       schema:
         type: string
         example: 1234567890ab
-      description: id of the study you are either filtering/copying on
+      description: id of the resource you are either filtering/copying on
     name:
       name: name
       in: query
