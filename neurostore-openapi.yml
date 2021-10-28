@@ -1011,7 +1011,9 @@ components:
           type: string
           nullable: true
         notes:
-          type: object
+          type: array
+          items:
+            type: object
   responses:
     '404':
       description: Example response
