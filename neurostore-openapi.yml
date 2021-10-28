@@ -1009,6 +1009,7 @@ components:
           type: string
         description:
           type: string
+          nullable: true
         notes:
           type: object
   responses:
