@@ -1019,10 +1019,19 @@ components:
           type: array
           items:
             type: object
+            properties:
+              analysis:
+                type: string
+              study:
+                type: string
+              note:
+                type: object
         source:
           type: string
+          nullable: true
         source_id:
           type: string
+          nullable: true
         source_updated_at:
           type: string
   responses:
