@@ -1019,6 +1019,12 @@ components:
           type: array
           items:
             type: object
+        source:
+          type: string
+        source_id:
+          type: string
+        source_updated_at:
+          type: string
   responses:
     '404':
       description: Example response
