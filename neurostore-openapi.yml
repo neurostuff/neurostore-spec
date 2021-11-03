@@ -37,7 +37,8 @@ paths:
         '404':
           $ref: '#/components/responses/404'
       description: Retrieve the information of a dataset with the matching dataset ID.
-      parameters: []
+      parameters:
+        - $ref: '#/components/parameters/nested'
     put:
       summary: PUT/update a dataset
       responses:
@@ -506,11 +507,16 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/dataset'
-                    - $ref: '#/components/schemas/read-only'
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/dataset'
+                        - $ref: '#/components/schemas/read-only'
+                  metadata:
+                    $ref: '#/components/schemas/metadata'
       description: Get a list of datasets.
       parameters:
         - $ref: '#/components/parameters/search'
@@ -518,6 +524,17 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/description'
+        - $ref: '#/components/parameters/source_id'
+        - $ref: '#/components/parameters/unique'
+        - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/authors'
+        - $ref: '#/components/parameters/user_id'
+      security:
+        - JSON-Web-Token: []
+        - {}
     post:
       summary: POST/create a dataset
       responses:
@@ -574,6 +591,81 @@ paths:
               $ref: '#/components/schemas/user'
       tags:
         - user
+  /annotations/:
+    parameters: []
+    get:
+      summary: Your GET endpoint
+      tags:
+        - annotations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    $ref: '#/components/schemas/metadata'
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/annotation'
+                        - $ref: '#/components/schemas/read-only'
+      description: get annotations for an available dataset
+      parameters:
+        - $ref: '#/components/parameters/dataset_id'
+    post:
+      summary: Post Annotation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/annotation'
+      description: Create an annotation
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - annotations
+      parameters:
+        - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/source_id'
+  '/annotations/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags:
+        - annotations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/annotation'
+                  - $ref: '#/components/schemas/read-only'
+      description: get an individual annotation
+    put:
+      summary: Update an annotation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/annotation'
+      description: edit an existing annotation
+      tags:
+        - annotations
 components:
   schemas:
     dataset:
@@ -598,21 +690,23 @@ components:
         pmid:
           type: string
           nullable: true
-        nimads_data:
+        studies:
           description: ''
-          type: object
-          properties:
-            dataset:
-              type: array
-              items:
-                $ref: '#/components/schemas/study'
+          type: array
+          items:
+            oneOf:
+              - allOf:
+                  - $ref: '#/components/schemas/study'
+                  - $ref: '#/components/schemas/read-only'
+              - type: string
+                properties: {}
         user:
           type: string
           nullable: true
           readOnly: true
       required:
         - name
-        - nimads_data
+        - studies
     study:
       description: attributes of a study/published paper
       type: object
@@ -908,6 +1002,39 @@ components:
           type: integer
           description: count of elements for unique entries
           readOnly: true
+    annotation:
+      title: annotation
+      type: object
+      properties:
+        id:
+          type: string
+        dataset:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        notes:
+          type: array
+          items:
+            type: object
+            properties:
+              analysis:
+                type: string
+              study:
+                type: string
+              note:
+                type: object
+        source:
+          type: string
+          nullable: true
+        source_id:
+          type: string
+          nullable: true
+        source_updated_at:
+          type: string
+          nullable: true
   responses:
     '404':
       description: Example response
@@ -1013,14 +1140,14 @@ components:
           - pubmed
           - neurosynth
           - neuroquery
-      description: the source of the study you would like to filter/copy from
+      description: the source of the resource you would like to filter/copy from
     source_id:
       name: source_id
       in: query
       schema:
         type: string
         example: 1234567890ab
-      description: id of the study you are either filtering/copying on
+      description: id of the resource you are either filtering/copying on
     name:
       name: name
       in: query
@@ -1083,6 +1210,13 @@ components:
       schema:
         type: string
       description: user id you want to filter by
+    dataset_id:
+      name: dataset_id
+      in: query
+      required: false
+      schema:
+        type: string
+      description: see all annotations connected to this dataset
   securitySchemes:
     JSON-Web-Token:
       type: http
@@ -1096,3 +1230,4 @@ tags:
   - name: studies
   - name: conditions
   - name: user
+  - name: annotations
