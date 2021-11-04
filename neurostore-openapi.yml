@@ -870,34 +870,34 @@ components:
       properties:
         metadata:
           type: object
-          nullable: true
           description: metadata from image
+          nullable: true
         url:
           type: string
-          nullable: true
           format: uri
           example: 'https://neurovault.org/media/images/4778/Positive_RPEs_zstat.nii.gz'
           description: URL to image file
+          nullable: true
         filename:
           type: string
-          nullable: true
           example: Positive_RPEs_zstat.nii.gz
           description: name of the image file
+          nullable: true
         space:
           type: string
-          nullable: true
           example: TAL
           description: the template space the image is in
+          nullable: true
         value_type:
           type: string
-          nullable: true
           example: Z
           description: The values the image represents
+          nullable: true
         analysis_name:
           type: string
-          nullable: true
           example: Positive RPEs
           description: name of the analysis
+          nullable: true
           readOnly: true
         analysis:
           type: string
@@ -910,6 +910,7 @@ components:
           type: string
           format: date-time
           description: date the image was added
+          nullable: true
           readOnly: true
     condition:
       title: condition
