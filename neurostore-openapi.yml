@@ -56,6 +56,16 @@ paths:
         - datasets
       security:
         - JSON-Web-Token: []
+    delete:
+      summary: DELETE a Dataset
+      responses:
+        '200':
+          description: OK
+      description: delete a dataset
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - datasets
   '/studies/{id}':
     parameters:
       - schema:
@@ -100,6 +110,16 @@ paths:
         - studies
       security:
         - JSON-Web-Token: []
+    delete:
+      summary: DELETE a study
+      responses:
+        '200':
+          description: OK
+      description: delete a study
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - studies
   /studies/:
     get:
       summary: GET a list of studies
@@ -256,6 +276,16 @@ paths:
       description: Update an existing analysis.
       security:
         - JSON-Web-Token: []
+    delete:
+      summary: DELETE an analysis
+      responses:
+        '200':
+          description: OK
+      description: delete an analysis
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - analyses
   /points/:
     get:
       summary: Get Points
@@ -337,6 +367,16 @@ paths:
       description: Update a particular MRI coordinate.
       security:
         - JSON-Web-Token: []
+    delete:
+      summary: DELETE a point
+      responses:
+        '200':
+          description: OK
+      description: delete a point
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - points
   '/images/{id}':
     parameters:
       - schema:
@@ -378,6 +418,16 @@ paths:
       description: Update a specific image.
       security:
         - JSON-Web-Token: []
+    delete:
+      summary: DELETE an image
+      responses:
+        '200':
+          description: OK
+      description: delete an image
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - images
   /images/:
     get:
       summary: GET a list of images
@@ -519,6 +569,16 @@ paths:
       description: update a condition
       security:
         - JSON-Web-Token: []
+    delete:
+      summary: DELETE a condition
+      responses:
+        '200':
+          description: OK
+      description: delete a condition
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - conditions
   /datasets/:
     get:
       summary: GET a list of datasets
@@ -687,6 +747,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/annotation'
       description: edit an existing annotation
+      tags:
+        - annotations
+    delete:
+      summary: DELETE an annotation
+      responses:
+        '200':
+          description: OK
+      description: delete annotation
+      security:
+        - JSON-Web-Token: []
       tags:
         - annotations
 components:
