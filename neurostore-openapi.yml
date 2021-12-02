@@ -277,6 +277,25 @@ paths:
                   metadata:
                     $ref: '#/components/schemas/metadata'
       description: list points in database
+    post:
+      summary: POST Points
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/point'
+      tags:
+        - points
+      description: add a point to an analysis
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/point'
   '/points/{id}':
     parameters:
       - schema:
@@ -812,7 +831,6 @@ components:
           example: 38jobTomPDqt
           minLength: 12
           maxLength: 12
-          readOnly: true
     point:
       title: point
       type: object
@@ -851,7 +869,6 @@ components:
           example: 6kwPw6p79Ljm
           minLength: 12
           maxLength: 12
-          readOnly: true
         image:
           type: string
           nullable: true
@@ -909,7 +926,6 @@ components:
           description: ID of the analysis this image came from
           minLength: 12
           maxLength: 12
-          readOnly: true
         add_date:
           type: string
           format: date-time
@@ -983,6 +999,7 @@ components:
         value:
           type: number
           nullable: true
+      description: ''
     user:
       title: user
       type: object
