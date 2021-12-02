@@ -150,8 +150,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties: {}
+                $ref: '#/components/schemas/study'
       requestBody:
         content:
           application/json:
