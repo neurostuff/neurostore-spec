@@ -1002,6 +1002,8 @@ components:
           description: date the image was added
           nullable: true
           readOnly: true
+      required:
+        - analysis
     condition:
       title: condition
       type: object
