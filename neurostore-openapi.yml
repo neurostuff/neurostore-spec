@@ -749,6 +749,8 @@ paths:
       description: edit an existing annotation
       tags:
         - annotations
+      security:
+        - JSON-Web-Token: []
     delete:
       summary: DELETE an annotation
       responses:
