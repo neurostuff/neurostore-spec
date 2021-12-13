@@ -740,7 +740,6 @@ paths:
                       - $ref: '#/components/schemas/read-only'
                   - allOf:
                       - $ref: '#/components/schemas/annotation-export'
-                      - $ref: '#/components/schemas/read-only'
       description: get an individual annotation
     put:
       summary: Update an annotation
