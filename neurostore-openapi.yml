@@ -1129,12 +1129,14 @@ components:
           nullable: true
         metadata:
           type: object
+          nullable: true
     annotation-export:
       title: annotation-export
       type: object
       properties:
         metadata:
           type: object
+          nullable: true
         annotation:
           type: string
   responses:
