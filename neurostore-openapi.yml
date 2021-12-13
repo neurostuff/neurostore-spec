@@ -741,6 +741,8 @@ paths:
                   - allOf:
                       - $ref: '#/components/schemas/annotation-export'
       description: get an individual annotation
+      parameters:
+        - $ref: '#/components/parameters/export'
     put:
       summary: Update an annotation
       responses:
