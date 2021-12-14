@@ -738,8 +738,7 @@ paths:
                   - allOf:
                       - $ref: '#/components/schemas/annotation'
                       - $ref: '#/components/schemas/read-only'
-                  - allOf:
-                      - $ref: '#/components/schemas/annotation-export'
+                  - $ref: '#/components/schemas/annotation-export'
       description: get an individual annotation
       parameters:
         - $ref: '#/components/parameters/export'
