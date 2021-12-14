@@ -734,7 +734,7 @@ paths:
           content:
             application/json:
               schema:
-                anyOf:
+                oneOf:
                   - $ref: '#/components/schemas/annotation-export'
                   - allOf:
                       - $ref: '#/components/schemas/annotation'
@@ -1138,8 +1138,13 @@ components:
         metadata:
           type: object
           nullable: true
+          readOnly: true
         annotation:
           type: string
+          readOnly: true
+      required:
+        - metadata
+        - annotation
   responses:
     '404':
       description: Example response
