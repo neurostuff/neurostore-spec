@@ -735,10 +735,10 @@ paths:
             application/json:
               schema:
                 oneOf:
+                  - $ref: '#/components/schemas/annotation-export'
                   - allOf:
                       - $ref: '#/components/schemas/annotation'
                       - $ref: '#/components/schemas/read-only'
-                  - $ref: '#/components/schemas/annotation-export'
       description: get an individual annotation
       parameters:
         - $ref: '#/components/parameters/export'
