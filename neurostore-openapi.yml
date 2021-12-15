@@ -633,6 +633,11 @@ paths:
       description: Create a dataset.
       security:
         - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/dataset'
   /users/:
     get:
       summary: Your GET endpoint
