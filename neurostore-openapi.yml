@@ -722,6 +722,11 @@ paths:
       parameters:
         - $ref: '#/components/parameters/source'
         - $ref: '#/components/parameters/source_id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/annotation'
   '/annotations/{id}':
     parameters:
       - schema:
