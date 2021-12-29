@@ -744,10 +744,14 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/annotation'
-                  - $ref: '#/components/schemas/read-only'
+                oneOf:
+                  - $ref: '#/components/schemas/annotation-export'
+                  - allOf:
+                      - $ref: '#/components/schemas/annotation'
+                      - $ref: '#/components/schemas/read-only'
       description: get an individual annotation
+      parameters:
+        - $ref: '#/components/parameters/export'
     put:
       summary: Update an annotation
       responses:
@@ -1068,6 +1072,9 @@ components:
           description: who owns the resource
           nullable: true
           readOnly: true
+      required:
+        - created_at
+        - user
     point-value:
       title: point-value
       type: object
@@ -1107,8 +1114,6 @@ components:
       title: annotation
       type: object
       properties:
-        id:
-          type: string
         dataset:
           type: string
         name:
@@ -1136,6 +1141,18 @@ components:
         source_updated_at:
           type: string
           nullable: true
+        metadata:
+          type: object
+          nullable: true
+    annotation-export:
+      title: annotation-export
+      type: object
+      properties:
+        metadata:
+          type: object
+          nullable: true
+        annotation:
+          type: string
   responses:
     '404':
       description: Example response
@@ -1318,6 +1335,13 @@ components:
       schema:
         type: string
       description: see all annotations connected to this dataset
+    export:
+      name: export
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: return endpoint data in consumable/readable format
   securitySchemes:
     JSON-Web-Token:
       type: http
