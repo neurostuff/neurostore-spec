@@ -1138,13 +1138,8 @@ components:
         metadata:
           type: object
           nullable: true
-          readOnly: true
         annotation:
           type: string
-          readOnly: true
-      required:
-        - metadata
-        - annotation
   responses:
     '404':
       description: Example response
