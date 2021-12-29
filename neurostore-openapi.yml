@@ -1062,6 +1062,9 @@ components:
           description: who owns the resource
           nullable: true
           readOnly: true
+      required:
+        - created_at
+        - user
     point-value:
       title: point-value
       type: object
