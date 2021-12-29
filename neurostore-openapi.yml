@@ -734,7 +734,7 @@ paths:
           content:
             application/json:
               schema:
-                anyOf:
+                oneOf:
                   - $ref: '#/components/schemas/annotation-export'
                   - allOf:
                       - $ref: '#/components/schemas/annotation'
