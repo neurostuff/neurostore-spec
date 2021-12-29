@@ -748,7 +748,9 @@ paths:
                 oneOf:
                   - allOf:
                       - $ref: '#/components/schemas/annotation-export'
-                      - required: ['annotation', 'metadata']
+                      - required:
+                          - annotation
+                          - metadata
                   - allOf:
                       - $ref: '#/components/schemas/annotation'
                       - $ref: '#/components/schemas/read-only'
@@ -1129,6 +1131,7 @@ components:
           type: array
           items:
             type: object
+            nullable: true
             properties:
               analysis:
                 type: string
