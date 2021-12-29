@@ -693,6 +693,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   metadata:
                     $ref: '#/components/schemas/metadata'
@@ -745,7 +746,9 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/annotation-export'
+                  - allOf:
+                      - $ref: '#/components/schemas/annotation-export'
+                      - required: ['annotation', 'metadata']
                   - allOf:
                       - $ref: '#/components/schemas/annotation'
                       - $ref: '#/components/schemas/read-only'
@@ -1090,7 +1093,6 @@ components:
       type: object
       title: user
       description: ''
-      additionalProperties: false
       properties:
         name:
           type: string
@@ -1115,7 +1117,6 @@ components:
     annotation:
       type: object
       title: annotation
-      additionalProperties: false
       properties:
         dataset:
           type: string
@@ -1150,7 +1151,6 @@ components:
     annotation-export:
       type: object
       title: annotation-export
-      additionalProperties: false
       properties:
         metadata:
           type: object
