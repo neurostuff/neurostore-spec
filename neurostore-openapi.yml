@@ -1087,9 +1087,10 @@ components:
           nullable: true
       description: ''
     user:
-      title: user
       type: object
+      title: user
       description: ''
+      additionalProperties: false
       properties:
         name:
           type: string
@@ -1097,9 +1098,10 @@ components:
         neuroid:
           type: string
     metadata:
-      title: metadata
       type: object
+      title: metadata
       description: data included in every list response
+      additionalProperties: false
       properties:
         total_count:
           type: integer
@@ -1111,8 +1113,9 @@ components:
           description: count of elements for unique entries
           readOnly: true
     annotation:
-      title: annotation
       type: object
+      title: annotation
+      additionalProperties: false
       properties:
         dataset:
           type: string
@@ -1145,8 +1148,9 @@ components:
           type: object
           nullable: true
     annotation-export:
-      title: annotation-export
       type: object
+      title: annotation-export
+      additionalProperties: false
       properties:
         metadata:
           type: object
