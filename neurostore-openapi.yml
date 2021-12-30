@@ -66,6 +66,25 @@ paths:
         - JSON-Web-Token: []
       tags:
         - datasets
+    patch:
+      summary: Patch dataset's metadata
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dataset'
+      description: 'edit (without overwriting) a dataset''s metadata, otherwise behaves like PUT'
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/dataset'
+      tags:
+        - datasets
   '/studies/{id}':
     parameters:
       - schema:
@@ -118,6 +137,25 @@ paths:
       description: delete a study
       security:
         - JSON-Web-Token: []
+      tags:
+        - studies
+    patch:
+      summary: Patch a study's metadata
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/study'
+      description: update a study's metadata without overwriting existing keys (otherwise same as PUT)
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/study'
       tags:
         - studies
   /studies/:
@@ -739,24 +777,16 @@ paths:
       summary: Your GET endpoint
       tags:
         - annotations
+      description: get an individual annotation
+      parameters:
+        - $ref: '#/components/parameters/export'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                oneOf:
-                  - allOf:
-                      - $ref: '#/components/schemas/annotation-export'
-                      - required:
-                          - annotation
-                          - metadata
-                  - allOf:
-                      - $ref: '#/components/schemas/annotation'
-                      - $ref: '#/components/schemas/read-only'
-      description: get an individual annotation
-      parameters:
-        - $ref: '#/components/parameters/export'
+                $ref: '#/components/schemas/annotation'
     put:
       summary: Update an annotation
       responses:
@@ -779,6 +809,25 @@ paths:
       description: delete annotation
       security:
         - JSON-Web-Token: []
+      tags:
+        - annotations
+    patch:
+      summary: Patch an annotation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/annotation'
+      description: add new key to JSON components without overwriting entire component
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/annotation'
       tags:
         - annotations
 components:
@@ -1139,6 +1188,8 @@ components:
                 type: string
               note:
                 type: object
+              annotation:
+                type: string
         source:
           type: string
           nullable: true
@@ -1161,6 +1212,12 @@ components:
         annotation:
           type: string
   responses:
+    '200':
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
     '404':
       description: Example response
       content:
