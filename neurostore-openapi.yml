@@ -771,6 +771,11 @@ paths:
         - annotations
       security:
         - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/annotation'
     delete:
       summary: DELETE an annotation
       responses:
