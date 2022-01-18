@@ -627,7 +627,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/dataset'
+                allOf:
+                  - $ref: '#/components/schemas/dataset'
+                  - $ref: '#/components/schemas/read-only'
       tags:
         - datasets
       description: Create a dataset.
