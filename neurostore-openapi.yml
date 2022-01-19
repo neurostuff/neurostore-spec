@@ -1122,6 +1122,7 @@ components:
     annotation:
       title: annotation
       type: object
+      description: ''
       properties:
         dataset:
           type: string
@@ -1133,14 +1134,18 @@ components:
         notes:
           type: array
           items:
-            type: object
-            properties:
-              analysis:
-                type: string
-              study:
-                type: string
-              note:
-                type: object
+            allOf:
+              - type: object
+                properties:
+                  analysis:
+                    type: string
+                  study:
+                    type: string
+                  note:
+                    type: object
+                  annotation:
+                    type: string
+              - $ref: '#/components/schemas/read-only'
         source:
           type: string
           nullable: true
