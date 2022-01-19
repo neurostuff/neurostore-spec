@@ -1139,12 +1139,16 @@ components:
                 properties:
                   analysis:
                     type: string
+                    description: analysis id of the note
                   study:
                     type: string
+                    description: study id of the note
                   note:
                     type: object
+                    description: note object
                   annotation:
                     type: string
+                    description: annotation id of the note
               - $ref: '#/components/schemas/read-only'
         source:
           type: string
