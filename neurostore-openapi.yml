@@ -646,7 +646,22 @@ paths:
       summary: Your GET endpoint
       tags:
         - annotations
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    $ref: '#/components/schemas/metadata'
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/annotation'
+                        - $ref: '#/components/schemas/read-only'
       description: get annotations for an available dataset
       parameters:
         - $ref: '#/components/parameters/dataset_id'
