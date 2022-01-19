@@ -1135,14 +1135,7 @@ components:
           type: array
           items:
             allOf:
-              - type: object
-                properties:
-                  analysis:
-                    type: string
-                  study:
-                    type: string
-                  note:
-                    type: object
+              - $ref: '#/components/schemas/annotation-note'
               - $ref: '#/components/schemas/read-only'
         source:
           type: string
@@ -1156,6 +1149,18 @@ components:
         metadata:
           type: object
           nullable: true
+    annotation-note:
+      title: annotation-note
+      type: object
+      properties:
+        analysis:
+          type: string
+        study:
+          type: string
+        annotation:
+          type: string
+        note:
+          type: object
     annotation-export:
       title: annotation-export
       type: object
