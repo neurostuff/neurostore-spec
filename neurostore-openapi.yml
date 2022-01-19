@@ -714,11 +714,6 @@ paths:
       description: get an individual annotation
       parameters:
         - $ref: '#/components/parameters/export'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/annotation'
     put:
       summary: Update an annotation
       responses:
