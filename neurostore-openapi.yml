@@ -1162,8 +1162,9 @@ components:
         note:
           type: object
     annotation-export:
-      title: annotation-export
       type: object
+      title: annotation-export
+      additionalProperties: false
       properties:
         metadata:
           type: object
