@@ -1081,9 +1081,6 @@ components:
           description: who owns the resource
           nullable: true
           readOnly: true
-      required:
-        - created_at
-        - user
     point-value:
       title: point-value
       type: object
@@ -1135,16 +1132,7 @@ components:
           type: array
           items:
             allOf:
-              - type: object
-                properties:
-                  analysis:
-                    type: string
-                  study:
-                    type: string
-                  note:
-                    type: object
-                  annotation:
-                    type: string
+              - $ref: '#/components/schemas/annotation-note'
               - $ref: '#/components/schemas/read-only'
         source:
           type: string
@@ -1158,9 +1146,22 @@ components:
         metadata:
           type: object
           nullable: true
-    annotation-export:
-      title: annotation-export
+    annotation-note:
+      title: annotation-note
       type: object
+      properties:
+        analysis:
+          type: string
+        study:
+          type: string
+        annotation:
+          type: string
+        note:
+          type: object
+    annotation-export:
+      type: object
+      title: annotation-export
+      additionalProperties: false
       properties:
         metadata:
           type: object
