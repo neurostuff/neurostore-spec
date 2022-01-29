@@ -1124,11 +1124,8 @@ components:
           readOnly: true
     annotation:
       type: object
-<<<<<<< HEAD
       title: annotation
-=======
       description: ''
->>>>>>> f913b524ac676862518e76d3417b6f7951bf350f
       properties:
         dataset:
           type: string
@@ -1140,21 +1137,9 @@ components:
         notes:
           type: array
           items:
-<<<<<<< HEAD
-            type: object
-            nullable: true
-            properties:
-              analysis:
-                type: string
-              study:
-                type: string
-              note:
-                type: object
-=======
             allOf:
               - $ref: '#/components/schemas/annotation-note'
               - $ref: '#/components/schemas/read-only'
->>>>>>> f913b524ac676862518e76d3417b6f7951bf350f
         source:
           type: string
           nullable: true
