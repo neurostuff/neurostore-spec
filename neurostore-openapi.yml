@@ -13,6 +13,66 @@ servers:
   - url: 'https://neurostore.org/api'
     description: production
 paths:
+  /datasets/:
+    get:
+      summary: GET a list of datasets
+      tags:
+        - datasets
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/dataset'
+                        - $ref: '#/components/schemas/read-only'
+                  metadata:
+                    $ref: '#/components/schemas/metadata'
+      description: Get a list of datasets.
+      parameters:
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/description'
+        - $ref: '#/components/parameters/source_id'
+        - $ref: '#/components/parameters/unique'
+        - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/authors'
+        - $ref: '#/components/parameters/user_id'
+      security:
+        - JSON-Web-Token: []
+        - {}
+    post:
+      summary: POST/create a dataset
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/dataset'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - datasets
+      description: Create a dataset.
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/dataset'
   '/datasets/{id}':
     parameters:
       - schema:
@@ -66,60 +126,6 @@ paths:
         - JSON-Web-Token: []
       tags:
         - datasets
-  '/studies/{id}':
-    parameters:
-      - schema:
-          type: string
-        name: id
-        in: path
-        required: true
-    get:
-      summary: GET a study
-      tags:
-        - studies
-      responses:
-        '200':
-          description: Study Found
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/study'
-                  - $ref: '#/components/schemas/read-only'
-              examples: {}
-        '404':
-          $ref: '#/components/responses/404'
-      description: Get a study.
-      parameters:
-        - $ref: '#/components/parameters/nested'
-    put:
-      summary: PUT/update a study
-      responses:
-        '200':
-          description: OK
-        '422':
-          $ref: '#/components/responses/422'
-      description: Update a study.
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/study'
-      tags:
-        - studies
-      security:
-        - JSON-Web-Token: []
-    delete:
-      summary: DELETE a study
-      responses:
-        '200':
-          description: OK
-      description: delete a study
-      security:
-        - JSON-Web-Token: []
-      tags:
-        - studies
   /studies/:
     get:
       summary: GET a list of studies
@@ -185,6 +191,60 @@ paths:
       parameters:
         - $ref: '#/components/parameters/source'
         - $ref: '#/components/parameters/source_id'
+  '/studies/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: GET a study
+      tags:
+        - studies
+      responses:
+        '200':
+          description: Study Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/study'
+                  - $ref: '#/components/schemas/read-only'
+              examples: {}
+        '404':
+          $ref: '#/components/responses/404'
+      description: Get a study.
+      parameters:
+        - $ref: '#/components/parameters/nested'
+    put:
+      summary: PUT/update a study
+      responses:
+        '200':
+          description: OK
+        '422':
+          $ref: '#/components/responses/422'
+      description: Update a study.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/study'
+      tags:
+        - studies
+      security:
+        - JSON-Web-Token: []
+    delete:
+      summary: DELETE a study
+      responses:
+        '200':
+          description: OK
+      description: delete a study
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - studies
   /analyses/:
     get:
       summary: GET list of analyses
@@ -378,57 +438,6 @@ paths:
         - JSON-Web-Token: []
       tags:
         - points
-  '/images/{id}':
-    parameters:
-      - schema:
-          type: string
-        name: id
-        in: path
-        required: true
-    get:
-      summary: GET an image
-      tags:
-        - images
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/image'
-                  - $ref: '#/components/schemas/read-only'
-        '404':
-          $ref: '#/components/responses/404'
-      description: Retrieve information about a particular image from an analysis.
-    put:
-      summary: PUT/update an image
-      responses:
-        '200':
-          description: OK
-        '422':
-          $ref: '#/components/responses/422'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/image'
-        description: ''
-      tags:
-        - images
-      description: Update a specific image.
-      security:
-        - JSON-Web-Token: []
-    delete:
-      summary: DELETE an image
-      responses:
-        '200':
-          description: OK
-      description: delete an image
-      security:
-        - JSON-Web-Token: []
-      tags:
-        - images
   /images/:
     get:
       summary: GET a list of images
@@ -480,6 +489,57 @@ paths:
       description: Create an image
       security:
         - JSON-Web-Token: []
+  '/images/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: GET an image
+      tags:
+        - images
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/image'
+                  - $ref: '#/components/schemas/read-only'
+        '404':
+          $ref: '#/components/responses/404'
+      description: Retrieve information about a particular image from an analysis.
+    put:
+      summary: PUT/update an image
+      responses:
+        '200':
+          description: OK
+        '422':
+          $ref: '#/components/responses/422'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/image'
+        description: ''
+      tags:
+        - images
+      description: Update a specific image.
+      security:
+        - JSON-Web-Token: []
+    delete:
+      summary: DELETE an image
+      responses:
+        '200':
+          description: OK
+      description: delete an image
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - images
   /conditions/:
     get:
       summary: GET Conditions
@@ -580,106 +640,6 @@ paths:
         - JSON-Web-Token: []
       tags:
         - conditions
-  /datasets/:
-    get:
-      summary: GET a list of datasets
-      tags:
-        - datasets
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  results:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/dataset'
-                        - $ref: '#/components/schemas/read-only'
-                  metadata:
-                    $ref: '#/components/schemas/metadata'
-      description: Get a list of datasets.
-      parameters:
-        - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/desc'
-        - $ref: '#/components/parameters/page_size'
-        - $ref: '#/components/parameters/nested'
-        - $ref: '#/components/parameters/name'
-        - $ref: '#/components/parameters/description'
-        - $ref: '#/components/parameters/source_id'
-        - $ref: '#/components/parameters/unique'
-        - $ref: '#/components/parameters/source'
-        - $ref: '#/components/parameters/authors'
-        - $ref: '#/components/parameters/user_id'
-      security:
-        - JSON-Web-Token: []
-        - {}
-    post:
-      summary: POST/create a dataset
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/dataset'
-      tags:
-        - datasets
-      description: Create a dataset.
-      security:
-        - JSON-Web-Token: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/dataset'
-  /users/:
-    get:
-      summary: Your GET endpoint
-      tags:
-        - user
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  metadata:
-                    $ref: '#/components/schemas/metadata'
-                  results:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/user'
-      description: get list of users
-      security:
-        - JSON-Web-Token: []
-    post:
-      summary: ''
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/user'
-      description: create a user
-      security:
-        - JSON-Web-Token: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/user'
-      tags:
-        - user
   /annotations/:
     parameters: []
     get:
@@ -714,7 +674,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/annotation'
+                allOf:
+                  - $ref: '#/components/schemas/annotation'
+                  - $ref: '#/components/schemas/read-only'
       description: Create an annotation
       security:
         - JSON-Web-Token: []
@@ -771,6 +733,11 @@ paths:
         - annotations
       security:
         - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/annotation'
     delete:
       summary: DELETE an annotation
       responses:
@@ -781,6 +748,48 @@ paths:
         - JSON-Web-Token: []
       tags:
         - annotations
+  /users/:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    $ref: '#/components/schemas/metadata'
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/user'
+      description: get list of users
+      security:
+        - JSON-Web-Token: []
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+      description: create a user
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      tags:
+        - user
 components:
   schemas:
     dataset:
@@ -1077,9 +1086,6 @@ components:
           description: who owns the resource
           nullable: true
           readOnly: true
-      required:
-        - created_at
-        - user
     point-value:
       title: point-value
       type: object
@@ -1118,7 +1124,11 @@ components:
           readOnly: true
     annotation:
       type: object
+<<<<<<< HEAD
       title: annotation
+=======
+      description: ''
+>>>>>>> f913b524ac676862518e76d3417b6f7951bf350f
       properties:
         dataset:
           type: string
@@ -1130,6 +1140,7 @@ components:
         notes:
           type: array
           items:
+<<<<<<< HEAD
             type: object
             nullable: true
             properties:
@@ -1139,6 +1150,11 @@ components:
                 type: string
               note:
                 type: object
+=======
+            allOf:
+              - $ref: '#/components/schemas/annotation-note'
+              - $ref: '#/components/schemas/read-only'
+>>>>>>> f913b524ac676862518e76d3417b6f7951bf350f
         source:
           type: string
           nullable: true
@@ -1151,9 +1167,22 @@ components:
         metadata:
           type: object
           nullable: true
+    annotation-note:
+      title: annotation-note
+      type: object
+      properties:
+        analysis:
+          type: string
+        study:
+          type: string
+        annotation:
+          type: string
+        note:
+          type: object
     annotation-export:
       type: object
       title: annotation-export
+      additionalProperties: false
       properties:
         metadata:
           type: object
