@@ -653,6 +653,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   metadata:
                     $ref: '#/components/schemas/metadata'
@@ -707,7 +708,11 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/annotation-export'
+                  - allOf:
+                      - $ref: '#/components/schemas/annotation-export'
+                      - required:
+                          - annotation
+                          - metadata
                   - allOf:
                       - $ref: '#/components/schemas/annotation'
                       - $ref: '#/components/schemas/read-only'
@@ -1093,8 +1098,8 @@ components:
           nullable: true
       description: ''
     user:
-      title: user
       type: object
+      title: user
       description: ''
       properties:
         name:
@@ -1103,9 +1108,10 @@ components:
         neuroid:
           type: string
     metadata:
-      title: metadata
       type: object
+      title: metadata
       description: data included in every list response
+      additionalProperties: false
       properties:
         total_count:
           type: integer
@@ -1117,8 +1123,8 @@ components:
           description: count of elements for unique entries
           readOnly: true
     annotation:
-      title: annotation
       type: object
+      title: annotation
       description: ''
       properties:
         dataset:
@@ -1166,7 +1172,7 @@ components:
         metadata:
           type: object
           nullable: true
-        annotation:
+        annotation_csv:
           type: string
   responses:
     '404':
