@@ -1160,7 +1160,11 @@ components:
           type: string
         study:
           type: string
+        study_name:
+          type: string
         annotation:
+          type: string
+        analysis_name:
           type: string
         note:
           type: object
