@@ -879,6 +879,8 @@ components:
         source_updated_at:
           type: string
           nullable: true
+        year:
+          type: integer
     analysis:
       title: analysis
       type: object
