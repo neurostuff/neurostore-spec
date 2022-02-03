@@ -1166,6 +1166,8 @@ components:
           type: string
         note:
           type: object
+        study_year:
+          type: integer
     annotation-export:
       type: object
       title: annotation-export
