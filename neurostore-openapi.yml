@@ -1174,10 +1174,10 @@ components:
         study_year:
           type: integer
           nullable: true
-        journal_name:
+        publication:
           type: string
           nullable: true
-        author_names:
+        authors:
           type: string
           nullable: true
     annotation-export:
