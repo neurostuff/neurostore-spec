@@ -1174,6 +1174,12 @@ components:
         study_year:
           type: integer
           nullable: true
+        journal_name:
+          type: string
+          nullable: true
+        author_names:
+          type: string
+          nullable: true
     annotation-export:
       type: object
       title: annotation-export
