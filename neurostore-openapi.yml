@@ -879,6 +879,9 @@ components:
         source_updated_at:
           type: string
           nullable: true
+        year:
+          type: integer
+          nullable: true
     analysis:
       title: analysis
       type: object
@@ -1168,6 +1171,9 @@ components:
           type: string
         note:
           type: object
+        study_year:
+          type: integer
+          nullable: true
     annotation-export:
       type: object
       title: annotation-export
