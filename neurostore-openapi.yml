@@ -1169,6 +1169,7 @@ components:
           type: string
         analysis_name:
           type: string
+          nullable: true
         note:
           type: object
         study_year:
