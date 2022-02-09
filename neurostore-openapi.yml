@@ -790,6 +790,43 @@ paths:
               $ref: '#/components/schemas/user'
       tags:
         - user
+  '/users/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Individual User Profile
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+    put:
+      summary: Update Individual Profile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+      description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - user
 components:
   schemas:
     dataset:
