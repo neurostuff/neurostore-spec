@@ -827,6 +827,8 @@ components:
           type: string
           nullable: true
           readOnly: true
+        public:
+          type: boolean
     study:
       description: attributes of a study/published paper
       type: object
@@ -1155,6 +1157,8 @@ components:
         metadata:
           type: object
           nullable: true
+        public:
+          type: boolean
     annotation-note:
       title: annotation-note
       type: object
