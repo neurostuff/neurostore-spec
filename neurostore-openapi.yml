@@ -164,6 +164,7 @@ paths:
         - $ref: '#/components/parameters/source'
         - $ref: '#/components/parameters/authors'
         - $ref: '#/components/parameters/user_id'
+        - $ref: '#/components/parameters/data_type'
       security:
         - JSON-Web-Token: []
         - {}
@@ -1410,6 +1411,17 @@ components:
       schema:
         type: boolean
       description: return endpoint data in consumable/readable format
+    data_type:
+      name: data_type
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - coordinate
+          - image
+          - both
+      description: 'whether searching for studies that contain coordinates, images, or both'
   securitySchemes:
     JSON-Web-Token:
       type: http
