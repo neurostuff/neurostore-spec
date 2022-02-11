@@ -1,0 +1,171 @@
+openapi: 3.1.0
+info:
+  title: analysis specification
+  version: '1.0'
+  summary: Analysis Specification for Meta-analysis
+  description: api to create a meta-analysis specification
+servers:
+  - url: 'http://localhost:80'
+paths:
+  '/users/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get User Info by User ID
+      tags: []
+      description: Retrieve the information of the user with the matching user ID.
+  /users:
+    parameters: []
+    get:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+  /meta-analyses:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bundle'
+      description: list all meta-analyses
+    parameters: []
+  '/meta-analyses/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+  /datasets:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+  '/datasets/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+  /annotations:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+  '/annotations/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+  /specifications:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/meta-analysis'
+      description: meta-analysis specification
+    parameters: []
+  '/specifications/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/meta-analysis'
+components:
+  schemas:
+    meta-analysis:
+      title: meta-analysis
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        estimator:
+          $ref: '#/components/schemas/estimator'
+        mask:
+          type:
+            - string
+            - 'null'
+        contrast:
+          type:
+            - string
+            - 'null'
+        transformer:
+          type:
+            - string
+            - 'null'
+        corrector:
+          $ref: '#/components/schemas/corrector'
+    estimator:
+      title: estimator
+      type: object
+      properties:
+        algorithm:
+          type: string
+    corrector:
+      title: corrector
+      type: object
+      properties:
+        type:
+          type: string
+    bundle:
+      title: bundle
+      type: object
+      properties:
+        meta-analysis-specification:
+          $ref: '#/components/schemas/meta-analysis'
+        dataset:
+          $ref: ''
+        annotation:
+          $ref: ./neurostore-openapi.yml#/components/schemas/annotation
