@@ -1,11 +1,14 @@
 openapi: 3.0.0
 info:
-  title: analysis specification
+  title: Analysis Specification for Meta-analysis
   version: '1.0'
-  summary: Analysis Specification for Meta-analysis
   description: api to create a meta-analysis specification
+  contact:
+    name: James D Kent
+    url: 'https://github.com/jdkent'
+    email: jamesdkent21@gmail.com
 servers:
-  - url: 'http://localhost:81'
+  - url: 'http://localhost:81/api'
 paths:
   '/users/{id}':
     parameters:
@@ -18,6 +21,9 @@ paths:
       summary: Get User Info by User ID
       tags: []
       description: Retrieve the information of the user with the matching user ID.
+      responses:
+        '200':
+          description: OK
   /users:
     parameters: []
     get:
@@ -25,7 +31,7 @@ paths:
       responses:
         '200':
           description: OK
-  /meta-analyses:
+  /bundles:
     get:
       summary: Your GET endpoint
       tags: []
@@ -40,7 +46,7 @@ paths:
                   $ref: '#/components/schemas/bundle'
       description: list all meta-analyses
     parameters: []
-  '/meta-analyses/{id}':
+  '/bundles/{id}':
     parameters:
       - schema:
           type: string
@@ -50,12 +56,16 @@ paths:
     get:
       summary: Your GET endpoint
       tags: []
-      responses: {}
+      responses:
+        '200':
+          description: OK
   /datasets:
     get:
       summary: Your GET endpoint
       tags: []
-      responses: {}
+      responses:
+        '200':
+          description: OK
   '/datasets/{id}':
     parameters:
       - schema:
@@ -66,12 +76,16 @@ paths:
     get:
       summary: Your GET endpoint
       tags: []
-      responses: {}
+      responses:
+        '200':
+          description: OK
   /annotations:
     get:
       summary: Your GET endpoint
       tags: []
-      responses: {}
+      responses:
+        '200':
+          description: OK
   '/annotations/{id}':
     parameters:
       - schema:
@@ -82,8 +96,10 @@ paths:
     get:
       summary: Your GET endpoint
       tags: []
-      responses: {}
-  /specifications:
+      responses:
+        '200':
+          description: OK
+  /meta-analyses:
     get:
       summary: Your GET endpoint
       tags: []
@@ -95,16 +111,9 @@ paths:
               schema:
                 type: object
                 properties: {}
-        '':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/meta-analysis'
       description: meta-analysis specification
     parameters: []
-  '/specifications/{id}':
+  '/meta-analyses/{id}':
     parameters:
       - schema:
           type: string
@@ -134,17 +143,14 @@ components:
         estimator:
           $ref: '#/components/schemas/estimator'
         mask:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
         contrast:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
         transformer:
-          type:
-            - string
-            - 'null'
+          type: string
+          nullable: true
         corrector:
           $ref: '#/components/schemas/corrector'
     estimator:
@@ -166,6 +172,10 @@ components:
         meta-analysis-specification:
           $ref: '#/components/schemas/meta-analysis'
         dataset:
-          $ref: ''
+          type: object
         annotation:
           $ref: ./neurostore-openapi.yml#/components/schemas/annotation
+  securitySchemes:
+    JSON-Web-Token:
+      type: http
+      scheme: bearer
