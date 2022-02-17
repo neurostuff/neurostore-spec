@@ -170,11 +170,11 @@ components:
       type: object
       properties:
         meta-analysis-specification:
-          $ref: '#/components/schemas/meta-analysis'
+          type: object
         dataset:
           type: object
         annotation:
-          $ref: ./neurostore-openapi.yml#/components/schemas/annotation
+          type: object
   securitySchemes:
     JSON-Web-Token:
       type: http
