@@ -69,7 +69,8 @@ paths:
   /studysets:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - studyset
       responses:
         '200':
           description: OK
@@ -84,7 +85,8 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - studyset
       responses:
         '200':
           description: OK
@@ -92,7 +94,8 @@ paths:
   /annotations:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - annotation
       responses:
         '200':
           description: OK
@@ -106,7 +109,8 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - annotation
       responses:
         '200':
           description: OK
@@ -114,7 +118,8 @@ paths:
   /meta-analyses:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - meta-analysis
       responses:
         '200':
           description: OK
@@ -134,7 +139,8 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - meta-analysis
       responses:
         '200':
           description: OK
@@ -166,18 +172,24 @@ components:
           nullable: true
         corrector:
           $ref: '#/components/schemas/corrector'
+      x-tags:
+        - meta-analysis
     estimator:
       title: estimator
       type: object
       properties:
         algorithm:
           type: string
+      x-tags:
+        - meta-analysis
     corrector:
       title: corrector
       type: object
       properties:
         type:
           type: string
+      x-tags:
+        - meta-analysis
     bundle:
       title: bundle
       type: object
@@ -188,7 +200,38 @@ components:
           type: object
         annotation:
           type: object
+      x-tags:
+        - bundle
+      description: ''
+    annotation:
+      title: annotation
+      type: object
+      properties:
+        id:
+          type: string
+      x-tags:
+        - annotation
+    studyset:
+      title: studyset
+      type: object
+      properties:
+        id:
+          type: string
+      x-tags:
+        - studyset
+    user:
+      title: user
+      type: object
+      properties:
+        id:
+          type: string
   securitySchemes:
     JSON-Web-Token:
       type: http
       scheme: bearer
+tags:
+  - name: annotation
+  - name: bundle
+  - name: meta-analysis
+  - name: studyset
+  - name: user
