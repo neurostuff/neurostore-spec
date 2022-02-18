@@ -19,7 +19,8 @@ paths:
         required: true
     get:
       summary: Get User Info by User ID
-      tags: []
+      tags:
+        - user
       description: Retrieve the information of the user with the matching user ID.
       responses:
         '200':
@@ -31,10 +32,14 @@ paths:
       responses:
         '200':
           description: OK
+      description: List all users
+      tags:
+        - user
   /bundles:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - bundle
       responses:
         '200':
           description: OK
@@ -55,18 +60,22 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - bundle
       responses:
         '200':
           description: OK
-  /datasets:
+      description: 'get a bundle (meta-analysis, annotation, and studyset)'
+  /studysets:
     get:
       summary: Your GET endpoint
       tags: []
       responses:
         '200':
           description: OK
-  '/datasets/{id}':
+      description: get a list of serialized studyset
+    parameters: []
+  '/studysets/{id}':
     parameters:
       - schema:
           type: string
@@ -79,6 +88,7 @@ paths:
       responses:
         '200':
           description: OK
+      description: get a single serialized studyset
   /annotations:
     get:
       summary: Your GET endpoint
@@ -86,6 +96,7 @@ paths:
       responses:
         '200':
           description: OK
+      description: git a list of serialized annotations
   '/annotations/{id}':
     parameters:
       - schema:
@@ -99,6 +110,7 @@ paths:
       responses:
         '200':
           description: OK
+      description: get a single annotation
   /meta-analyses:
     get:
       summary: Your GET endpoint
@@ -111,7 +123,7 @@ paths:
               schema:
                 type: object
                 properties: {}
-      description: meta-analysis specification
+      description: list of meta-analysis specifications
     parameters: []
   '/meta-analyses/{id}':
     parameters:
@@ -130,6 +142,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/meta-analysis'
+      description: get a meta-analysis specification
 components:
   schemas:
     meta-analysis:
