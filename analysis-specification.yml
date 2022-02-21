@@ -115,7 +115,7 @@ paths:
         '200':
           description: OK
       description: get a single annotation
-  /meta_analyses:
+  /meta-analyses:
     get:
       summary: Your GET endpoint
       tags:
@@ -130,7 +130,7 @@ paths:
                 properties: {}
       description: list of meta-analysis specifications
     parameters: []
-  '/meta_analyses/{id}':
+  '/meta-analyses/{id}':
     parameters:
       - schema:
           type: string
@@ -154,9 +154,9 @@ components:
     meta-analysis:
       title: meta-analysis
       type: object
+      x-tags:
+        - meta-analysis
       properties:
-        id:
-          type: string
         type:
           type: string
         estimator:
@@ -172,8 +172,6 @@ components:
           nullable: true
         corrector:
           $ref: '#/components/schemas/corrector'
-      x-tags:
-        - meta-analysis
     estimator:
       title: estimator
       type: object
@@ -193,38 +191,62 @@ components:
     bundle:
       title: bundle
       type: object
-      properties:
-        meta-analysis-specification:
-          type: object
-        dataset:
-          type: object
-        annotation:
-          type: object
       x-tags:
         - bundle
       description: ''
+      properties:
+        meta_analysis:
+          type: object
+        studyset:
+          type: object
+        annotation:
+          type: object
+          nullable: true
+        name:
+          type: string
+        description:
+          type: string
     annotation:
       title: annotation
       type: object
-      properties:
-        id:
-          type: string
       x-tags:
         - annotation
+      properties:
+        neurostore_id:
+          type: string
+        annotation:
+          type: object
     studyset:
       title: studyset
       type: object
-      properties:
-        id:
-          type: string
       x-tags:
         - studyset
+      properties:
+        neurostore_id:
+          type: string
+        studyset:
+          type: object
     user:
       title: user
       type: object
       properties:
         id:
           type: string
+    read-only:
+      title: read-only
+      type: object
+      properties:
+        id:
+          type: string
+        updated_at:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          readOnly: true
+        user:
+          type: string
+          nullable: true
   securitySchemes:
     JSON-Web-Token:
       type: http
