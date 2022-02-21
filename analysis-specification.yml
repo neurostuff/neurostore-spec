@@ -33,7 +33,6 @@ paths:
                   - $ref: '#/components/schemas/read-only'
     put:
       summary: Update User Information
-      operationId: ''
       responses:
         '200':
           description: OK
@@ -65,7 +64,6 @@ paths:
         - user
     post:
       summary: Create A New User
-      operationId: ''
       responses:
         '200':
           description: OK
@@ -110,7 +108,6 @@ paths:
     parameters: []
     post:
       summary: Create Bundle
-      operationId: ''
       responses:
         '200':
           description: OK
@@ -146,22 +143,12 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  metadata:
-                    type:
-                      - string
-                      - object
-                  results:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/bundle'
-                        - $ref: '#/components/schemas/read-only'
+                allOf:
+                  - $ref: '#/components/schemas/bundle'
+                  - $ref: '#/components/schemas/read-only'
       description: 'get a bundle (meta-analysis, annotation, and studyset)'
     put:
       summary: Update Bundle
-      operationId: ''
       responses:
         '200':
           description: OK
@@ -196,9 +183,7 @@ paths:
                   metadata:
                     type: object
                   results:
-                    type:
-                      - string
-                      - array
+                    type: array
                     items:
                       allOf:
                         - $ref: '#/components/schemas/studyset'
@@ -207,7 +192,6 @@ paths:
     parameters: []
     post:
       summary: Create Studyset
-      operationId: ''
       responses:
         '200':
           description: OK
@@ -243,7 +227,6 @@ paths:
       description: get a single serialized studyset
     put:
       summary: Update Studyset
-      operationId: ''
       responses:
         '200':
           description: OK
@@ -286,7 +269,6 @@ paths:
       description: git a list of serialized annotations
     post:
       summary: Create Annotation
-      operationId: ''
       responses:
         '200':
           description: OK
@@ -328,7 +310,6 @@ paths:
       description: get a single annotation
     put:
       summary: Update Annotation
-      operationId: ''
       responses:
         '200':
           description: OK
@@ -373,7 +354,6 @@ paths:
     parameters: []
     post:
       summary: ''
-      operationId: ''
       responses:
         '200':
           description: OK
@@ -413,7 +393,6 @@ paths:
       description: get a meta-analysis specification
     put:
       summary: ''
-      operationId: ''
       responses:
         '200':
           description: OK
