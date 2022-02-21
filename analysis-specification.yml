@@ -9,6 +9,7 @@ info:
     email: jamesdkent21@gmail.com
 servers:
   - url: 'http://localhost:81/api'
+    description: testing
 paths:
   '/users/{id}':
     parameters:
@@ -77,7 +78,7 @@ paths:
         - JSON-Web-Token: []
       tags:
         - user
-      description: ''
+      description: create a single user
       requestBody:
         content:
           application/json:
@@ -126,6 +127,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/bundle'
+      description: 'create a new meta-analysis, studyset, annotation bundle'
   '/bundles/{id}':
     parameters:
       - schema:
@@ -167,6 +169,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/bundle'
+      description: update an existing bundle (that has not yet been run)
   /studysets:
     get:
       summary: Your GET endpoint
@@ -210,6 +213,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/studyset'
+      description: create a new serialized studyset
   '/studysets/{id}':
     parameters:
       - schema:
@@ -245,6 +249,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/studyset'
+      description: update an existing serialized studyset
   /annotations:
     get:
       summary: Your GET endpoint
@@ -266,7 +271,7 @@ paths:
                       allOf:
                         - $ref: '#/components/schemas/annotation'
                         - $ref: '#/components/schemas/read-only'
-      description: git a list of serialized annotations
+      description: get a list of serialized annotations
     post:
       summary: Create Annotation
       responses:
@@ -287,6 +292,7 @@ paths:
               $ref: '#/components/schemas/annotation'
       security:
         - JSON-Web-Token: []
+      description: create a new serialized annotation
   '/annotations/{id}':
     parameters:
       - schema:
@@ -328,6 +334,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/annotation'
+      description: update an existing annotation
   /meta-analyses:
     get:
       summary: Your GET endpoint
@@ -372,6 +379,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/meta-analysis'
+      description: create a new meta-analysis specification
   '/meta-analyses/{id}':
     parameters:
       - schema:
@@ -392,7 +400,7 @@ paths:
                 $ref: '#/components/schemas/meta-analysis'
       description: get a meta-analysis specification
     put:
-      summary: ''
+      summary: Update Meta-Analysis specification
       responses:
         '200':
           description: OK
@@ -411,6 +419,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/meta-analysis'
+      description: update an existing meta analysis specification
+      operationId: ''
 components:
   schemas:
     meta-analysis:
@@ -494,6 +504,7 @@ components:
       properties:
         external_id:
           type: string
+      description: attributes of the user object
     read-only:
       title: read-only
       type: object
