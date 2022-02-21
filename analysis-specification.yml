@@ -25,6 +25,34 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/user'
+                  - $ref: '#/components/schemas/read-only'
+    put:
+      summary: Update User Information
+      operationId: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/user'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - user
+      description: update information about a user
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
   /users:
     parameters: []
     get:
@@ -35,6 +63,28 @@ paths:
       description: List all users
       tags:
         - user
+    post:
+      summary: Create A New User
+      operationId: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/user'
+                  - $ref: '#/components/schemas/read-only'
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - user
+      description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
   /bundles:
     get:
       summary: Your GET endpoint
@@ -46,11 +96,39 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/bundle'
-      description: list all meta-analyses
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/bundle'
+                        - $ref: '#/components/schemas/read-only'
+                  metadata:
+                    type: object
+      description: 'list all runnable meta-analysis, studyset, annotation bundles'
     parameters: []
+    post:
+      summary: Create Bundle
+      operationId: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/bundle'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - bundle
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bundle'
   '/bundles/{id}':
     parameters:
       - schema:
@@ -65,7 +143,43 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    type:
+                      - string
+                      - object
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/bundle'
+                        - $ref: '#/components/schemas/read-only'
       description: 'get a bundle (meta-analysis, annotation, and studyset)'
+    put:
+      summary: Update Bundle
+      operationId: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/bundle'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - bundle
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bundle'
   /studysets:
     get:
       summary: Your GET endpoint
@@ -74,8 +188,44 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    type: object
+                  results:
+                    type:
+                      - string
+                      - array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/studyset'
+                        - $ref: '#/components/schemas/read-only'
       description: get a list of serialized studyset
     parameters: []
+    post:
+      summary: Create Studyset
+      operationId: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/studyset'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - studyset
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/studyset'
   '/studysets/{id}':
     parameters:
       - schema:
@@ -91,6 +241,27 @@ paths:
         '200':
           description: OK
       description: get a single serialized studyset
+    put:
+      summary: Update Studyset
+      operationId: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/studyset'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - studyset
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/studyset'
   /annotations:
     get:
       summary: Your GET endpoint
@@ -99,7 +270,41 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    type: object
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/annotation'
+                        - $ref: '#/components/schemas/read-only'
       description: git a list of serialized annotations
+    post:
+      summary: Create Annotation
+      operationId: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/annotation'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - annotation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/annotation'
+      security:
+        - JSON-Web-Token: []
   '/annotations/{id}':
     parameters:
       - schema:
@@ -114,7 +319,34 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/annotation'
+                  - $ref: '#/components/schemas/read-only'
       description: get a single annotation
+    put:
+      summary: Update Annotation
+      operationId: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/annotation'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - annotation
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/annotation'
   /meta-analyses:
     get:
       summary: Your GET endpoint
@@ -127,9 +359,39 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: {}
+                properties:
+                  metadata:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          allOf:
+                            - $ref: '#/components/schemas/meta-analysis'
+                            - $ref: '#/components/schemas/read-only'
       description: list of meta-analysis specifications
     parameters: []
+    post:
+      summary: ''
+      operationId: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/meta-analysis'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - meta-analysis
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/meta-analysis'
   '/meta-analyses/{id}':
     parameters:
       - schema:
@@ -149,6 +411,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/meta-analysis'
       description: get a meta-analysis specification
+    put:
+      summary: ''
+      operationId: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/meta-analysis'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - meta-analysis
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/meta-analysis'
 components:
   schemas:
     meta-analysis:
@@ -230,7 +513,7 @@ components:
       title: user
       type: object
       properties:
-        id:
+        external_id:
           type: string
     read-only:
       title: read-only
