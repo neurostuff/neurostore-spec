@@ -84,7 +84,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/user'
-  /bundles:
+  /meta-analyses:
     get:
       summary: Your GET endpoint
       tags:
@@ -101,7 +101,7 @@ paths:
                     type: array
                     items:
                       allOf:
-                        - $ref: '#/components/schemas/bundle'
+                        - $ref: '#/components/schemas/meta-analysis'
                         - $ref: '#/components/schemas/read-only'
                   metadata:
                     type: object
@@ -116,7 +116,7 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/bundle'
+                  - $ref: '#/components/schemas/meta-analysis'
                   - $ref: '#/components/schemas/read-only'
       tags:
         - bundle
@@ -126,9 +126,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/bundle'
-      description: 'create a new meta-analysis, studyset, annotation bundle'
-  '/bundles/{id}':
+              $ref: '#/components/schemas/meta-analysis'
+      description: 'create a new specification, studyset, annotation bundle'
+  '/meta-analyses/{id}':
     parameters:
       - schema:
           type: string
@@ -146,7 +146,7 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/bundle'
+                  - $ref: '#/components/schemas/meta-analysis'
                   - $ref: '#/components/schemas/read-only'
       description: 'get a bundle (meta-analysis, annotation, and studyset)'
     put:
@@ -158,7 +158,7 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/bundle'
+                  - $ref: '#/components/schemas/meta-analysis'
                   - $ref: '#/components/schemas/read-only'
       tags:
         - bundle
@@ -168,8 +168,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/bundle'
-      description: update an existing bundle (that has not yet been run)
+              $ref: '#/components/schemas/meta-analysis'
+      description: update an existing meta-analysis (that has not yet been run)
   /studysets:
     get:
       summary: Your GET endpoint
@@ -228,6 +228,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/studyset'
       description: get a single serialized studyset
     put:
       summary: Update Studyset
@@ -335,7 +339,7 @@ paths:
             schema:
               $ref: '#/components/schemas/annotation'
       description: update an existing annotation
-  /meta-analyses:
+  /specifications:
     get:
       summary: Your GET endpoint
       tags:
@@ -355,7 +359,7 @@ paths:
                         type: array
                         items:
                           allOf:
-                            - $ref: '#/components/schemas/meta-analysis'
+                            - $ref: '#/components/schemas/specification'
                             - $ref: '#/components/schemas/read-only'
       description: list of meta-analysis specifications
     parameters: []
@@ -378,9 +382,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/meta-analysis'
+              $ref: '#/components/schemas/specification'
       description: create a new meta-analysis specification
-  '/meta-analyses/{id}':
+  '/specifications/{id}':
     parameters:
       - schema:
           type: string
@@ -397,7 +401,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/meta-analysis'
+                $ref: '#/components/schemas/specification'
       description: get a meta-analysis specification
     put:
       summary: Update Meta-Analysis specification
@@ -418,16 +422,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/meta-analysis'
+              $ref: '#/components/schemas/specification'
       description: update an existing meta analysis specification
       operationId: ''
 components:
   schemas:
-    meta-analysis:
-      title: meta-analysis
+    specification:
+      title: specification
       type: object
-      x-tags:
-        - meta-analysis
       properties:
         type:
           type: string
@@ -444,6 +446,8 @@ components:
           nullable: true
         corrector:
           $ref: '#/components/schemas/corrector'
+      x-tags:
+        - specification
     estimator:
       title: estimator
       type: object
@@ -460,24 +464,32 @@ components:
           type: string
       x-tags:
         - meta-analysis
-    bundle:
-      title: bundle
+    meta-analysis:
+      title: meta-analysis
       type: object
-      x-tags:
-        - bundle
       description: ''
       properties:
-        meta_analysis:
-          type: object
+        specification:
+          oneOf:
+            - type: string
+            - type: object
         studyset:
-          type: object
+          oneOf:
+            - type: string
+            - type: object
         annotation:
-          type: object
-          nullable: true
+          oneOf:
+            - type: object
+              nullable: true
+            - type: string
+              properties: {}
+              nullable: true
         name:
           type: string
         description:
           type: string
+      x-tags:
+        - meta-analysis
     annotation:
       title: annotation
       type: object
