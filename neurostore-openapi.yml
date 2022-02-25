@@ -1196,6 +1196,8 @@ components:
           nullable: true
         public:
           type: boolean
+        note_keys:
+          type: object
     annotation-note:
       title: annotation-note
       type: object
