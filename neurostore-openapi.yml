@@ -1207,12 +1207,23 @@ components:
           type: string
         study:
           type: string
+        study_name:
+          type: string
         annotation:
           type: string
+        analysis_name:
+          type: string
+          nullable: true
         note:
           type: object
         study_year:
           type: integer
+          nullable: true
+        publication:
+          type: string
+          nullable: true
+        authors:
+          type: string
           nullable: true
     annotation-export:
       type: object
