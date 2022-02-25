@@ -525,9 +525,12 @@ components:
           type: string
         updated_at:
           type: string
+          format: date-time
+          nullable: true
           readOnly: true
         created_at:
           type: string
+          format: date-time
           readOnly: true
         user:
           type: string
