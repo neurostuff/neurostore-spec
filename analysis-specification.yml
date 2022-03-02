@@ -106,6 +106,8 @@ paths:
                   metadata:
                     type: object
       description: 'list all runnable meta-analysis, studyset, annotation bundles'
+      parameters:
+        - $ref: '#/components/parameters/nested'
     parameters: []
     post:
       summary: Create Bundle
@@ -149,6 +151,8 @@ paths:
                   - $ref: '#/components/schemas/meta-analysis'
                   - $ref: '#/components/schemas/read-only'
       description: 'get a bundle (meta-analysis, annotation, and studyset)'
+      parameters:
+        - $ref: '#/components/parameters/nested'
     put:
       summary: Update Bundle
       responses:
@@ -539,6 +543,14 @@ components:
     JSON-Web-Token:
       type: http
       scheme: bearer
+  parameters:
+    nested:
+      name: nested
+      in: query
+      required: false
+      schema:
+        type: string
+      description: show nested component instead of id
 tags:
   - name: annotation
   - name: bundle
