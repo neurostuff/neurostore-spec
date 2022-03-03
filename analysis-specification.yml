@@ -1,0 +1,559 @@
+openapi: 3.0.0
+info:
+  title: Analysis Specification for Meta-analysis
+  version: '1.0'
+  description: api to create a meta-analysis specification
+  contact:
+    name: James D Kent
+    url: 'https://github.com/jdkent'
+    email: jamesdkent21@gmail.com
+servers:
+  - url: 'http://localhost:81/api'
+    description: testing
+paths:
+  '/users/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get User Info by User ID
+      tags:
+        - user
+      description: Retrieve the information of the user with the matching user ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/user'
+                  - $ref: '#/components/schemas/read-only'
+    put:
+      summary: Update User Information
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/user'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - user
+      description: update information about a user
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+  /users:
+    parameters: []
+    get:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+      description: List all users
+      tags:
+        - user
+    post:
+      summary: Create A New User
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/user'
+                  - $ref: '#/components/schemas/read-only'
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - user
+      description: create a single user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+  /meta-analyses:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - bundle
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/meta-analysis'
+                        - $ref: '#/components/schemas/read-only'
+                  metadata:
+                    type: object
+      description: 'list all runnable meta-analysis, studyset, annotation bundles'
+      parameters:
+        - $ref: '#/components/parameters/nested'
+    parameters: []
+    post:
+      summary: Create Bundle
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/meta-analysis'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - bundle
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/meta-analysis'
+      description: 'create a new specification, studyset, annotation bundle'
+  '/meta-analyses/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags:
+        - bundle
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/meta-analysis'
+                  - $ref: '#/components/schemas/read-only'
+      description: 'get a bundle (specification, annotation, and studyset)'
+      parameters:
+        - $ref: '#/components/parameters/nested'
+    put:
+      summary: Update Bundle
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/meta-analysis'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - bundle
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/meta-analysis'
+      description: update an existing meta-analysis (that has not yet been run)
+  /studysets:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - studyset
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    type: object
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/studyset'
+                        - $ref: '#/components/schemas/read-only'
+      description: get a list of serialized studyset
+    parameters: []
+    post:
+      summary: Create Studyset
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/studyset'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - studyset
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/studyset'
+      description: create a new serialized studyset
+  '/studysets/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags:
+        - studyset
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/studyset'
+      description: get a single serialized studyset
+    put:
+      summary: Update Studyset
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/studyset'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - studyset
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/studyset'
+      description: update an existing serialized studyset
+  /annotations:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - annotation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    type: object
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/annotation'
+                        - $ref: '#/components/schemas/read-only'
+      description: get a list of serialized annotations
+    post:
+      summary: Create Annotation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/annotation'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - annotation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/annotation'
+      security:
+        - JSON-Web-Token: []
+      description: create a new serialized annotation
+  '/annotations/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags:
+        - annotation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/annotation'
+                  - $ref: '#/components/schemas/read-only'
+      description: get a single annotation
+    put:
+      summary: Update Annotation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/annotation'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - annotation
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/annotation'
+      description: update an existing annotation
+  /specifications:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - meta-analysis
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          allOf:
+                            - $ref: '#/components/schemas/specification'
+                            - $ref: '#/components/schemas/read-only'
+      description: list of meta-analysis specifications
+    parameters: []
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/meta-analysis'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - meta-analysis
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/specification'
+      description: create a new meta-analysis specification
+  '/specifications/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags:
+        - meta-analysis
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/specification'
+      description: get a meta-analysis specification
+    put:
+      summary: Update Meta-Analysis specification
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/meta-analysis'
+                  - $ref: '#/components/schemas/read-only'
+      tags:
+        - meta-analysis
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/specification'
+      description: update an existing meta analysis specification
+      operationId: ''
+components:
+  schemas:
+    specification:
+      title: specification
+      type: object
+      properties:
+        type:
+          type: string
+        estimator:
+          $ref: '#/components/schemas/estimator'
+        mask:
+          type: string
+          nullable: true
+        contrast:
+          type: string
+          nullable: true
+        transformer:
+          type: string
+          nullable: true
+        corrector:
+          $ref: '#/components/schemas/corrector'
+      x-tags:
+        - specification
+    estimator:
+      title: estimator
+      type: object
+      properties:
+        algorithm:
+          type: string
+      x-tags:
+        - meta-analysis
+    corrector:
+      title: corrector
+      type: object
+      properties:
+        type:
+          type: string
+      x-tags:
+        - meta-analysis
+    meta-analysis:
+      title: meta-analysis
+      type: object
+      description: ''
+      properties:
+        specification:
+          oneOf:
+            - type: string
+            - type: object
+        studyset:
+          oneOf:
+            - type: string
+            - type: object
+        annotation:
+          oneOf:
+            - type: object
+              nullable: true
+            - type: string
+              properties: {}
+              nullable: true
+        name:
+          type: string
+        description:
+          type: string
+      x-tags:
+        - meta-analysis
+    annotation:
+      title: annotation
+      type: object
+      x-tags:
+        - annotation
+      properties:
+        neurostore_id:
+          type: string
+        annotation:
+          type: object
+    studyset:
+      title: studyset
+      type: object
+      x-tags:
+        - studyset
+      properties:
+        neurostore_id:
+          type: string
+        studyset:
+          type: object
+    user:
+      title: user
+      type: object
+      properties:
+        external_id:
+          type: string
+      description: attributes of the user object
+    read-only:
+      title: read-only
+      type: object
+      properties:
+        id:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        user:
+          type: string
+          nullable: true
+  securitySchemes:
+    JSON-Web-Token:
+      type: http
+      scheme: bearer
+  parameters:
+    nested:
+      name: nested
+      in: query
+      required: false
+      schema:
+        type: string
+      description: show nested component instead of id
+tags:
+  - name: annotation
+  - name: bundle
+  - name: meta-analysis
+  - name: studyset
+  - name: user
