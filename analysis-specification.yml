@@ -150,7 +150,7 @@ paths:
                 allOf:
                   - $ref: '#/components/schemas/meta-analysis'
                   - $ref: '#/components/schemas/read-only'
-      description: 'get a bundle (meta-analysis, annotation, and studyset)'
+      description: 'get a bundle (specification, annotation, and studyset)'
       parameters:
         - $ref: '#/components/parameters/nested'
     put:
