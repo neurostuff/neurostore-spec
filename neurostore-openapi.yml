@@ -799,11 +799,15 @@ components:
           readOnly: true
         public:
           type: boolean
+      x-tags:
+        - dataset
     dataset-return:
       title: dataset-return
       allOf:
         - $ref: '#/components/schemas/dataset'
         - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - dataset
     dataset-list:
       title: dataset-get
       type: object
@@ -814,6 +818,8 @@ components:
             $ref: '#/components/schemas/dataset-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - dataset
     study:
       description: attributes of a study/published paper
       type: object
@@ -869,11 +875,15 @@ components:
         year:
           type: integer
           nullable: true
+      x-tags:
+        - study
     study-return:
       title: study-return
       allOf:
         - $ref: '#/components/schemas/study'
         - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - study
     study-list:
       title: study-get
       type: object
@@ -884,6 +894,8 @@ components:
             $ref: '#/components/schemas/study-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - study
     analysis:
       title: analysis
       type: object
@@ -933,11 +945,15 @@ components:
           example: 38jobTomPDqt
           minLength: 12
           maxLength: 12
+      x-tags:
+        - analysis
     analysis-return:
       title: analysis-return
       allOf:
         - $ref: '#/components/schemas/analysis'
         - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - analysis
     analysis-list:
       title: analysis-list
       type: object
@@ -948,6 +964,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/analysis-return'
+      x-tags:
+        - analysis
     point:
       title: point
       type: object
@@ -1000,10 +1018,14 @@ components:
               - allOf:
                   - $ref: '#/components/schemas/point-value'
                   - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - point
     point-return:
       allOf:
         - $ref: '#/components/schemas/point'
         - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - point
     point-list:
       title: point-list
       type: object
@@ -1014,6 +1036,8 @@ components:
             $ref: '#/components/schemas/point-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - point
     point-value:
       title: point-value
       type: object
@@ -1025,6 +1049,8 @@ components:
           type: number
           nullable: true
       description: ''
+      x-tags:
+        - point
     image:
       title: image
       type: object
@@ -1074,10 +1100,14 @@ components:
           description: date the image was added
           nullable: true
           readOnly: true
+      x-tags:
+        - image
     image-return:
       allOf:
         - $ref: '#/components/schemas/image'
         - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - image
     image-list:
       title: image-list
       type: object
@@ -1088,6 +1118,8 @@ components:
             $ref: '#/components/schemas/image-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - image
     condition:
       title: condition
       type: object
@@ -1102,11 +1134,15 @@ components:
           type: string
           nullable: true
           description: condition description
+      x-tags:
+        - condition
     condition-return:
       title: condition-return
       allOf:
         - $ref: '#/components/schemas/condition'
         - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - condition
     condition-list:
       title: condition-list
       type: object
@@ -1117,6 +1153,8 @@ components:
             $ref: '#/components/schemas/condition-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - condition
     annotation:
       type: object
       title: annotation
@@ -1151,6 +1189,8 @@ components:
           type: boolean
         note_keys:
           type: object
+      x-tags:
+        - annotation
     annotation-return:
       title: annotation-return
       oneOf:
@@ -1162,6 +1202,8 @@ components:
         - allOf:
             - $ref: '#/components/schemas/annotation'
             - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - annotation
     annotation-list:
       title: annotation-list
       type: object
@@ -1172,6 +1214,8 @@ components:
             $ref: '#/components/schemas/annotation-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - annotation
     annotation-note:
       title: annotation-note
       type: object
@@ -1198,6 +1242,8 @@ components:
         authors:
           type: string
           nullable: true
+      x-tags:
+        - annotation
     annotation-export:
       type: object
       title: annotation-export
@@ -1208,6 +1254,8 @@ components:
           nullable: true
         annotation_csv:
           type: string
+      x-tags:
+        - annotation
     user:
       type: object
       title: user
@@ -1218,6 +1266,8 @@ components:
           description: full name of user
         neuroid:
           type: string
+      x-tags:
+        - user
     user-list:
       title: user-list
       type: object
@@ -1228,6 +1278,8 @@ components:
             $ref: '#/components/schemas/user'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - user
     metadata:
       type: object
       title: metadata
@@ -1244,6 +1296,8 @@ components:
           description: count of elements for unique entries
           readOnly: true
       x-internal: true
+      x-tags:
+        - support
     read-only:
       title: read-only
       type: object
@@ -1267,6 +1321,8 @@ components:
           nullable: true
           readOnly: true
       x-internal: true
+      x-tags:
+        - support
     json-ld:
       title: json-ld
       type: object
@@ -1289,6 +1345,8 @@ components:
           description: One of the NiMADS data types
           example: Study
       x-internal: true
+      x-tags:
+        - support
   responses:
     '404':
       description: Example response
