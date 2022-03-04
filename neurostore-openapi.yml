@@ -740,6 +740,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/user'
+      description: get an individual user
     put:
       summary: Update Individual Profile
       responses:
@@ -749,7 +750,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/user'
-      description: ''
+      description: update an individual user
       requestBody:
         content:
           application/json:
