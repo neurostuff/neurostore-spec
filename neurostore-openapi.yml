@@ -798,6 +798,21 @@ components:
           readOnly: true
         public:
           type: boolean
+    dataset-return:
+      title: dataset-return
+      allOf:
+        - $ref: '#/components/schemas/dataset'
+        - $ref: '#/components/schemas/read-only'
+    dataset-list:
+      title: dataset-get
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/dataset-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
     study:
       description: attributes of a study/published paper
       type: object
@@ -853,6 +868,21 @@ components:
         year:
           type: integer
           nullable: true
+    study-return:
+      title: study-return
+      allOf:
+        - $ref: '#/components/schemas/study'
+        - $ref: '#/components/schemas/read-only'
+    study-list:
+      title: study-get
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/study-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
     analysis:
       title: analysis
       type: object
@@ -902,6 +932,21 @@ components:
           example: 38jobTomPDqt
           minLength: 12
           maxLength: 12
+    analysis-return:
+      title: analysis-return
+      allOf:
+        - $ref: '#/components/schemas/analysis'
+        - $ref: '#/components/schemas/read-only'
+    analysis-list:
+      title: analysis-list
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/metadata'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/analysis-return'
     point:
       title: point
       type: object
@@ -954,6 +999,31 @@ components:
               - allOf:
                   - $ref: '#/components/schemas/point-value'
                   - $ref: '#/components/schemas/read-only'
+    point-return:
+      allOf:
+        - $ref: '#/components/schemas/point'
+        - $ref: '#/components/schemas/read-only'
+    point-list:
+      title: point-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/point-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    point-value:
+      title: point-value
+      type: object
+      properties:
+        kind:
+          type: string
+          nullable: true
+        value:
+          type: number
+          nullable: true
+      description: ''
     image:
       title: image
       type: object
@@ -1003,6 +1073,20 @@ components:
           description: date the image was added
           nullable: true
           readOnly: true
+    image-return:
+      allOf:
+        - $ref: '#/components/schemas/image'
+        - $ref: '#/components/schemas/read-only'
+    image-list:
+      title: image-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/image-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
     condition:
       title: condition
       type: object
@@ -1017,85 +1101,21 @@ components:
           type: string
           nullable: true
           description: condition description
-    json-ld:
-      title: json-ld
-      type: object
-      description: JSON-LD elements for data tracking
-      properties:
-        '@context':
-          type: object
-          description: Context for the shorthand names
-          properties:
-            '@vocab':
-              type: string
-              description: common URI prefix for @type
-              format: uri
-        '@id':
-          type: string
-          format: uri
-          description: URI of the resource
-        '@type':
-          type: string
-          description: One of the NiMADS data types
-          example: Study
-    read-only:
-      title: read-only
-      type: object
-      description: common read-only attributes
-      properties:
-        id:
-          type: string
-          description: short UUID specifying the location of this resource
-          example: 38jobTomPDqt
-          minLength: 12
-          maxLength: 12
-        created_at:
-          type: string
-          format: date-time
-          example: '2021-01-16T20:50:38.009318+00:00'
-          description: time the resource was created on the database
-          readOnly: true
-        user:
-          type: string
-          description: who owns the resource
-          nullable: true
-          readOnly: true
-    point-value:
-      title: point-value
+    condition-return:
+      title: condition-return
+      allOf:
+        - $ref: '#/components/schemas/condition'
+        - $ref: '#/components/schemas/read-only'
+    condition-list:
+      title: condition-list
       type: object
       properties:
-        kind:
-          type: string
-          nullable: true
-        value:
-          type: number
-          nullable: true
-      description: ''
-    user:
-      type: object
-      title: user
-      description: ''
-      properties:
-        name:
-          type: string
-          description: full name of user
-        neuroid:
-          type: string
-    metadata:
-      type: object
-      title: metadata
-      description: data included in every list response
-      additionalProperties: false
-      properties:
-        total_count:
-          type: integer
-          description: |
-            total number of entries
-          readOnly: true
-        unique_count:
-          type: integer
-          description: count of elements for unique entries
-          readOnly: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/condition-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
     annotation:
       type: object
       title: annotation
@@ -1130,6 +1150,27 @@ components:
           type: boolean
         note_keys:
           type: object
+    annotation-return:
+      title: annotation-return
+      oneOf:
+        - allOf:
+            - $ref: '#/components/schemas/annotation-export'
+            - required:
+                - annotation
+                - metadata
+        - allOf:
+            - $ref: '#/components/schemas/annotation'
+            - $ref: '#/components/schemas/read-only'
+    annotation-list:
+      title: annotation-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/annotation-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
     annotation-note:
       title: annotation-note
       type: object
@@ -1166,115 +1207,16 @@ components:
           nullable: true
         annotation_csv:
           type: string
-    dataset-list:
-      title: dataset-get
+    user:
       type: object
+      title: user
+      description: ''
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/dataset-return'
-        metadata:
-          $ref: '#/components/schemas/metadata'
-    dataset-return:
-      title: dataset-return
-      allOf:
-        - $ref: '#/components/schemas/dataset'
-        - $ref: '#/components/schemas/read-only'
-    study-list:
-      title: study-get
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/study-return'
-        metadata:
-          $ref: '#/components/schemas/metadata'
-    study-return:
-      title: study-return
-      allOf:
-        - $ref: '#/components/schemas/study'
-        - $ref: '#/components/schemas/read-only'
-    analysis-return:
-      title: analysis-return
-      allOf:
-        - $ref: '#/components/schemas/analysis'
-        - $ref: '#/components/schemas/read-only'
-    point-return:
-      allOf:
-        - $ref: '#/components/schemas/point'
-        - $ref: '#/components/schemas/read-only'
-    image-return:
-      allOf:
-        - $ref: '#/components/schemas/image'
-        - $ref: '#/components/schemas/read-only'
-    condition-return:
-      title: condition-return
-      allOf:
-        - $ref: '#/components/schemas/condition'
-        - $ref: '#/components/schemas/read-only'
-    annotation-return:
-      title: annotation-return
-      oneOf:
-        - allOf:
-            - $ref: '#/components/schemas/annotation-export'
-            - required:
-                - annotation
-                - metadata
-        - allOf:
-            - $ref: '#/components/schemas/annotation'
-            - $ref: '#/components/schemas/read-only'
-    analysis-list:
-      title: analysis-list
-      type: object
-      properties:
-        metadata:
-          $ref: '#/components/schemas/metadata'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/analysis-return'
-    point-list:
-      title: point-list
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/point-return'
-        metadata:
-          $ref: '#/components/schemas/metadata'
-    image-list:
-      title: image-list
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/image-return'
-        metadata:
-          $ref: '#/components/schemas/metadata'
-    condition-list:
-      title: condition-list
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/condition-return'
-        metadata:
-          $ref: '#/components/schemas/metadata'
-    annotation-list:
-      title: annotation-list
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/annotation-return'
-        metadata:
-          $ref: '#/components/schemas/metadata'
+        name:
+          type: string
+          description: full name of user
+        neuroid:
+          type: string
     user-list:
       title: user-list
       type: object
@@ -1285,6 +1227,67 @@ components:
             $ref: '#/components/schemas/user'
         metadata:
           $ref: '#/components/schemas/metadata'
+    metadata:
+      type: object
+      title: metadata
+      description: data included in every list response
+      additionalProperties: false
+      properties:
+        total_count:
+          type: integer
+          description: |
+            total number of entries
+          readOnly: true
+        unique_count:
+          type: integer
+          description: count of elements for unique entries
+          readOnly: true
+      x-internal: true
+    read-only:
+      title: read-only
+      type: object
+      description: common read-only attributes
+      properties:
+        id:
+          type: string
+          description: short UUID specifying the location of this resource
+          example: 38jobTomPDqt
+          minLength: 12
+          maxLength: 12
+        created_at:
+          type: string
+          format: date-time
+          example: '2021-01-16T20:50:38.009318+00:00'
+          description: time the resource was created on the database
+          readOnly: true
+        user:
+          type: string
+          description: who owns the resource
+          nullable: true
+          readOnly: true
+      x-internal: true
+    json-ld:
+      title: json-ld
+      type: object
+      description: JSON-LD elements for data tracking
+      properties:
+        '@context':
+          type: object
+          description: Context for the shorthand names
+          properties:
+            '@vocab':
+              type: string
+              description: common URI prefix for @type
+              format: uri
+        '@id':
+          type: string
+          format: uri
+          description: URI of the resource
+        '@type':
+          type: string
+          description: One of the NiMADS data types
+          example: Study
+      x-internal: true
   responses:
     '404':
       description: Example response
