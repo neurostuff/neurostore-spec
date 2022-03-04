@@ -24,7 +24,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/dataset-get'
+                $ref: '#/components/schemas/dataset-list'
       description: Get a list of datasets.
       parameters:
         - $ref: '#/components/parameters/search'
@@ -51,7 +51,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/dataset-post'
+                $ref: '#/components/schemas/dataset-return'
       tags:
         - datasets
       description: Create a dataset.
@@ -79,9 +79,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/dataset'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/dataset-return'
               examples: {}
         '404':
           $ref: '#/components/responses/404'
@@ -93,6 +91,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dataset-return'
         '422':
           $ref: '#/components/responses/422'
       description: Update a dataset.
@@ -126,17 +128,7 @@ paths:
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  results:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/study'
-                        - $ref: '#/components/schemas/read-only'
-                  metadata:
-                    $ref: '#/components/schemas/metadata'
+                $ref: '#/components/schemas/study-list'
               examples: {}
       description: List studies
       parameters:
@@ -166,7 +158,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/study'
+                $ref: '#/components/schemas/study-return'
       requestBody:
         content:
           application/json:
@@ -198,9 +190,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/study'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/study-return'
               examples: {}
         '404':
           $ref: '#/components/responses/404'
@@ -212,6 +202,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/study-return'
         '422':
           $ref: '#/components/responses/422'
       description: Update a study.
@@ -246,16 +240,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  metadata:
-                    $ref: '#/components/schemas/metadata'
-                  results:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/analysis'
-                        - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/analysis-list'
               examples: {}
       description: List all analyses performed across studies.
       parameters:
@@ -273,6 +258,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/analysis-return'
       requestBody:
         content:
           application/json:
@@ -301,9 +290,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/analysis'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/analysis-return'
         '404':
           $ref: '#/components/responses/404'
       description: Information pertaining to a particular analysis within a study.
@@ -314,6 +301,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/analysis-return'
         '422':
           $ref: '#/components/responses/422'
       requestBody:
@@ -347,16 +338,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  results:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/point'
-                        - $ref: '#/components/schemas/read-only'
-                  metadata:
-                    $ref: '#/components/schemas/metadata'
+                $ref: '#/components/schemas/point-list'
       description: list points in database
     post:
       summary: POST Points
@@ -366,7 +348,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/point'
+                $ref: '#/components/schemas/point-return'
       tags:
         - points
       description: add a point to an analysis
@@ -394,9 +376,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/point'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/point-return'
               examples: {}
         '404':
           description: Not Found
@@ -406,6 +386,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/point-return'
         '422':
           $ref: '#/components/responses/422'
       requestBody:
@@ -439,16 +423,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  metadata:
-                    $ref: '#/components/schemas/metadata'
-                  results:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/image'
-                        - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/image-list'
       description: Retrieve and list images.
       parameters:
         - $ref: '#/components/parameters/search'
@@ -468,7 +443,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/image'
+                $ref: '#/components/schemas/image-return'
       requestBody:
         content:
           application/json:
@@ -496,9 +471,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/image'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/image-return'
         '404':
           $ref: '#/components/responses/404'
       description: Retrieve information about a particular image from an analysis.
@@ -507,6 +480,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/image-return'
         '422':
           $ref: '#/components/responses/422'
       requestBody:
@@ -541,16 +518,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  metadata:
-                    $ref: '#/components/schemas/metadata'
-                  results:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/condition'
-                        - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/condition-list'
       description: Get all conditions
       parameters:
         - $ref: '#/components/parameters/search'
@@ -568,7 +536,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/condition'
+                $ref: '#/components/schemas/condition-return'
       description: Create a condition
       security:
         - JSON-Web-Token: []
@@ -596,9 +564,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/condition'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/condition-return'
         '404':
           $ref: '#/components/responses/404'
       description: 'Retrieve a condition (e.g., 2-back) that can be used in contrasts (e.g., 2-back - 1-back)'
@@ -607,6 +573,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/condition-return'
         '422':
           $ref: '#/components/responses/422'
       requestBody:
@@ -642,17 +612,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  metadata:
-                    $ref: '#/components/schemas/metadata'
-                  results:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/annotation'
-                        - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/annotation-list'
       description: get annotations for an available dataset
       parameters:
         - $ref: '#/components/parameters/dataset_id'
@@ -664,9 +624,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/annotation'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/annotation-return'
       description: Create an annotation
       security:
         - JSON-Web-Token: []
@@ -697,15 +655,7 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - allOf:
-                      - $ref: '#/components/schemas/annotation-export'
-                      - required:
-                          - annotation
-                          - metadata
-                  - allOf:
-                      - $ref: '#/components/schemas/annotation'
-                      - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/annotation-return'
       description: get an individual annotation
       parameters:
         - $ref: '#/components/parameters/export'
@@ -717,7 +667,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/annotation'
+                $ref: '#/components/schemas/annotation-return'
       description: edit an existing annotation
       tags:
         - annotations
@@ -749,15 +699,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  metadata:
-                    $ref: '#/components/schemas/metadata'
-                  results:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/user'
+                $ref: '#/components/schemas/user-list'
       description: get list of users
       security:
         - JSON-Web-Token: []
@@ -1224,23 +1166,125 @@ components:
           nullable: true
         annotation_csv:
           type: string
-    dataset-get:
+    dataset-list:
       title: dataset-get
       type: object
       properties:
         results:
           type: array
           items:
-            allOf:
-              - $ref: '#/components/schemas/dataset'
-              - $ref: '#/components/schemas/read-only'
+            $ref: '#/components/schemas/dataset-return'
         metadata:
           $ref: '#/components/schemas/metadata'
-    dataset-post:
-      title: dataset-post
+    dataset-return:
+      title: dataset-return
       allOf:
         - $ref: '#/components/schemas/dataset'
         - $ref: '#/components/schemas/read-only'
+    study-list:
+      title: study-get
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/study-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    study-return:
+      title: study-return
+      allOf:
+        - $ref: '#/components/schemas/study'
+        - $ref: '#/components/schemas/read-only'
+    analysis-return:
+      title: analysis-return
+      allOf:
+        - $ref: '#/components/schemas/analysis'
+        - $ref: '#/components/schemas/read-only'
+    point-return:
+      allOf:
+        - $ref: '#/components/schemas/point'
+        - $ref: '#/components/schemas/read-only'
+    image-return:
+      allOf:
+        - $ref: '#/components/schemas/image'
+        - $ref: '#/components/schemas/read-only'
+    condition-return:
+      title: condition-return
+      allOf:
+        - $ref: '#/components/schemas/condition'
+        - $ref: '#/components/schemas/read-only'
+    annotation-return:
+      title: annotation-return
+      oneOf:
+        - allOf:
+            - $ref: '#/components/schemas/annotation-export'
+            - required:
+                - annotation
+                - metadata
+        - allOf:
+            - $ref: '#/components/schemas/annotation'
+            - $ref: '#/components/schemas/read-only'
+    analysis-list:
+      title: analysis-list
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/metadata'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/analysis-return'
+    point-list:
+      title: point-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/point-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    image-list:
+      title: image-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/image-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    condition-list:
+      title: condition-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/condition-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    annotation-list:
+      title: annotation-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/annotation-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    user-list:
+      title: user-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/user'
+        metadata:
+          $ref: '#/components/schemas/metadata'
   responses:
     '404':
       description: Example response
