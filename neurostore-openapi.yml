@@ -24,16 +24,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  results:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/dataset'
-                        - $ref: '#/components/schemas/read-only'
-                  metadata:
-                    $ref: '#/components/schemas/metadata'
+                $ref: '#/components/schemas/dataset-get'
       description: Get a list of datasets.
       parameters:
         - $ref: '#/components/parameters/search'
@@ -60,9 +51,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/dataset'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/dataset-post'
       tags:
         - datasets
       description: Create a dataset.
@@ -1235,6 +1224,23 @@ components:
           nullable: true
         annotation_csv:
           type: string
+    dataset-get:
+      title: dataset-get
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/dataset'
+              - $ref: '#/components/schemas/read-only'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    dataset-post:
+      title: dataset-post
+      allOf:
+        - $ref: '#/components/schemas/dataset'
+        - $ref: '#/components/schemas/read-only'
   responses:
     '404':
       description: Example response
