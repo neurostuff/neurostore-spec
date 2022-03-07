@@ -1219,6 +1219,8 @@ components:
     annotation-note:
       title: annotation-note
       type: object
+      x-tags:
+        - annotation
       properties:
         analysis:
           type: string
@@ -1233,6 +1235,7 @@ components:
           nullable: true
         note:
           type: object
+          nullable: true
         study_year:
           type: integer
           nullable: true
@@ -1242,8 +1245,6 @@ components:
         authors:
           type: string
           nullable: true
-      x-tags:
-        - annotation
     annotation-export:
       type: object
       title: annotation-export
