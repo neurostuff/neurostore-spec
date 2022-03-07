@@ -1159,6 +1159,8 @@ components:
       type: object
       title: annotation
       description: ''
+      x-tags:
+        - annotation
       properties:
         dataset:
           type: string
@@ -1189,8 +1191,7 @@ components:
           type: boolean
         note_keys:
           type: object
-      x-tags:
-        - annotation
+          nullable: true
     annotation-return:
       title: annotation-return
       oneOf:
