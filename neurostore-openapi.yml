@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: neurostore api
   version: '1.0'
-  description: Create datasets for meta-analysis
+  description: Create studysets for meta-analysis
   contact:
     name: James D Kent
     email: jamesdkent21@gmail.com
@@ -13,19 +13,19 @@ servers:
   - url: 'https://neurostore.org/api'
     description: production
 paths:
-  /datasets/:
+  /studysets/:
     get:
-      summary: GET a list of datasets
+      summary: GET a list of studysets
       tags:
-        - datasets
+        - studysets
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/dataset-list'
-      description: Get a list of datasets.
+                $ref: '#/components/schemas/studyset-list'
+      description: Get a list of studysets.
       parameters:
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
@@ -44,25 +44,25 @@ paths:
         - JSON-Web-Token: []
         - {}
     post:
-      summary: POST/create a dataset
+      summary: POST/create a studyset
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/dataset-return'
+                $ref: '#/components/schemas/studyset-return'
       tags:
-        - datasets
-      description: Create a dataset.
+        - studysets
+      description: Create a studyset.
       security:
         - JSON-Web-Token: []
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/dataset'
-  '/datasets/{id}':
+              $ref: '#/components/schemas/studyset'
+  '/studysets/{id}':
     parameters:
       - schema:
           type: string
@@ -70,53 +70,53 @@ paths:
         in: path
         required: true
     get:
-      summary: GET a dataset
+      summary: GET a studyset
       tags:
-        - datasets
+        - studysets
       responses:
         '200':
-          description: Dataset found
+          description: studyset found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/dataset-return'
+                $ref: '#/components/schemas/studyset-return'
               examples: {}
         '404':
           $ref: '#/components/responses/404'
-      description: Retrieve the information of a dataset with the matching dataset ID.
+      description: Retrieve the information of a studyset with the matching studyset ID.
       parameters:
         - $ref: '#/components/parameters/nested'
     put:
-      summary: PUT/update a dataset
+      summary: PUT/update a studyset
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/dataset-return'
+                $ref: '#/components/schemas/studyset-return'
         '422':
           $ref: '#/components/responses/422'
-      description: Update a dataset.
+      description: Update a studyset.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/dataset'
+              $ref: '#/components/schemas/studyset'
       tags:
-        - datasets
+        - studysets
       security:
         - JSON-Web-Token: []
     delete:
-      summary: DELETE a Dataset
+      summary: DELETE a studyset
       responses:
         '200':
           description: OK
-      description: delete a dataset
+      description: delete a studyset
       security:
         - JSON-Web-Token: []
       tags:
-        - datasets
+        - studysets
   /studies/:
     get:
       summary: GET a list of studies
@@ -613,9 +613,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/annotation-list'
-      description: get annotations for an available dataset
+      description: get annotations for an available studyset
       parameters:
-        - $ref: '#/components/parameters/dataset_id'
+        - $ref: '#/components/parameters/studyset_id'
     post:
       summary: Post Annotation
       responses:
@@ -762,8 +762,8 @@ paths:
         - user
 components:
   schemas:
-    dataset:
-      title: dataset
+    studyset:
+      title: studyset
       type: object
       description: ''
       x-examples: {}
@@ -800,26 +800,26 @@ components:
         public:
           type: boolean
       x-tags:
-        - dataset
-    dataset-return:
-      title: dataset-return
+        - studyset
+    studyset-return:
+      title: studyset-return
       allOf:
-        - $ref: '#/components/schemas/dataset'
+        - $ref: '#/components/schemas/studyset'
         - $ref: '#/components/schemas/read-only'
       x-tags:
-        - dataset
-    dataset-list:
-      title: dataset-get
+        - studyset
+    studyset-list:
+      title: studyset-get
       type: object
       properties:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/dataset-return'
+            $ref: '#/components/schemas/studyset-return'
         metadata:
           $ref: '#/components/schemas/metadata'
       x-tags:
-        - dataset
+        - studyset
     study:
       description: attributes of a study/published paper
       type: object
@@ -1162,7 +1162,7 @@ components:
       x-tags:
         - annotation
       properties:
-        dataset:
+        studyset:
           type: string
         name:
           type: string
@@ -1524,13 +1524,13 @@ components:
       schema:
         type: string
       description: user id you want to filter by
-    dataset_id:
-      name: dataset_id
+    studyset_id:
+      name: studyset_id
       in: query
       required: false
       schema:
         type: string
-      description: see all annotations connected to this dataset
+      description: see all annotations connected to this studyset
     export:
       name: export
       in: query
@@ -1556,7 +1556,7 @@ components:
       description: authentication method
 tags:
   - name: analyses
-  - name: datasets
+  - name: studysets
   - name: images
   - name: points
   - name: studies
