@@ -29,9 +29,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/user'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/user-return'
     put:
       summary: Update User Information
       responses:
@@ -40,9 +38,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/user'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/user-return'
       tags:
         - user
       description: update information about a user
@@ -60,6 +56,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-list'
       description: List all users
       tags:
         - user
@@ -71,9 +71,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/user'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/user-return'
       security:
         - JSON-Web-Token: []
       tags:
@@ -95,16 +93,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  results:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/meta-analysis'
-                        - $ref: '#/components/schemas/read-only'
-                  metadata:
-                    type: object
+                $ref: '#/components/schemas/meta-analysis-list'
       description: 'list all runnable meta-analysis, studyset, annotation bundles'
       parameters:
         - $ref: '#/components/parameters/nested'
@@ -117,9 +106,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/meta-analysis'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/meta-analysis-return'
       tags:
         - bundle
       security:
@@ -147,9 +134,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/meta-analysis'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/meta-analysis-return'
       description: 'get a bundle (specification, annotation, and studyset)'
       parameters:
         - $ref: '#/components/parameters/nested'
@@ -161,9 +146,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/meta-analysis'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/meta-analysis-return'
       tags:
         - bundle
       security:
@@ -185,16 +168,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  metadata:
-                    type: object
-                  results:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/studyset'
-                        - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/studyset-list'
       description: get a list of serialized studyset
     parameters: []
     post:
@@ -205,9 +179,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/studyset'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/studyset-return'
       tags:
         - studyset
       security:
@@ -235,7 +207,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/studyset'
+                $ref: '#/components/schemas/studyset-return'
       description: get a single serialized studyset
     put:
       summary: Update Studyset
@@ -245,9 +217,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/studyset'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/studyset-return'
       tags:
         - studyset
       security:
@@ -269,16 +239,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  metadata:
-                    type: object
-                  results:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/annotation'
-                        - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/annotation-list'
       description: get a list of serialized annotations
     post:
       summary: Create Annotation
@@ -288,9 +249,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/annotation'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/annotation-return'
       tags:
         - annotation
       requestBody:
@@ -318,9 +277,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/annotation'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/annotation-return'
       description: get a single annotation
     put:
       summary: Update Annotation
@@ -330,9 +287,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/annotation'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/annotation-return'
       tags:
         - annotation
       security:
@@ -354,17 +309,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  metadata:
-                    type: object
-                    properties:
-                      results:
-                        type: array
-                        items:
-                          allOf:
-                            - $ref: '#/components/schemas/specification'
-                            - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/specification-list'
       description: list of meta-analysis specifications
     parameters: []
     post:
@@ -375,9 +320,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/meta-analysis'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/specification-return'
       tags:
         - meta-analysis
       security:
@@ -405,7 +348,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/specification'
+                $ref: '#/components/schemas/specification-return'
       description: get a meta-analysis specification
     put:
       summary: Update Meta-Analysis specification
@@ -415,9 +358,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/meta-analysis'
-                  - $ref: '#/components/schemas/read-only'
+                $ref: '#/components/schemas/specification-return'
       tags:
         - meta-analysis
       security:
@@ -539,6 +480,84 @@ components:
         user:
           type: string
           nullable: true
+    specification-return:
+      title: specification-return
+      allOf:
+        - $ref: '#/components/schemas/specification'
+        - $ref: '#/components/schemas/read-only'
+    specification-list:
+      title: specification-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/specification-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    annotation-return:
+      title: annotation-return
+      allOf:
+        - $ref: '#/components/schemas/annotation'
+        - $ref: '#/components/schemas/read-only'
+    annotation-list:
+      title: annotation-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/annotation-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    studyset-return:
+      title: studyset-return
+      allOf:
+        - $ref: '#/components/schemas/studyset'
+        - $ref: '#/components/schemas/read-only'
+    studyset-list:
+      title: studyset-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/studyset-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    meta-analysis-return:
+      title: meta-analysis-return
+      allOf:
+        - $ref: '#/components/schemas/meta-analysis'
+        - $ref: '#/components/schemas/read-only'
+    meta-analysis-list:
+      title: meta-analysis-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/meta-analysis-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    user-return:
+      title: user-return
+      allOf:
+        - $ref: '#/components/schemas/user'
+        - $ref: '#/components/schemas/read-only'
+    user-list:
+      title: user-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/user-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    metadata:
+      title: metadata
+      type: object
   securitySchemes:
     JSON-Web-Token:
       type: http
