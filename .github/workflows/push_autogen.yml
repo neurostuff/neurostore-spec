@@ -9,24 +9,24 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout Specification
-          uses: actions/checkout@v3
-          with:
-            path: specification
+        uses: actions/checkout@v3
+        with:
+          path: specification
       - name: Checkout Generator
-          uses: actions/checkout@v3
-          with:
-            repository: neurostuff/neurostuff-sdk-generator
-            submodules: true
-            token: ${{ secrets.SDK_PAT }}
+        uses: actions/checkout@v3
+        with:
+          repository: neurostuff/neurostuff-sdk-generator
+          submodules: true
+          token: ${{ secrets.SDK_PAT }}
       - name: Change/Create branch
       - run: |
           git fetch
           git ls-remote --exit-code --heads origin  ${{ github.ref_name }} || git branch ${{ github.ref_name }}
           git checkout ${{ github.ref_name }}
       - name: Checkout Specification
-          uses: actions/checkout@v3
-          with:
-            path: neurostore-spec
+        uses: actions/checkout@v3
+        with:
+          path: neurostore-spec
       - name: Update Generator
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
