@@ -8,10 +8,6 @@ jobs:
   update_generator:
     runs-on: ubuntu-20.04
     steps:
-      - name: Checkout Specification
-        uses: actions/checkout@v3
-        with:
-          path: specification
       - name: Checkout Generator
         uses: actions/checkout@v3
         with:
@@ -19,7 +15,7 @@ jobs:
           submodules: true
           token: ${{ secrets.SDK_PAT }}
       - name: Change/Create branch
-      - run: |
+        run: |
           git fetch
           git ls-remote --exit-code --heads origin  ${{ github.ref_name }} || git branch ${{ github.ref_name }}
           git checkout ${{ github.ref_name }}
