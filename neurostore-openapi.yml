@@ -1359,21 +1359,23 @@ components:
         - support
     entity:
       title: entity
-      type: object
       description: 'descriptor of level of analysis for a particular image/point (run, session, subject, group, meta)'
-      properties:
-        label:
-          type: string
-        level:
-          type: string
-          enum:
-            - run
-            - session
-            - subject
-            - group
-            - meta
-        analysis:
-          type: string
+      allOf:
+        - type: object
+          properties:
+            label:
+              type: string
+            level:
+              type: string
+              enum:
+                - run
+                - session
+                - subject
+                - group
+                - meta
+            analysis:
+              type: string
+        - $ref: ./neurosynth-compose-openapi.yml#/components/schemas/read-only
   responses:
     '404':
       description: Example response
