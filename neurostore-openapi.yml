@@ -1375,7 +1375,7 @@ components:
                 - meta
             analysis:
               type: string
-        - $ref: ./neurosynth-compose-openapi.yml#/components/schemas/read-only
+        - $ref: '#/components/schemas/read-only'
   responses:
     '404':
       description: Example response
