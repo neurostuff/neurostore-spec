@@ -971,6 +971,8 @@ components:
       type: object
       x-examples: {}
       description: a coordinate in the brain
+      x-tags:
+        - point
       properties:
         coordinates:
           type: array
@@ -1018,8 +1020,10 @@ components:
               - allOf:
                   - $ref: '#/components/schemas/point-value'
                   - $ref: '#/components/schemas/read-only'
-      x-tags:
-        - point
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/entity'
     point-return:
       allOf:
         - $ref: '#/components/schemas/point'
@@ -1056,6 +1060,8 @@ components:
       type: object
       description: representation of a statistical brain image
       x-examples: {}
+      x-tags:
+        - image
       properties:
         metadata:
           type: object
@@ -1100,8 +1106,10 @@ components:
           description: date the image was added
           nullable: true
           readOnly: true
-      x-tags:
-        - image
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/entity'
     image-return:
       allOf:
         - $ref: '#/components/schemas/image'
@@ -1349,6 +1357,23 @@ components:
       x-internal: true
       x-tags:
         - support
+    entity:
+      title: entity
+      type: object
+      description: 'descriptor of level of analysis for a particular image/point (run, session, subject, group, meta)'
+      properties:
+        label:
+          type: string
+        level:
+          type: string
+          enum:
+            - run
+            - session
+            - subject
+            - group
+            - meta
+        analysis:
+          type: string
   responses:
     '404':
       description: Example response
