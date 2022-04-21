@@ -375,6 +375,8 @@ components:
     specification:
       title: specification
       type: object
+      x-tags:
+        - specification
       properties:
         type:
           type: string
@@ -391,8 +393,9 @@ components:
           nullable: true
         corrector:
           $ref: '#/components/schemas/corrector'
-      x-tags:
-        - specification
+        filter:
+          type: string
+          nullable: true
     estimator:
       title: estimator
       type: object
