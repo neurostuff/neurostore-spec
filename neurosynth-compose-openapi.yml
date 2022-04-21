@@ -398,6 +398,7 @@ components:
       type: object
       x-tags:
         - meta-analysis
+      nullable: true
       properties:
         type:
           type: string
@@ -418,6 +419,8 @@ components:
       title: meta-analysis
       type: object
       description: ''
+      x-tags:
+        - meta-analysis
       properties:
         specification:
           oneOf:
@@ -429,17 +432,14 @@ components:
             - type: object
         annotation:
           oneOf:
-            - type: object
-              nullable: true
             - type: string
-              properties: {}
+              nullable: true
+            - type: object
               nullable: true
         name:
           type: string
         description:
           type: string
-      x-tags:
-        - meta-analysis
     annotation:
       title: annotation
       type: object
