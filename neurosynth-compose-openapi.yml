@@ -375,6 +375,8 @@ components:
     specification:
       title: specification
       type: object
+      x-tags:
+        - specification
       properties:
         type:
           type: string
@@ -391,28 +393,37 @@ components:
           nullable: true
         corrector:
           $ref: '#/components/schemas/corrector'
-      x-tags:
-        - specification
+        filter:
+          type: string
+          nullable: true
     estimator:
       title: estimator
       type: object
-      properties:
-        algorithm:
-          type: string
       x-tags:
         - meta-analysis
-    corrector:
-      title: corrector
-      type: object
+      nullable: true
       properties:
         type:
           type: string
+        args:
+          type: object
+    corrector:
+      title: corrector
       x-tags:
         - meta-analysis
+      type: object
+      nullable: true
+      properties:
+        type:
+          type: string
+        args:
+          type: object
     meta-analysis:
       title: meta-analysis
       type: object
       description: ''
+      x-tags:
+        - meta-analysis
       properties:
         specification:
           oneOf:
@@ -424,17 +435,14 @@ components:
             - type: object
         annotation:
           oneOf:
-            - type: object
-              nullable: true
             - type: string
-              properties: {}
+              nullable: true
+            - type: object
               nullable: true
         name:
           type: string
         description:
           type: string
-      x-tags:
-        - meta-analysis
     annotation:
       title: annotation
       type: object
