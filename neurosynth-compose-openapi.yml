@@ -428,17 +428,16 @@ components:
         specification:
           oneOf:
             - type: string
-            - type: object
+            - $ref: '#/components/schemas/specification'
         studyset:
           oneOf:
             - type: string
-            - type: object
+            - $ref: '#/components/schemas/studyset'
         annotation:
           oneOf:
             - type: string
               nullable: true
-            - type: object
-              nullable: true
+            - $ref: '#/components/schemas/annotation'
         name:
           type: string
         description:
