@@ -452,6 +452,7 @@ components:
           type: string
         annotation:
           type: object
+          nullable: true
         studyset:
           type: string
     studyset:
@@ -464,6 +465,7 @@ components:
           type: string
         studyset:
           type: object
+          nullable: true
     user:
       title: user
       type: object
