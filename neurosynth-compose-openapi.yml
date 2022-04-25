@@ -453,7 +453,7 @@ components:
           type: string
         annotation:
           type: object
-        studyset_id:
+        studyset:
           type: string
     studyset:
       title: studyset
