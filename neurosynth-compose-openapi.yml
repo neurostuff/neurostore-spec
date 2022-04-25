@@ -450,7 +450,7 @@ components:
       properties:
         neurostore_id:
           type: string
-        annotation:
+        snapshot:
           type: object
           nullable: true
         studyset:
@@ -463,7 +463,7 @@ components:
       properties:
         neurostore_id:
           type: string
-        studyset:
+        snapshot:
           type: object
           nullable: true
     user:
