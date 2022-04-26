@@ -411,6 +411,7 @@ components:
       x-tags:
         - meta-analysis
       type: object
+      nullable: true
       properties:
         type:
           type: string
