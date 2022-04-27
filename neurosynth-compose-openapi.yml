@@ -598,7 +598,7 @@ components:
     bad-request:
       description: form when a request goes wrong
       content:
-        application/json:
+        application/problem+json:
           schema:
             type: object
             properties:
