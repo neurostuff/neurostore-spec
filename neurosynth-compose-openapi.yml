@@ -453,8 +453,10 @@ components:
             - $ref: '#/components/schemas/annotation'
         name:
           type: string
+          nullable: true
         description:
           type: string
+          nullable: true
         internal_studyset_id:
           type: string
           writeOnly: true
