@@ -455,6 +455,12 @@ components:
           type: string
         description:
           type: string
+        internal_studyset_id:
+          type: string
+          writeOnly: true
+        internal_annotation_id:
+          type: string
+          writeOnly: true
     annotation:
       title: annotation
       type: object
