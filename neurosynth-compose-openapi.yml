@@ -256,7 +256,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/annotation'
+              $ref: '#/components/schemas/annotation-update'
       security:
         - JSON-Web-Token: []
       description: create a new serialized annotation
@@ -296,7 +296,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/annotation'
+              $ref: '#/components/schemas/annotation-update'
       description: update an existing annotation
   /specifications:
     get:
@@ -468,6 +468,7 @@ components:
           nullable: true
         studyset:
           type: string
+          readOnly: true
     studyset:
       title: studyset
       type: object
@@ -582,6 +583,15 @@ components:
     metadata:
       title: metadata
       type: object
+    annotation-update:
+      title: annotation-post
+      allOf:
+        - type: object
+          properties:
+            internal_studyset_id:
+              type: string
+              writeOnly: true
+        - $ref: '#/components/schemas/annotation'
   securitySchemes:
     JSON-Web-Token:
       type: http
