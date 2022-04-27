@@ -310,6 +310,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/specification-list'
+        '400':
+          $ref: '#/components/responses/bad-request'
       description: list of meta-analysis specifications
     parameters: []
     post:
@@ -321,6 +323,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/specification-return'
+        '400':
+          $ref: '#/components/responses/bad-request'
       tags:
         - meta-analysis
       security:
@@ -349,6 +353,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/specification-return'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
       description: get a meta-analysis specification
     put:
       summary: Update Meta-Analysis specification
@@ -359,6 +367,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/specification-return'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
       tags:
         - meta-analysis
       security:
@@ -580,6 +594,22 @@ components:
       schema:
         type: string
       description: show nested component instead of id
+  responses:
+    bad-request:
+      description: form when a request goes wrong
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+              status:
+                type: integer
+              title:
+                type: string
+              type:
+                type: string
 tags:
   - name: annotation
   - name: bundle
