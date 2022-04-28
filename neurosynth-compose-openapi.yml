@@ -325,8 +325,6 @@ paths:
                 $ref: '#/components/schemas/specification-return'
         '400':
           $ref: '#/components/responses/bad-request'
-        '422':
-          $ref: '#/components/responses/bad-request'
         '500':
           $ref: '#/components/responses/bad-request'
       tags:
