@@ -52,7 +52,7 @@ paths:
   /users:
     parameters: []
     get:
-      summary: ''
+      summary: GET list of Users
       responses:
         '200':
           description: OK
@@ -84,9 +84,7 @@ paths:
               $ref: '#/components/schemas/user'
   /meta-analyses:
     get:
-      summary: Your GET endpoint
-      tags:
-        - bundle
+      summary: GET a list of meta-analyses
       responses:
         '200':
           description: OK
@@ -96,12 +94,14 @@ paths:
                 $ref: '#/components/schemas/meta-analysis-list'
         '400':
           $ref: '#/components/responses/bad-request'
-      description: 'list all runnable meta-analysis, studyset, annotation bundles'
+      description: 'list all runnable specification, studyset, annotation bundles'
       parameters:
         - $ref: '#/components/parameters/nested'
+      tags:
+        - meta-analysis
     parameters: []
     post:
-      summary: Create Bundle
+      summary: Create a new meta-analysis
       responses:
         '200':
           description: OK
@@ -115,8 +115,6 @@ paths:
           $ref: '#/components/responses/bad-request'
         '500':
           $ref: '#/components/responses/bad-request'
-      tags:
-        - bundle
       security:
         - JSON-Web-Token: []
       requestBody:
@@ -125,6 +123,8 @@ paths:
             schema:
               $ref: '#/components/schemas/meta-analysis-post-body'
       description: 'create a new specification, studyset, annotation bundle'
+      tags:
+        - meta-analysis
   '/meta-analyses/{id}':
     parameters:
       - schema:
@@ -133,9 +133,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
-      tags:
-        - bundle
+      summary: GET meta-analysis information
       responses:
         '200':
           description: OK
@@ -147,11 +145,13 @@ paths:
           $ref: '#/components/responses/bad-request'
         '404':
           $ref: '#/components/responses/bad-request'
-      description: 'get a bundle (specification, annotation, and studyset)'
+      description: 'get a meta-analysis (specification, annotation, and studyset)'
       parameters:
         - $ref: '#/components/parameters/nested'
+      tags:
+        - meta-analysis
     put:
-      summary: Update Bundle
+      summary: Update a meta-analysis
       responses:
         '200':
           description: OK
@@ -167,8 +167,6 @@ paths:
           $ref: '#/components/responses/bad-request'
         '422':
           $ref: '#/components/responses/bad-request'
-      tags:
-        - bundle
       security:
         - JSON-Web-Token: []
       requestBody:
@@ -177,9 +175,11 @@ paths:
             schema:
               $ref: '#/components/schemas/meta-analysis'
       description: update an existing meta-analysis (that has not yet been run)
+      tags:
+        - meta-analysis
   /studysets:
     get:
-      summary: Your GET endpoint
+      summary: Get a list of Studysets
       tags:
         - studyset
       responses:
@@ -191,10 +191,10 @@ paths:
                 $ref: '#/components/schemas/studyset-list'
         '400':
           $ref: '#/components/responses/bad-request'
-      description: get a list of serialized studyset
+      description: get a list of serialized/referenced studysets
     parameters: []
     post:
-      summary: Create Studyset
+      summary: Create a new Studyset
       responses:
         '200':
           description: OK
@@ -217,7 +217,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/studyset-post-body'
-      description: create a new serialized studyset
+      description: create a new serialized/referenced studyset
   '/studysets/{id}':
     parameters:
       - schema:
@@ -226,7 +226,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get information about a Studyset
       tags:
         - studyset
       responses:
@@ -240,9 +240,9 @@ paths:
           $ref: '#/components/responses/bad-request'
         '404':
           $ref: '#/components/responses/bad-request'
-      description: get a single serialized studyset
+      description: get a single serialized/referenced studyset
     put:
-      summary: Update Studyset
+      summary: Update a Studyset
       responses:
         '200':
           description: OK
@@ -267,10 +267,10 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/studyset'
-      description: update an existing serialized studyset
+      description: update an existing serialized/referenced studyset
   /annotations:
     get:
-      summary: Your GET endpoint
+      summary: GET a list of annotations
       tags:
         - annotation
       responses:
@@ -282,9 +282,9 @@ paths:
                 $ref: '#/components/schemas/annotation-list'
         '400':
           $ref: '#/components/responses/bad-request'
-      description: get a list of serialized annotations
+      description: get a list of serialized/referenced annotations
     post:
-      summary: Create Annotation
+      summary: Create a new Annotation
       responses:
         '200':
           description: OK
@@ -307,7 +307,7 @@ paths:
               $ref: '#/components/schemas/annotation-post-body'
       security:
         - JSON-Web-Token: []
-      description: create a new serialized annotation
+      description: create a new serialized/referenced annotation
   '/annotations/{id}':
     parameters:
       - schema:
@@ -316,7 +316,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: GET information about an annotation
       tags:
         - annotation
       responses:
@@ -332,7 +332,7 @@ paths:
           $ref: '#/components/responses/bad-request'
       description: get a single annotation
     put:
-      summary: Update Annotation
+      summary: Update an Annotation
       responses:
         '200':
           description: OK
@@ -457,24 +457,30 @@ components:
       type: object
       x-tags:
         - specification
+      description: a machine readable specification of how to run a meta-analysis (currently specifically tailored to NiMARE).
       properties:
         type:
           type: string
+          description: 'the type of meta-analysis being run, typically either cbma or ibma, but others may become available in the future.'
         estimator:
           $ref: '#/components/schemas/estimator'
         mask:
           type: string
+          description: a string representing a binary nifti file to select which voxels a user wants to include in the analysis.
           nullable: true
         contrast:
           type: string
+          description: 'underspecified selection of columns to contrast (TODO, make better).'
           nullable: true
         transformer:
           type: string
+          description: 'A transformation applied to column(s) (e.g., binarize based on a threshold). This is likely to become deprecated.'
           nullable: true
         corrector:
           $ref: '#/components/schemas/corrector'
         filter:
           type: string
+          description: a boolean column from annotations selecting which analyses to include in the meta-analysis
           nullable: true
     estimator:
       title: estimator
@@ -484,23 +490,33 @@ components:
       properties:
         type:
           type: string
+          description: 'the meta-analytic algorithm applied to the data. Currently this should be directly tied to the function/class running the meta-analysis. For example, ALE, or MKDADensity are valid NiMARE classes to put here.'
+          example: MKDADensity
+          minLength: 1
         args:
           type: object
+          description: 'arbitrary keyword arguments to be passed into the function/class to modify default functionality, this could modify the kernel, resampling methods, or any other behavior defined in the function/class (like MKDADensity).'
+      description: the specification for the function/class running the meta-analysis
     corrector:
       title: corrector
       x-tags:
         - meta-analysis
       type: object
+      description: The function/class applying statistical adjustments to the output of the meta-analysis (optional).
       nullable: true
       properties:
         type:
           type: string
+          description: the name of the function/class performing the correction. For example FWECorrector from NiMARE would be valid.
+          example: FWECorrector
+          minLength: 1
         args:
           type: object
+          description: 'key word arguments passed to the corrector to modidy default functionality, such as number of iterations, or the particular method of correction being applied.'
     meta-analysis:
       title: meta-analysis
       type: object
-      description: ''
+      description: 'The combination of the specification determining what meta-analysis to run (required), the studyset to act as input to the meta-analytic algorithm (required), and the annotation to provide human readable annotations as well as acts as an optional filter on which analyses to select within the studyset (optional, but suggested).'
       x-tags:
         - meta-analysis
       properties:
@@ -508,40 +524,54 @@ components:
           oneOf:
             - type: string
             - $ref: '#/components/schemas/specification'
+          description: Either a string representation of the id of the specification (nested=False) or a JSON representation of the specification itself (nested=True).
         studyset:
+          readOnly: true
           oneOf:
             - type: string
             - $ref: '#/components/schemas/studyset'
+          description: Either a string representation of the id of the studyset (nested=False) or a JSON representation of the studyset itself (nested=True).
+          
         annotation:
+          readOnly: true
           oneOf:
             - type: string
               nullable: true
             - $ref: '#/components/schemas/annotation'
+          description: Either a string representation of the id of the annotation (nested=False) or a JSON representation of the annotation itself (nested=True).
         name:
           type: string
+          description: Human-readable name of the meta-analysis.
           nullable: true
         description:
           type: string
+          description: Long form description of the meta-analysis.
           nullable: true
         internal_studyset_id:
           type: string
+          description: The id of the studyset on neurosynth-compose (as opposed to the id of the studyset on neurostore). Multiple snapshots of the studyset can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
           writeOnly: true
         internal_annotation_id:
           type: string
+          description: The id of the annotation on neurosynth-compose (as opposed to the id of the annotation on neurostore). Multiple snapshots of the annotation can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
           writeOnly: true
     annotation:
       title: annotation
       type: object
       x-tags:
         - annotation
+      description: a holder/reference to the annotation on neurostore
       properties:
         neurostore_id:
           type: string
+          description: the id of the annotation on neurostore
         snapshot:
           type: object
+          description: the snapshot taken of the annotation pending a successful run of the meta-analytic algorithm
           nullable: true
         studyset:
           type: string
+          description: The related studyset to this annotation.
           readOnly: true
     studyset:
       title: studyset
@@ -551,8 +581,10 @@ components:
       properties:
         neurostore_id:
           type: string
+          description: The id of the studyset on neurostore.
         snapshot:
           type: object
+          description: The snapshot of the studyset pending a successful run of the meta-analysis.
           nullable: true
     user:
       title: user
@@ -567,23 +599,28 @@ components:
       properties:
         id:
           type: string
+          description: the identifier for the resource.
         updated_at:
           type: string
           format: date-time
+          description: when the resource was last modified.
           nullable: true
           readOnly: true
         created_at:
           type: string
           format: date-time
+          description: When the resource was created.
           readOnly: true
         user:
           type: string
+          description: Who owns the resource.
           nullable: true
     specification-return:
       title: specification-return
       allOf:
         - $ref: '#/components/schemas/specification'
         - $ref: '#/components/schemas/read-only'
+      description: The view of the specification through an endpoint.
     specification-list:
       title: specification-list
       type: object
@@ -594,6 +631,7 @@ components:
             $ref: '#/components/schemas/specification-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      description: The representation of a list of specifications.
     annotation-return:
       title: annotation-return
       allOf:
