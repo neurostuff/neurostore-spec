@@ -331,12 +331,9 @@ paths:
         - meta-analysis
       security:
         - JSON-Web-Token: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/specification'
       description: create a new meta-analysis specification
+      requestBody:
+        $ref: '#/components/requestBodies/specification-post-body'
   '/specifications/{id}':
     parameters:
       - schema:
@@ -398,6 +395,7 @@ components:
       properties:
         type:
           type: string
+          example: cbma
         estimator:
           $ref: '#/components/schemas/estimator'
         mask:
@@ -632,6 +630,16 @@ components:
                 type: string
               type:
                 type: string
+  requestBodies:
+    specification-post-body:
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/specification'
+              - required:
+                  - type
+                  - estimator
 tags:
   - name: annotation
   - name: bundle
