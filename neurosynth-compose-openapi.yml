@@ -335,7 +335,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/specification'
+              $ref: '#/components/schemas/specification-post-body'
       description: create a new meta-analysis specification
   '/specifications/{id}':
     parameters:
@@ -604,6 +604,13 @@ components:
               type: string
               writeOnly: true
         - $ref: '#/components/schemas/annotation'
+    specification-post-body:
+      title: specification-post-body
+      allOf:
+        - $ref: '#/components/schemas/specification'
+        - required:
+            - type
+            - estimator
   securitySchemes:
     JSON-Web-Token:
       type: http
