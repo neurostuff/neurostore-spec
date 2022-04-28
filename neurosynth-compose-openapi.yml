@@ -94,6 +94,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/meta-analysis-list'
+        '400':
+          $ref: '#/components/responses/bad-request'
       description: 'list all runnable meta-analysis, studyset, annotation bundles'
       parameters:
         - $ref: '#/components/parameters/nested'
@@ -107,6 +109,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/meta-analysis-return'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '422':
+          $ref: '#/components/responses/bad-request'
+        '500':
+          $ref: '#/components/responses/bad-request'
       tags:
         - bundle
       security:
@@ -115,7 +123,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/meta-analysis'
+              $ref: '#/components/schemas/meta-analysis-post-body'
       description: 'create a new specification, studyset, annotation bundle'
   '/meta-analyses/{id}':
     parameters:
@@ -135,6 +143,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/meta-analysis-return'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
       description: 'get a bundle (specification, annotation, and studyset)'
       parameters:
         - $ref: '#/components/parameters/nested'
@@ -147,6 +159,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/meta-analysis-return'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
+        '422':
+          $ref: '#/components/responses/bad-request'
       tags:
         - bundle
       security:
@@ -169,6 +189,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/studyset-list'
+        '400':
+          $ref: '#/components/responses/bad-request'
       description: get a list of serialized studyset
     parameters: []
     post:
@@ -180,6 +202,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/studyset-return'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '422':
+          $ref: '#/components/responses/bad-request'
+        '500':
+          $ref: '#/components/responses/bad-request'
       tags:
         - studyset
       security:
@@ -188,7 +216,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/studyset'
+              $ref: '#/components/schemas/studyset-post-body'
       description: create a new serialized studyset
   '/studysets/{id}':
     parameters:
@@ -208,6 +236,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/studyset-return'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
       description: get a single serialized studyset
     put:
       summary: Update Studyset
@@ -218,6 +250,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/studyset-return'
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
+        '422':
+          $ref: '#/components/responses/bad-request'
       tags:
         - studyset
       security:
@@ -240,6 +280,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/annotation-list'
+        '400':
+          $ref: '#/components/responses/bad-request'
       description: get a list of serialized annotations
     post:
       summary: Create Annotation
@@ -250,13 +292,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/annotation-return'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '422':
+          $ref: '#/components/responses/bad-request'
+        '500':
+          $ref: '#/components/responses/bad-request'
       tags:
         - annotation
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/annotation-update'
+              $ref: '#/components/schemas/annotation-post-body'
       security:
         - JSON-Web-Token: []
       description: create a new serialized annotation
@@ -278,6 +326,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/annotation-return'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
       description: get a single annotation
     put:
       summary: Update Annotation
@@ -288,6 +340,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/annotation-return'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
+        '422':
+          $ref: '#/components/responses/bad-request'
       tags:
         - annotation
       security:
@@ -325,6 +385,10 @@ paths:
                 $ref: '#/components/schemas/specification-return'
         '400':
           $ref: '#/components/responses/bad-request'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+        '500':
+          $ref: '#/components/responses/bad-request'
       tags:
         - meta-analysis
       security:
@@ -333,7 +397,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/specification'
+              $ref: '#/components/schemas/specification-post-body'
       description: create a new meta-analysis specification
   '/specifications/{id}':
     parameters:
@@ -372,6 +436,8 @@ paths:
         '401':
           $ref: '#/components/responses/bad-request'
         '404':
+          $ref: '#/components/responses/bad-request'
+        '422':
           $ref: '#/components/responses/bad-request'
       tags:
         - meta-analysis
@@ -600,6 +666,33 @@ components:
               type: string
               writeOnly: true
         - $ref: '#/components/schemas/annotation'
+    specification-post-body:
+      title: specification-post-body
+      allOf:
+        - $ref: '#/components/schemas/specification'
+        - required:
+            - type
+            - estimator
+    annotation-post-body:
+      title: annotation-post-body
+      allOf:
+        - $ref: '#/components/schemas/annotation-update'
+        - required:
+            - internal_studyset_id
+    studyset-post-body:
+      title: studyset-post-body
+      allOf:
+        - $ref: '#/components/schemas/studyset'
+        - required:
+            - neurostore_id
+    meta-analysis-post-body:
+      title: meta-analysis-post-body
+      allOf:
+        - $ref: '#/components/schemas/meta-analysis'
+        - required:
+            - internal_annotation_id
+            - internal_studyset_id
+            - specification
   securitySchemes:
     JSON-Web-Token:
       type: http
@@ -610,7 +703,7 @@ components:
       in: query
       required: false
       schema:
-        type: string
+        type: boolean
       description: show nested component instead of id
   responses:
     bad-request:
