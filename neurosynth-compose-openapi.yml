@@ -360,7 +360,7 @@ paths:
       description: update an existing annotation
   /specifications:
     get:
-      summary: Your GET endpoint
+      summary: Get a list of Specifications
       responses:
         '200':
           description: OK
@@ -375,7 +375,7 @@ paths:
         - specification
     parameters: []
     post:
-      summary: ''
+      summary: Create a Specification
       responses:
         '200':
           description: OK
@@ -407,7 +407,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get information about a Specification
       responses:
         '200':
           description: OK
@@ -485,8 +485,6 @@ components:
     estimator:
       title: estimator
       type: object
-      x-tags:
-        - meta-analysis
       properties:
         type:
           type: string
@@ -497,10 +495,10 @@ components:
           type: object
           description: 'arbitrary keyword arguments to be passed into the function/class to modify default functionality, this could modify the kernel, resampling methods, or any other behavior defined in the function/class (like MKDADensity).'
       description: the specification for the function/class running the meta-analysis
+      x-tags:
+        - specification
     corrector:
       title: corrector
-      x-tags:
-        - meta-analysis
       type: object
       description: The function/class applying statistical adjustments to the output of the meta-analysis (optional).
       nullable: true
@@ -513,6 +511,8 @@ components:
         args:
           type: object
           description: 'key word arguments passed to the corrector to modidy default functionality, such as number of iterations, or the particular method of correction being applied.'
+      x-tags:
+        - specification
     meta-analysis:
       title: meta-analysis
       type: object
@@ -592,6 +592,8 @@ components:
         external_id:
           type: string
       description: attributes of the user object
+      x-tags:
+        - user
     read-only:
       title: read-only
       type: object
@@ -620,6 +622,8 @@ components:
         - $ref: '#/components/schemas/specification'
         - $ref: '#/components/schemas/read-only'
       description: The view of the specification through an endpoint.
+      x-tags:
+        - specification
     specification-list:
       title: specification-list
       type: object
@@ -631,11 +635,15 @@ components:
         metadata:
           $ref: '#/components/schemas/metadata'
       description: The representation of a list of specifications.
+      x-tags:
+        - specification
     annotation-return:
       title: annotation-return
       allOf:
         - $ref: '#/components/schemas/annotation'
         - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - annotation
     annotation-list:
       title: annotation-list
       type: object
@@ -646,11 +654,15 @@ components:
             $ref: '#/components/schemas/annotation-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - annotation
     studyset-return:
       title: studyset-return
       allOf:
         - $ref: '#/components/schemas/studyset'
         - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - studyset
     studyset-list:
       title: studyset-list
       type: object
@@ -661,11 +673,15 @@ components:
             $ref: '#/components/schemas/studyset-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - studyset
     meta-analysis-return:
       title: meta-analysis-return
       allOf:
         - $ref: '#/components/schemas/meta-analysis'
         - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - meta-analysis
     meta-analysis-list:
       title: meta-analysis-list
       type: object
@@ -676,11 +692,15 @@ components:
             $ref: '#/components/schemas/meta-analysis-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - meta-analysis
     user-return:
       title: user-return
       allOf:
         - $ref: '#/components/schemas/user'
         - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - user
     user-list:
       title: user-list
       type: object
@@ -691,6 +711,8 @@ components:
             $ref: '#/components/schemas/user-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - user
     metadata:
       title: metadata
       type: object
@@ -703,6 +725,8 @@ components:
               type: string
               writeOnly: true
         - $ref: '#/components/schemas/annotation'
+      x-tags:
+        - annotation
     specification-post-body:
       title: specification-post-body
       allOf:
@@ -710,18 +734,24 @@ components:
         - required:
             - type
             - estimator
+      x-tags:
+        - specification
     annotation-post-body:
       title: annotation-post-body
       allOf:
         - $ref: '#/components/schemas/annotation-update'
         - required:
             - internal_studyset_id
+      x-tags:
+        - annotation
     studyset-post-body:
       title: studyset-post-body
       allOf:
         - $ref: '#/components/schemas/studyset'
         - required:
             - neurostore_id
+      x-tags:
+        - studyset
     meta-analysis-post-body:
       title: meta-analysis-post-body
       allOf:
@@ -730,6 +760,8 @@ components:
             - internal_annotation_id
             - internal_studyset_id
             - specification
+      x-tags:
+        - meta-analysis
   securitySchemes:
     JSON-Web-Token:
       type: http
