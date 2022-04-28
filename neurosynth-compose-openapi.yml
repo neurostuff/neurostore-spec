@@ -115,7 +115,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/meta-analysis'
+              $ref: '#/components/schemas/meta-analysis-post-body'
       description: 'create a new specification, studyset, annotation bundle'
   '/meta-analyses/{id}':
     parameters:
@@ -188,7 +188,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/studyset'
+              $ref: '#/components/schemas/studyset-post-body'
       description: create a new serialized studyset
   '/studysets/{id}':
     parameters:
@@ -256,7 +256,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/annotation-update'
+              $ref: '#/components/schemas/annotation-post-body'
       security:
         - JSON-Web-Token: []
       description: create a new serialized annotation
@@ -611,6 +611,25 @@ components:
         - required:
             - type
             - estimator
+    annotation-post-body:
+      title: annotation-post-body
+      allOf:
+        - $ref: '#/components/schemas/annotation-update'
+        - required:
+            - internal_studyset_id
+    studyset-post-body:
+      title: studyset-post-body
+      allOf:
+        - $ref: '#/components/schemas/studyset'
+        - required:
+            - neurostore_id
+    meta-analysis-post-body:
+      title: meta-analysis-post-body
+      allOf:
+        - $ref: '#/components/schemas/meta-analysis'
+        - required:
+            - internal_annotation_id
+            - internal_studyset_id
   securitySchemes:
     JSON-Web-Token:
       type: http
