@@ -94,6 +94,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/meta-analysis-list'
+        '400':
+          $ref: '#/components/responses/bad-request'
       description: 'list all runnable meta-analysis, studyset, annotation bundles'
       parameters:
         - $ref: '#/components/parameters/nested'
@@ -141,6 +143,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/meta-analysis-return'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
       description: 'get a bundle (specification, annotation, and studyset)'
       parameters:
         - $ref: '#/components/parameters/nested'
@@ -183,6 +189,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/studyset-list'
+        '400':
+          $ref: '#/components/responses/bad-request'
       description: get a list of serialized studyset
     parameters: []
     post:
@@ -228,6 +236,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/studyset-return'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
       description: get a single serialized studyset
     put:
       summary: Update Studyset
@@ -268,6 +280,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/annotation-list'
+        '400':
+          $ref: '#/components/responses/bad-request'
       description: get a list of serialized annotations
     post:
       summary: Create Annotation
@@ -312,6 +326,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/annotation-return'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
       description: get a single annotation
     put:
       summary: Update Annotation
