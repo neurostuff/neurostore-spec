@@ -256,7 +256,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/annotation'
+              $ref: '#/components/schemas/annotation-update'
       security:
         - JSON-Web-Token: []
       description: create a new serialized annotation
@@ -296,7 +296,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/annotation'
+              $ref: '#/components/schemas/annotation-update'
       description: update an existing annotation
   /specifications:
     get:
@@ -310,6 +310,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/specification-list'
+        '400':
+          $ref: '#/components/responses/bad-request'
       description: list of meta-analysis specifications
     parameters: []
     post:
@@ -321,6 +323,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/specification-return'
+        '400':
+          $ref: '#/components/responses/bad-request'
       tags:
         - meta-analysis
       security:
@@ -349,6 +353,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/specification-return'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
       description: get a meta-analysis specification
     put:
       summary: Update Meta-Analysis specification
@@ -359,6 +367,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/specification-return'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
       tags:
         - meta-analysis
       security:
@@ -439,8 +453,16 @@ components:
             - $ref: '#/components/schemas/annotation'
         name:
           type: string
+          nullable: true
         description:
           type: string
+          nullable: true
+        internal_studyset_id:
+          type: string
+          writeOnly: true
+        internal_annotation_id:
+          type: string
+          writeOnly: true
     annotation:
       title: annotation
       type: object
@@ -454,6 +476,7 @@ components:
           nullable: true
         studyset:
           type: string
+          readOnly: true
     studyset:
       title: studyset
       type: object
@@ -568,6 +591,15 @@ components:
     metadata:
       title: metadata
       type: object
+    annotation-update:
+      title: annotation-post
+      allOf:
+        - type: object
+          properties:
+            internal_studyset_id:
+              type: string
+              writeOnly: true
+        - $ref: '#/components/schemas/annotation'
   securitySchemes:
     JSON-Web-Token:
       type: http
@@ -580,6 +612,22 @@ components:
       schema:
         type: string
       description: show nested component instead of id
+  responses:
+    bad-request:
+      description: form when a request goes wrong
+      content:
+        application/problem+json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+              status:
+                type: integer
+              title:
+                type: string
+              type:
+                type: string
 tags:
   - name: annotation
   - name: bundle
