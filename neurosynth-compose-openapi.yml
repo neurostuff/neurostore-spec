@@ -107,6 +107,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/meta-analysis-return'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '422':
+          $ref: '#/components/responses/bad-request'
+        '500':
+          $ref: '#/components/responses/bad-request'
       tags:
         - bundle
       security:
@@ -147,6 +153,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/meta-analysis-return'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
+        '422':
+          $ref: '#/components/responses/bad-request'
       tags:
         - bundle
       security:
@@ -180,6 +194,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/studyset-return'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '422':
+          $ref: '#/components/responses/bad-request'
+        '500':
+          $ref: '#/components/responses/bad-request'
       tags:
         - studyset
       security:
@@ -218,6 +238,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/studyset-return'
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
+        '422':
+          $ref: '#/components/responses/bad-request'
       tags:
         - studyset
       security:
@@ -250,6 +278,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/annotation-return'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '422':
+          $ref: '#/components/responses/bad-request'
+        '500':
+          $ref: '#/components/responses/bad-request'
       tags:
         - annotation
       requestBody:
@@ -288,6 +322,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/annotation-return'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
+        '422':
+          $ref: '#/components/responses/bad-request'
       tags:
         - annotation
       security:
