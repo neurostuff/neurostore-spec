@@ -361,8 +361,6 @@ paths:
   /specifications:
     get:
       summary: Your GET endpoint
-      tags:
-        - meta-analysis
       responses:
         '200':
           description: OK
@@ -373,6 +371,8 @@ paths:
         '400':
           $ref: '#/components/responses/bad-request'
       description: list of meta-analysis specifications
+      tags:
+        - specification
     parameters: []
     post:
       summary: ''
@@ -389,8 +389,6 @@ paths:
           description: Unprocessable Entity (WebDAV)
         '500':
           $ref: '#/components/responses/bad-request'
-      tags:
-        - meta-analysis
       security:
         - JSON-Web-Token: []
       requestBody:
@@ -399,6 +397,8 @@ paths:
             schema:
               $ref: '#/components/schemas/specification-post-body'
       description: create a new meta-analysis specification
+      tags:
+        - specification
   '/specifications/{id}':
     parameters:
       - schema:
@@ -408,8 +408,6 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags:
-        - meta-analysis
       responses:
         '200':
           description: OK
@@ -422,6 +420,8 @@ paths:
         '404':
           $ref: '#/components/responses/bad-request'
       description: get a meta-analysis specification
+      tags:
+        - specification
     put:
       summary: Update Meta-Analysis specification
       responses:
@@ -439,8 +439,6 @@ paths:
           $ref: '#/components/responses/bad-request'
         '422':
           $ref: '#/components/responses/bad-request'
-      tags:
-        - meta-analysis
       security:
         - JSON-Web-Token: []
       requestBody:
@@ -450,6 +448,8 @@ paths:
               $ref: '#/components/schemas/specification'
       description: update an existing meta analysis specification
       operationId: ''
+      tags:
+        - specification
 components:
   schemas:
     specification:
@@ -531,7 +531,6 @@ components:
             - type: string
             - $ref: '#/components/schemas/studyset'
           description: Either a string representation of the id of the studyset (nested=False) or a JSON representation of the studyset itself (nested=True).
-          
         annotation:
           readOnly: true
           oneOf:
@@ -761,7 +760,7 @@ components:
                 type: string
 tags:
   - name: annotation
-  - name: bundle
   - name: meta-analysis
+  - name: specification
   - name: studyset
   - name: user
