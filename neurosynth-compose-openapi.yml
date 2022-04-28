@@ -325,6 +325,8 @@ paths:
                 $ref: '#/components/schemas/specification-return'
         '400':
           $ref: '#/components/responses/bad-request'
+        '500':
+          $ref: '#/components/responses/bad-request'
       tags:
         - meta-analysis
       security:
@@ -372,6 +374,8 @@ paths:
         '401':
           $ref: '#/components/responses/bad-request'
         '404':
+          $ref: '#/components/responses/bad-request'
+        '422':
           $ref: '#/components/responses/bad-request'
       tags:
         - meta-analysis
