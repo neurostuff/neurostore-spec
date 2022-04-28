@@ -702,7 +702,7 @@ components:
       in: query
       required: false
       schema:
-        type: string
+        type: boolean
       description: show nested component instead of id
   responses:
     bad-request:
