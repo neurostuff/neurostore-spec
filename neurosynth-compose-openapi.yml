@@ -692,6 +692,7 @@ components:
         - required:
             - internal_annotation_id
             - internal_studyset_id
+            - specification
   securitySchemes:
     JSON-Web-Token:
       type: http
