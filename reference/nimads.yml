@@ -1,0 +1,371 @@
+openapi: 3.0.0
+x-stoplight:
+  id: lm4zxc5x3cl0u
+info:
+  title: nimads
+  version: '1.0'
+components:
+  schemas:
+    studysetBase:
+      title: studysetBase
+      x-stoplight:
+        id: i9go6kajcady2
+      type: object
+      properties:
+        name:
+          type: string
+          description: ''
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        publication:
+          type: string
+          nullable: true
+        doi:
+          type: string
+          nullable: true
+        pmid:
+          type: string
+          nullable: true
+    studysetRelationships:
+      title: studysetRelationships
+      x-stoplight:
+        id: p4ehtid3xkf6g
+      type: object
+      properties:
+        studies:
+          description: ''
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/study'
+              - type: string
+                properties: {}
+    studyset:
+      title: studyset
+      x-stoplight:
+        id: gnuhmbd4ikted
+      allOf:
+        - $ref: '#/components/schemas/studysetBase'
+        - $ref: '#/components/schemas/studysetRelationships'
+    annotationBase:
+      title: annotationBase
+      x-stoplight:
+        id: jtcdsl5d7bdfa
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        metadata:
+          type: object
+          nullable: true
+        note_keys:
+          type: object
+          nullable: true
+    annotationRelationships:
+      title: annotationRelationships
+      x-stoplight:
+        id: gfb9gvmjnqcx6
+      type: object
+      properties:
+        studyset:
+          oneOf:
+            - $ref: '#/components/schemas/studyset'
+            - type: string
+              properties: {}
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/noteCollection'
+    annotation:
+      title: annotation
+      x-stoplight:
+        id: 4q7pjd7n2lbhj
+      allOf:
+        - $ref: '#/components/schemas/annotationBase'
+        - $ref: '#/components/schemas/annotationRelationships'
+    noteCollectionBase:
+      title: noteCollectionBase
+      x-stoplight:
+        id: 4t4rdy2jukm4j
+      type: object
+      properties:
+        note:
+          type: object
+          nullable: true
+    noteCollectionRelationships:
+      title: noteCollectionRelationships
+      x-stoplight:
+        id: i8hr2p2hnio37
+      type: object
+      properties:
+        analysis:
+          oneOf:
+            - $ref: '#/components/schemas/analysis'
+            - type: string
+              properties: {}
+        annotation:
+          oneOf:
+            - $ref: '#/components/schemas/annotation'
+            - type: string
+              properties: {}
+    noteCollection:
+      title: noteCollection
+      x-stoplight:
+        id: oiyhdquunqlx6
+      description: ''
+      allOf:
+        - $ref: '#/components/schemas/noteCollectionBase'
+        - $ref: '#/components/schemas/noteCollectionRelationships'
+    studyBase:
+      title: studyBase
+      x-stoplight:
+        id: m91cg8nyxgnzm
+      type: object
+      properties:
+        doi:
+          type: string
+          example: 10.1016/S0926-6410(97)00020-7
+          description: digital object identifier of the study
+          nullable: true
+        name:
+          type: string
+          example: 'Functional magnetic resonance imaging of category-specific cortical activation: evidence for semantic maps.'
+          description: title of the study
+          nullable: true
+        metadata:
+          description: other metadata associated with the study
+          type: object
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        publication:
+          type: string
+          nullable: true
+        pmid:
+          type: string
+          nullable: true
+        authors:
+          type: string
+          nullable: true
+        year:
+          type: integer
+          nullable: true
+    studyRelationships:
+      title: studyRelationships
+      x-stoplight:
+        id: y3188t5lzg8s0
+      type: object
+      properties:
+        analyses:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/analysis'
+              - type: string
+                properties: {}
+    study:
+      title: study
+      x-stoplight:
+        id: 5zlmr08oo8yrw
+      allOf:
+        - $ref: '#/components/schemas/studyBase'
+        - $ref: '#/components/schemas/studyRelationships'
+    analysisBase:
+      title: analysisBase
+      x-stoplight:
+        id: ag41ghxy1gsr8
+      type: object
+      properties:
+        name:
+          type: string
+          example: '"20356"'
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        weights:
+          type: array
+          description: 'weight applied to each condition, must be the same length as condition'
+          items:
+            type: number
+    analysisRelationships:
+      title: analysisRelationships
+      x-stoplight:
+        id: 2e1u07kjem1dm
+      type: object
+      properties:
+        conditions:
+          description: 'array of conditions (e.g., 2-back, memory, etc.) that must be the same length as weight.'
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/condition'
+              - type: string
+                properties: {}
+        images:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/image'
+              - type: string
+                properties: {}
+        points:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/point'
+              - type: string
+                properties: {}
+        study:
+          oneOf:
+            - $ref: '#/components/schemas/study'
+            - type: string
+              properties: {}
+    analysis:
+      title: analysis
+      x-stoplight:
+        id: stjmwkv29g8ru
+      allOf:
+        - $ref: '#/components/schemas/analysisBase'
+        - $ref: '#/components/schemas/analysisRelationships'
+    imageBase:
+      title: imageBase
+      x-stoplight:
+        id: v7h7ub0yudp32
+      type: object
+      properties:
+        metadata:
+          type: object
+          description: metadata from image
+          nullable: true
+        url:
+          type: string
+          format: uri
+          example: 'https://neurovault.org/media/images/4778/Positive_RPEs_zstat.nii.gz'
+          description: URL to image file
+          nullable: true
+        filename:
+          type: string
+          example: Positive_RPEs_zstat.nii.gz
+          description: name of the image file
+          nullable: true
+        space:
+          type: string
+          example: TAL
+          description: the template space the image is in
+          nullable: true
+        value_type:
+          type: string
+          example: Z
+          description: The values the image represents
+          nullable: true
+        add_date:
+          type: string
+          format: date-time
+          description: date the image was added
+          nullable: true
+          readOnly: true
+    imageRelationships:
+      title: imageRelationships
+      x-stoplight:
+        id: gp7ueyngdwnof
+      type: object
+      properties:
+        analysis:
+          oneOf:
+            - $ref: '#/components/schemas/analysis'
+            - type: string
+              properties: {}
+    image:
+      title: image
+      x-stoplight:
+        id: 1oc2nspyi992l
+      allOf:
+        - $ref: '#/components/schemas/imageBase'
+        - $ref: '#/components/schemas/imageRelationships'
+    pointBase:
+      title: pointBase
+      x-stoplight:
+        id: bejaeqad8fvr0
+      type: object
+      properties:
+        coordinates:
+          type: array
+          minItems: 3
+          maxItems: 3
+          description: location of the point
+          items:
+            type: number
+            format: float
+            example: 63
+        space:
+          type: string
+          example: UNKNOWN
+          description: template space used to determine coordinate (TAL or MNI or UNKNOWN)
+          nullable: true
+        kind:
+          type: string
+          description: 'method of how point was derived (e.g., center of mass)'
+          nullable: true
+        label_id:
+          type: string
+          nullable: true
+    pointRelationships:
+      title: pointRelationships
+      x-stoplight:
+        id: a87vvh4r0tz5c
+      type: object
+      properties:
+        image:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/image'
+        value:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/pointValue'
+              - type: string
+                properties: {}
+    pointValue:
+      title: pointValue
+      x-stoplight:
+        id: cra83arrfjms6
+      type: object
+      properties:
+        kind:
+          type: string
+          nullable: true
+        value:
+          type: number
+          nullable: true
+    point:
+      title: point
+      x-stoplight:
+        id: uw7dyv8sq7ehl
+      allOf:
+        - $ref: '#/components/schemas/pointBase'
+        - $ref: '#/components/schemas/pointRelationships'
+    conditionBase:
+      title: conditionBase
+      x-stoplight:
+        id: n6m5ng3nit56m
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          description: condition name
+        description:
+          type: string
+          nullable: true
+          description: condition description
+    condition:
+      allOf:
+        - $ref: '#/components/schemas/conditionBase'
