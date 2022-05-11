@@ -49,6 +49,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/studysetBase'
         - $ref: '#/components/schemas/studysetRelationships'
+      description: 'A collection of studies (e.g., publications) where each study is unit of publishable content.'
     annotationBase:
       title: annotationBase
       x-stoplight:
