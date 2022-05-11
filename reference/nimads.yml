@@ -14,19 +14,23 @@ components:
       properties:
         name:
           type: string
-          description: ''
+          description: Descriptive and human readable name of the studyset.
           nullable: true
         description:
           type: string
+          description: A longform description of the studyset.
           nullable: true
         publication:
           type: string
+          description: The journal/source the studyset is connected to if the studyset was published.
           nullable: true
         doi:
           type: string
+          description: A DOI connected to the published studyset (may change to being automatically created so each studyset connected to a successful meta-analysis gets a DOI).
           nullable: true
         pmid:
           type: string
+          description: 'If the article connected to the studyset was published on PubMed, then link the ID here.'
           nullable: true
     studysetRelationships:
       title: studysetRelationships
@@ -35,13 +39,14 @@ components:
       type: object
       properties:
         studies:
-          description: ''
           type: array
+          description: The collection of studies.
           items:
             oneOf:
               - $ref: '#/components/schemas/study'
               - type: string
-                properties: {}
+                description: The id or uri indicating the location of the study.
+            description: 'Studies can either be presented in their full nested representation, or simply as a string referencing the location of the study.'
     studyset:
       title: studyset
       x-stoplight:
@@ -49,7 +54,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/studysetBase'
         - $ref: '#/components/schemas/studysetRelationships'
-      description: 'A collection of studies (e.g., publications) where each study is unit of publishable content.'
+      description: 'A collection of studies (e.g., publications).'
     annotationBase:
       title: annotationBase
       x-stoplight:
