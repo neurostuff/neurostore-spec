@@ -258,6 +258,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/analysisBase'
         - $ref: '#/components/schemas/analysisRelationships'
+      description: A contrast of weighted conditions with associated statistical results.
     imageBase:
       title: imageBase
       x-stoplight:
@@ -266,33 +267,33 @@ components:
       properties:
         metadata:
           type: object
-          description: metadata from image
+          description: Metadata about image such as software and version used and other relevant data about how the image was produced.
           nullable: true
         url:
           type: string
           format: uri
           example: 'https://neurovault.org/media/images/4778/Positive_RPEs_zstat.nii.gz'
-          description: URL to image file
+          description: URL to image file.
           nullable: true
         filename:
           type: string
           example: Positive_RPEs_zstat.nii.gz
-          description: name of the image file
+          description: Name of the image file.
           nullable: true
         space:
           type: string
-          example: TAL
-          description: the template space the image is in
+          example: MNI152NLin2009aAsym
+          description: 'The template space the image is in (e.g., MNI '
           nullable: true
         value_type:
           type: string
           example: Z
-          description: The values the image represents
+          description: 'The values the image represents. For example, T-statistic or Z-statistic, or Betas.'
           nullable: true
         add_date:
           type: string
           format: date-time
-          description: date the image was added
+          description: Date the image was added.
           nullable: true
           readOnly: true
     imageRelationships:
@@ -305,7 +306,7 @@ components:
           oneOf:
             - $ref: '#/components/schemas/analysis'
             - type: string
-              properties: {}
+          description: 'Analysis the image is associated with. Each image is associated with one and only one analysis, but an analysis can have multiple images. Either an analysis object or a string linking to an analysis object.'
     image:
       title: image
       x-stoplight:
@@ -313,6 +314,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/imageBase'
         - $ref: '#/components/schemas/imageRelationships'
+      description: A description of a brain image linking to the actual nifti file.
     pointBase:
       title: pointBase
       x-stoplight:
@@ -323,22 +325,23 @@ components:
           type: array
           minItems: 3
           maxItems: 3
-          description: location of the point
+          description: Location of the significant coordinate in three dimensional space.
           items:
             type: number
             format: float
             example: 63
         space:
           type: string
-          example: UNKNOWN
-          description: template space used to determine coordinate (TAL or MNI or UNKNOWN)
+          example: MNI
+          description: Template space used to determine coordinate Examples include TAL or MNI.
           nullable: true
         kind:
           type: string
-          description: 'method of how point was derived (e.g., center of mass)'
+          description: 'Method of how point was derived (e.g., center of mass)'
           nullable: true
         label_id:
           type: string
+          description: 'If the point is associated with an image, this is the value the point takes in that image.'
           nullable: true
     pointRelationships:
       title: pointRelationships
@@ -348,15 +351,22 @@ components:
       properties:
         image:
           nullable: true
-          allOf:
+          oneOf:
             - $ref: '#/components/schemas/image'
+            - type: string
+              properties: {}
+          description: Statistical image the point was derived from. Either points to an image object or a string linking to an image object.
         value:
           type: array
+          description: 'An array of values at this point since each value could represent a beta, t-statistic and/or z-statistic, etc.'
           items:
-            oneOf:
-              - $ref: '#/components/schemas/pointValue'
-              - type: string
-                properties: {}
+            $ref: '#/components/schemas/pointValue'
+        analysis:
+          oneOf:
+            - $ref: '#/components/schemas/analysis'
+            - type: string
+              properties: {}
+          description: 'Analysis the point is associated with. Each point is associated with one and only one analysis, but an analysis can have multiple points. Either an analysis object or a string linking to an analysis object.'
     pointValue:
       title: pointValue
       x-stoplight:
@@ -365,9 +375,11 @@ components:
       properties:
         kind:
           type: string
+          description: 'The kind of statistic the value represents, whether it is variance, beta, t-statistic, or z-statistic.'
           nullable: true
         value:
           type: number
+          description: The value of the point for the "kind" of statistic.
           nullable: true
     point:
       title: point
@@ -376,6 +388,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/pointBase'
         - $ref: '#/components/schemas/pointRelationships'
+      description: A three dimensional coordinate representing a significant statistical peak associated with an analysis.
     conditionBase:
       title: conditionBase
       x-stoplight:
@@ -384,12 +397,13 @@ components:
       properties:
         name:
           type: string
+          description: 'Name of the condition being applied in the contrast, either psychological, pharmacological, or group based.'
           nullable: true
-          description: condition name
         description:
           type: string
+          description: Long form description of how the condition is operationalized and/or specific meaning.
           nullable: true
-          description: condition description
     condition:
       allOf:
         - $ref: '#/components/schemas/conditionBase'
+      description: Base component making up constrasts.
