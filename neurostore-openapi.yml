@@ -775,10 +775,13 @@ components:
         - type: object
           properties:
             studies:
-              oneOf:
-                - $ref: '#/components/schemas/study-return'
-                - type: string
-                  nullable: true
+              type: array
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/study-return'
+                  - type: string
+                    properties: {}
+                    nullable: true
     studyset-list:
       title: studyset-get
       type: object
