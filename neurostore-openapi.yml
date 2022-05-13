@@ -1024,7 +1024,7 @@ components:
             annotation:
               type: string
             study_year:
-              type: string
+              type: integer
               nullable: true
             publication:
               type: string
