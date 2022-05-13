@@ -1009,7 +1009,6 @@ components:
         id: fy0w02pre2yes
       allOf:
         - $ref: ./reference/nimads.yml#/components/schemas/noteCollectionBase
-        - $ref: '#/components/schemas/resource-attributes'
         - type: object
           properties:
             analysis:
