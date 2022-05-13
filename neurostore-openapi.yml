@@ -1039,14 +1039,18 @@ components:
       type: object
       title: annotation-export
       additionalProperties: false
+      x-tags:
+        - annotation
       properties:
         metadata:
           type: object
           nullable: true
+          readOnly: true
         annotation_csv:
           type: string
-      x-tags:
-        - annotation
+          readOnly: true
+      required:
+        - annotation_csv
     user:
       type: object
       title: user
