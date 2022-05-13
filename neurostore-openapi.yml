@@ -778,6 +778,7 @@ components:
               oneOf:
                 - $ref: '#/components/schemas/study-return'
                 - type: string
+                  nullable: true
     studyset-list:
       title: studyset-get
       type: object
@@ -804,6 +805,7 @@ components:
                 oneOf:
                   - $ref: '#/components/schemas/analysis-return'
                   - type: string
+                    nullable: true
       x-tags:
         - study
     study-list:
@@ -830,18 +832,18 @@ components:
             images:
               oneOf:
                 - $ref: '#/components/schemas/image-return'
-                - properties: {}
-                  type: string
+                - type: string
+                  nullable: true
             points:
               oneOf:
                 - $ref: '#/components/schemas/point-return'
                 - type: string
-                  properties: {}
+                  nullable: true
             conditions:
               oneOf:
                 - $ref: '#/components/schemas/condition-return'
                 - type: string
-                  properties: {}
+                  nullable: true
       x-tags:
         - analysis
     analysis-list:
@@ -864,10 +866,12 @@ components:
           properties:
             image:
               type: string
+              nullable: true
             value:
               oneOf:
                 - $ref: '#/components/schemas/point-value'
                 - type: string
+                  nullable: true
             x:
               type: number
               writeOnly: true
@@ -922,6 +926,7 @@ components:
                 $ref: '#/components/schemas/entity'
             analysis_name:
               type: string
+              nullable: true
       x-tags:
         - image
     image-list:
@@ -971,7 +976,7 @@ components:
                   oneOf:
                     - $ref: '#/components/schemas/note-collection-return'
                     - type: string
-                      properties: {}
+                      nullable: true
       x-tags:
         - annotation
     annotation-list:
@@ -999,18 +1004,23 @@ components:
               type: string
             analysis_name:
               type: string
+              nullable: true
             study:
               type: string
             study_name:
               type: string
+              nullable: true
             annotation:
               type: string
             study_year:
               type: string
+              nullable: true
             publication:
               type: string
+              nullable: true
             authors:
               type: string
+              nullable: true
     annotation-export:
       type: object
       title: annotation-export
