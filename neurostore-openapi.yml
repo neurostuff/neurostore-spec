@@ -830,20 +830,29 @@ components:
             study:
               type: string
             images:
-              oneOf:
-                - $ref: '#/components/schemas/image-return'
-                - type: string
-                  nullable: true
+              type: array
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/image-return'
+                  - type: string
+                    properties: {}
+                    nullable: true
             points:
-              oneOf:
-                - $ref: '#/components/schemas/point-return'
-                - type: string
-                  nullable: true
+              type: array
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/point-return'
+                  - type: string
+                    properties: {}
+                    nullable: true
             conditions:
-              oneOf:
-                - $ref: '#/components/schemas/condition-return'
-                - type: string
-                  nullable: true
+              type: array
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/condition-return'
+                  - type: string
+                    properties: {}
+                    nullable: true
       x-tags:
         - analysis
     analysis-list:
