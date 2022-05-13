@@ -697,7 +697,7 @@
       "given": [
         "#Operation_Object"
       ],
-      "severity": "warn",
+      "severity": "off",
       "then": {
         "function": "truthy",
         "field": "operationId"
