@@ -986,35 +986,6 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - annotation
-    note-collection:
-      title: annotation-note
-      type: object
-      x-tags:
-        - annotation
-      properties:
-        analysis:
-          type: string
-        study:
-          type: string
-        study_name:
-          type: string
-        annotation:
-          type: string
-        analysis_name:
-          type: string
-          nullable: true
-        note:
-          type: object
-          nullable: true
-        study_year:
-          type: integer
-          nullable: true
-        publication:
-          type: string
-          nullable: true
-        authors:
-          type: string
-          nullable: true
     note-collection-return:
       title: note-collection-return
       x-stoplight:
