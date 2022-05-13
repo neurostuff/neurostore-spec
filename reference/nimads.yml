@@ -64,6 +64,7 @@ components:
         name:
           type: string
           description: Descriptive name for the annotation.
+          nullable: true
         description:
           type: string
           description: Long form description of the annotation.

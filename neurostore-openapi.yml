@@ -1170,10 +1170,13 @@ components:
       properties:
         source:
           type: string
+          nullable: true
         source_id:
           type: string
+          nullable: true
         source_updated_at:
           type: string
+          nullable: true
   responses:
     '404':
       description: Example response
