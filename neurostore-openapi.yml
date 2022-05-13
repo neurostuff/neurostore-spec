@@ -1107,6 +1107,7 @@ components:
           example: 38jobTomPDqt
           minLength: 12
           maxLength: 12
+          readOnly: true
         created_at:
           type: string
           format: date-time
@@ -1125,6 +1126,8 @@ components:
         public:
           type: boolean
           default: true
+      required:
+        - id
     json-ld:
       title: json-ld
       type: object
