@@ -982,10 +982,13 @@ components:
             - type: object
               properties:
                 notes:
-                  oneOf:
-                    - $ref: '#/components/schemas/note-collection-return'
-                    - type: string
-                      nullable: true
+                  type: array
+                  items:
+                    oneOf:
+                      - $ref: '#/components/schemas/note-collection-return'
+                      - type: string
+                        properties: {}
+                        nullable: true
       x-tags:
         - annotation
     annotation-list:
