@@ -1,0 +1,62 @@
+name: Push changes to jsonschema
+
+on:
+  push:
+    branches:
+      - '**'
+jobs:
+  update_generator:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout NIMADS
+        uses: actions/checkout@v3
+        with:
+          repository: neurostuff/NIMADS
+          token: ${{ secrets.SDK_PAT }}
+          path: nimads
+      - name: Change/Create branch
+        run: |
+          cd nimads
+          git fetch
+          git ls-remote --exit-code --heads origin  ${{ github.ref_name }} || git branch ${{ github.ref_name }}
+          git checkout ${{ github.ref_name }}
+      - name: Checkout Specification
+        uses: actions/checkout@v3
+        with:
+          path: neurostore-spec
+      - name: Setup Node
+        uses: actions/setup-node@v3
+      - name: Install node script requirements
+        run: |
+          npm i @stoplight/json-ref-resolver
+          npm i js-yaml
+      - name: Create node script
+        run: |
+          echo -e '#!/usr/bin/env node
+          const yaml = require("js-yaml");
+          const fs = require("fs");
+          const toJsonSchema = require("@openapi-contrib/openapi-schema-to-json-schema");
+          let fileContents = fs.readFileSync("./neurostore-spec/reference/nimads.yml", "utf8");
+          let nimadsOpenAPI = yaml.load(fileContents);
+          let nimadsJSONSchema = toJsonSchema(nimadsOpenAPI);
+          const nimads_str = JSON.stringify(nimadsJSONSchema, null, 4);
+          fs.writeFileSync("./nimads/nimads.json", nimads_str);'  | sed -e 's/^[ \t]*//' > convert_openapi_to_jsonschema.js
+      - name: Convert openapi to jsonschema
+        run: node convert_openapi_to_jsonschema.js
+      - name: Update NIMADS
+        run: |
+          cd nimads
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          # check to see if there were any changes to the repository and no branches made
+          if [ -z "$(git ls-files --others --exclude-standard --directory --unmerged --modified)" ]; then
+            echo "No files to be committed!"
+            if [ -z "$(git ls-remote --heads origin ${{ github.ref_name }})" ]; then
+              git push -q https://${{ secrets.SDK_PAT }}@github.com/neurostuff/NIMADS.git ${{ github.ref_name }}
+            else
+              echo "branch already exists and is up to date"
+            fi
+          else
+            git add -A && git commit -m "${{ github.sha }}" -a
+            git push -q https://${{ secrets.SDK_PAT }}@github.com/neurostuff/NIMADS.git ${{ github.ref_name }}
+          fi
