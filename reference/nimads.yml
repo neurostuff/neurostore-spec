@@ -64,6 +64,7 @@ components:
         name:
           type: string
           description: Descriptive name for the annotation.
+          nullable: true
         description:
           type: string
           description: Long form description of the annotation.
@@ -354,9 +355,9 @@ components:
           oneOf:
             - $ref: '#/components/schemas/image'
             - type: string
-              properties: {}
+              nullable: true
           description: Statistical image the point was derived from. Either points to an image object or a string linking to an image object.
-        value:
+        values:
           type: array
           description: 'An array of values at this point since each value could represent a beta, t-statistic and/or z-statistic, etc.'
           items:
@@ -365,7 +366,6 @@ components:
           oneOf:
             - $ref: '#/components/schemas/analysis'
             - type: string
-              properties: {}
           description: 'Analysis the point is associated with. Each point is associated with one and only one analysis, but an analysis can have multiple points. Either an analysis object or a string linking to an analysis object.'
     pointValue:
       title: pointValue
