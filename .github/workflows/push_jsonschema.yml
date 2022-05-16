@@ -28,7 +28,7 @@ jobs:
         uses: actions/setup-node@v3
       - name: Install node script requirements
         run: |
-          npm i @stoplight/json-ref-resolver
+          npm i @openapi-contrib/openapi-schema-to-json-schema
           npm i js-yaml
       - name: Create node script
         run: |
