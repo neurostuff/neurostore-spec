@@ -61,7 +61,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/studyset'
+              $ref: ./reference/nimads.yml#/components/schemas/studyset
   '/studysets/{id}':
     parameters:
       - schema:
@@ -102,7 +102,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/studyset'
+              $ref: ./reference/nimads.yml#/components/schemas/studyset
       tags:
         - studysets
       security:
@@ -163,7 +163,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/study'
+              $ref: ./reference/nimads.yml#/components/schemas/study
         description: ''
       tags:
         - studies
@@ -214,7 +214,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/study'
+              $ref: ./reference/nimads.yml#/components/schemas/study
       tags:
         - studies
       security:
@@ -266,7 +266,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/analysis'
+              $ref: ./reference/nimads.yml#/components/schemas/analysis
       tags:
         - analyses
       description: create an analysis
@@ -311,7 +311,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/analysis'
+              $ref: ./reference/nimads.yml#/components/schemas/analysis
       tags:
         - analyses
       description: Update an existing analysis.
@@ -358,7 +358,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/point'
+              $ref: ./reference/nimads.yml#/components/schemas/point
   '/points/{id}':
     parameters:
       - schema:
@@ -396,7 +396,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/point'
+              $ref: ./reference/nimads.yml#/components/schemas/point
       tags:
         - points
       description: Update a particular MRI coordinate.
@@ -448,7 +448,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/image'
+              $ref: ./reference/nimads.yml#/components/schemas/image
       tags:
         - images
       description: Create an image
@@ -490,7 +490,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/image'
+              $ref: ./reference/nimads.yml#/components/schemas/image
         description: ''
       tags:
         - images
@@ -546,7 +546,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/condition'
+              $ref: ./reference/nimads.yml#/components/schemas/condition
   '/conditions/{id}':
     parameters:
       - schema:
@@ -583,7 +583,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/condition'
+              $ref: ./reference/nimads.yml#/components/schemas/condition
         description: ''
       tags:
         - conditions
@@ -637,7 +637,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/annotation'
+              $ref: ./reference/nimads.yml#/components/schemas/annotation
   '/annotations/{id}':
     parameters:
       - schema:
@@ -677,7 +677,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/annotation'
+              $ref: ./reference/nimads.yml#/components/schemas/annotation
     delete:
       summary: DELETE an annotation
       responses:
@@ -762,52 +762,26 @@ paths:
         - user
 components:
   schemas:
-    studyset:
-      title: studyset
-      type: object
-      description: ''
-      x-examples: {}
-      properties:
-        name:
-          type: string
-          description: ''
-          nullable: true
-        description:
-          type: string
-          nullable: true
-        publication:
-          type: string
-          nullable: true
-        doi:
-          type: string
-          nullable: true
-        pmid:
-          type: string
-          nullable: true
-        studies:
-          description: ''
-          type: array
-          items:
-            oneOf:
-              - allOf:
-                  - $ref: '#/components/schemas/study'
-                  - $ref: '#/components/schemas/read-only'
-              - type: string
-        user:
-          type: string
-          nullable: true
-          readOnly: true
-        public:
-          type: boolean
-      x-tags:
-        - studyset
     studyset-return:
       title: studyset-return
-      allOf:
-        - $ref: '#/components/schemas/studyset'
-        - $ref: '#/components/schemas/read-only'
+      description: ''
+      x-examples: {}
       x-tags:
         - studyset
+      allOf:
+        - $ref: ./reference/nimads.yml#/components/schemas/studysetBase
+        - $ref: '#/components/schemas/resource-attributes'
+        - $ref: '#/components/schemas/clone'
+        - type: object
+          properties:
+            studies:
+              type: array
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/study-return'
+                  - type: string
+                    properties: {}
+                    nullable: true
     studyset-list:
       title: studyset-get
       type: object
@@ -820,68 +794,21 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - studyset
-    study:
-      description: attributes of a study/published paper
-      type: object
-      title: study
-      x-examples: {}
-      properties:
-        analyses:
-          type: array
-          items:
-            oneOf:
-              - type: string
-              - allOf:
-                  - $ref: '#/components/schemas/read-only'
-                  - $ref: '#/components/schemas/analysis'
-        doi:
-          type: string
-          example: 10.1016/S0926-6410(97)00020-7
-          description: digital object identifier of the study
-          nullable: true
-        name:
-          type: string
-          example: 'Functional magnetic resonance imaging of category-specific cortical activation: evidence for semantic maps.'
-          description: title of the study
-          nullable: true
-        metadata:
-          description: other metadata associated with the study
-          type: object
-          nullable: true
-        description:
-          type: string
-          nullable: true
-        publication:
-          type: string
-          nullable: true
-        pmid:
-          type: string
-          nullable: true
-        public:
-          type: boolean
-          description: whether the study is visible to everyone or just you
-        authors:
-          type: string
-          nullable: true
-        source:
-          type: string
-          nullable: true
-        source_id:
-          type: string
-          nullable: true
-        source_updated_at:
-          type: string
-          nullable: true
-        year:
-          type: integer
-          nullable: true
-      x-tags:
-        - study
     study-return:
       title: study-return
       allOf:
-        - $ref: '#/components/schemas/study'
-        - $ref: '#/components/schemas/read-only'
+        - $ref: ./reference/nimads.yml#/components/schemas/studyBase
+        - $ref: '#/components/schemas/resource-attributes'
+        - $ref: '#/components/schemas/clone'
+        - type: object
+          properties:
+            analyses:
+              type: array
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/analysis-return'
+                  - type: string
+                    nullable: true
       x-tags:
         - study
     study-list:
@@ -896,62 +823,39 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - study
-    analysis:
-      title: analysis
-      type: object
-      x-examples: {}
-      description: ''
-      properties:
-        conditions:
-          description: 'array of conditions (e.g., 2-back, memory, etc.) that must be the same length as weight.'
-          type: array
-          items:
-            oneOf:
-              - type: string
-              - allOf:
-                  - $ref: '#/components/schemas/condition'
-                  - $ref: '#/components/schemas/read-only'
-        images:
-          type: array
-          items:
-            description: URL(s) pointing towards image endpoints
-            oneOf:
-              - type: string
-              - allOf:
-                  - $ref: '#/components/schemas/image'
-                  - $ref: '#/components/schemas/read-only'
-        name:
-          type: string
-          example: '"20356"'
-          nullable: true
-        points:
-          type: array
-          items:
-            oneOf:
-              - type: string
-              - allOf:
-                  - $ref: '#/components/schemas/point'
-                  - $ref: '#/components/schemas/read-only'
-        weights:
-          type: array
-          description: 'weight applied to each condition, must be the same length as condition'
-          items:
-            type: number
-        description:
-          type: string
-          nullable: true
-        study:
-          type: string
-          example: 38jobTomPDqt
-          minLength: 12
-          maxLength: 12
-      x-tags:
-        - analysis
     analysis-return:
       title: analysis-return
       allOf:
-        - $ref: '#/components/schemas/analysis'
-        - $ref: '#/components/schemas/read-only'
+        - $ref: ./reference/nimads.yml#/components/schemas/analysisBase
+        - $ref: '#/components/schemas/resource-attributes'
+        - type: object
+          properties:
+            study:
+              type: string
+            images:
+              type: array
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/image-return'
+                  - type: string
+                    properties: {}
+                    nullable: true
+            points:
+              type: array
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/point-return'
+                  - type: string
+                    properties: {}
+                    nullable: true
+            conditions:
+              type: array
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/condition-return'
+                  - type: string
+                    properties: {}
+                    nullable: true
       x-tags:
         - analysis
     analysis-list:
@@ -966,68 +870,33 @@ components:
             $ref: '#/components/schemas/analysis-return'
       x-tags:
         - analysis
-    point:
-      title: point
-      type: object
-      x-examples: {}
-      description: a coordinate in the brain
-      x-tags:
-        - point
-      properties:
-        coordinates:
-          type: array
-          minItems: 3
-          maxItems: 3
-          description: location of the point
-          items:
-            type: number
-            format: float
-            example: 63
-        space:
-          type: string
-          example: UNKNOWN
-          description: template space used to determine coordinate (TAL or MNI or UNKNOWN)
-          nullable: true
-        kind:
-          type: string
-          description: 'method of how point was derived (e.g., center of mass)'
-          nullable: true
-        x:
-          type: number
-          writeOnly: true
-        'y':
-          type: number
-          writeOnly: true
-        z:
-          type: number
-          writeOnly: true
-        analysis:
-          type: string
-          example: 6kwPw6p79Ljm
-          minLength: 12
-          maxLength: 12
-        image:
-          type: string
-          nullable: true
-        label_id:
-          type: string
-          nullable: true
-        value:
-          type: array
-          items:
-            oneOf:
-              - type: string
-              - allOf:
-                  - $ref: '#/components/schemas/point-value'
-                  - $ref: '#/components/schemas/read-only'
-        entities:
-          type: array
-          items:
-            $ref: '#/components/schemas/entity'
     point-return:
       allOf:
-        - $ref: '#/components/schemas/point'
-        - $ref: '#/components/schemas/read-only'
+        - $ref: ./reference/nimads.yml#/components/schemas/pointBase
+        - $ref: '#/components/schemas/resource-attributes'
+        - type: object
+          properties:
+            image:
+              type: string
+              nullable: true
+            value:
+              oneOf:
+                - $ref: '#/components/schemas/point-value'
+                - type: string
+                  nullable: true
+            x:
+              type: number
+              writeOnly: true
+            'y':
+              type: number
+              writeOnly: true
+            z:
+              type: number
+              writeOnly: true
+            entities:
+              type: array
+              items:
+                $ref: '#/components/schemas/entity'
       x-tags:
         - point
     point-list:
@@ -1055,65 +924,21 @@ components:
       description: ''
       x-tags:
         - point
-    image:
-      title: image
-      type: object
-      description: representation of a statistical brain image
-      x-examples: {}
-      x-tags:
-        - image
-      properties:
-        metadata:
-          type: object
-          description: metadata from image
-          nullable: true
-        url:
-          type: string
-          format: uri
-          example: 'https://neurovault.org/media/images/4778/Positive_RPEs_zstat.nii.gz'
-          description: URL to image file
-          nullable: true
-        filename:
-          type: string
-          example: Positive_RPEs_zstat.nii.gz
-          description: name of the image file
-          nullable: true
-        space:
-          type: string
-          example: TAL
-          description: the template space the image is in
-          nullable: true
-        value_type:
-          type: string
-          example: Z
-          description: The values the image represents
-          nullable: true
-        analysis_name:
-          type: string
-          example: Positive RPEs
-          description: name of the analysis
-          nullable: true
-          readOnly: true
-        analysis:
-          type: string
-          example: 7UvrsaALJU9g
-          description: ID of the analysis this image came from
-          minLength: 12
-          maxLength: 12
-        add_date:
-          type: string
-          format: date-time
-          description: date the image was added
-          nullable: true
-          readOnly: true
-        entities:
-          type: array
-          items:
-            $ref: '#/components/schemas/entity'
     image-return:
       allOf:
-        - $ref: '#/components/schemas/image'
-        - $ref: '#/components/schemas/read-only'
+        - $ref: ./reference/nimads.yml#/components/schemas/imageBase
+        - $ref: '#/components/schemas/resource-attributes'
+        - type: object
+          properties:
+            analysis:
+              type: string
+            entities:
+              type: array
+              items:
+                $ref: '#/components/schemas/entity'
+            analysis_name:
+              type: string
+              nullable: true
       x-tags:
         - image
     image-list:
@@ -1128,27 +953,11 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - image
-    condition:
-      title: condition
-      type: object
-      x-examples: {}
-      description: ''
-      properties:
-        name:
-          type: string
-          nullable: true
-          description: condition name
-        description:
-          type: string
-          nullable: true
-          description: condition description
-      x-tags:
-        - condition
     condition-return:
       title: condition-return
       allOf:
-        - $ref: '#/components/schemas/condition'
-        - $ref: '#/components/schemas/read-only'
+        - $ref: ./reference/nimads.yml#/components/schemas/conditionBase
+        - $ref: '#/components/schemas/resource-attributes'
       x-tags:
         - condition
     condition-list:
@@ -1163,54 +972,26 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - condition
-    annotation:
-      type: object
-      title: annotation
-      description: ''
-      x-tags:
-        - annotation
-      properties:
-        studyset:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-          nullable: true
-        notes:
-          type: array
-          items:
-            allOf:
-              - $ref: '#/components/schemas/annotation-note'
-              - $ref: '#/components/schemas/read-only'
-        source:
-          type: string
-          nullable: true
-        source_id:
-          type: string
-          nullable: true
-        source_updated_at:
-          type: string
-          nullable: true
-        metadata:
-          type: object
-          nullable: true
-        public:
-          type: boolean
-        note_keys:
-          type: object
-          nullable: true
     annotation-return:
       title: annotation-return
       oneOf:
         - allOf:
             - $ref: '#/components/schemas/annotation-export'
-            - required:
-                - annotation
-                - metadata
+            - {}
         - allOf:
-            - $ref: '#/components/schemas/annotation'
-            - $ref: '#/components/schemas/read-only'
+            - $ref: ./reference/nimads.yml#/components/schemas/annotationBase
+            - $ref: '#/components/schemas/resource-attributes'
+            - $ref: '#/components/schemas/clone'
+            - type: object
+              properties:
+                notes:
+                  type: array
+                  items:
+                    oneOf:
+                      - $ref: '#/components/schemas/note-collection-return'
+                      - type: string
+                        properties: {}
+                        nullable: true
       x-tags:
         - annotation
     annotation-list:
@@ -1225,47 +1006,51 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - annotation
-    annotation-note:
-      title: annotation-note
-      type: object
-      x-tags:
-        - annotation
-      properties:
-        analysis:
-          type: string
-        study:
-          type: string
-        study_name:
-          type: string
-        annotation:
-          type: string
-        analysis_name:
-          type: string
-          nullable: true
-        note:
-          type: object
-          nullable: true
-        study_year:
-          type: integer
-          nullable: true
-        publication:
-          type: string
-          nullable: true
-        authors:
-          type: string
-          nullable: true
+    note-collection-return:
+      title: note-collection-return
+      x-stoplight:
+        id: fy0w02pre2yes
+      allOf:
+        - $ref: ./reference/nimads.yml#/components/schemas/noteCollectionBase
+        - type: object
+          properties:
+            analysis:
+              type: string
+            analysis_name:
+              type: string
+              nullable: true
+            study:
+              type: string
+            study_name:
+              type: string
+              nullable: true
+            annotation:
+              type: string
+            study_year:
+              type: integer
+              nullable: true
+            publication:
+              type: string
+              nullable: true
+            authors:
+              type: string
+              nullable: true
     annotation-export:
       type: object
       title: annotation-export
       additionalProperties: false
+      x-tags:
+        - annotation
       properties:
         metadata:
           type: object
           nullable: true
+          readOnly: true
         annotation_csv:
           type: string
-      x-tags:
-        - annotation
+          readOnly: true
+      required:
+        - annotation_csv
     user:
       type: object
       title: user
@@ -1308,10 +1093,13 @@ components:
       x-internal: true
       x-tags:
         - support
-    read-only:
-      title: read-only
+    resource-attributes:
+      title: resource-attributes
       type: object
-      description: common read-only attributes
+      description: common resource attributes
+      x-internal: true
+      x-tags:
+        - support
       properties:
         id:
           type: string
@@ -1319,20 +1107,27 @@ components:
           example: 38jobTomPDqt
           minLength: 12
           maxLength: 12
+          readOnly: true
         created_at:
           type: string
           format: date-time
           example: '2021-01-16T20:50:38.009318+00:00'
           description: time the resource was created on the database
           readOnly: true
+        updated_at:
+          type: string
+          nullable: true
+          readOnly: true
         user:
           type: string
           description: who owns the resource
           nullable: true
           readOnly: true
-      x-internal: true
-      x-tags:
-        - support
+        public:
+          type: boolean
+          default: true
+      required:
+        - id
     json-ld:
       title: json-ld
       type: object
@@ -1375,7 +1170,22 @@ components:
                 - meta
             analysis:
               type: string
-        - $ref: '#/components/schemas/read-only'
+        - $ref: '#/components/schemas/resource-attributes'
+    clone:
+      title: clone
+      x-stoplight:
+        id: x93bgkqihq25v
+      type: object
+      properties:
+        source:
+          type: string
+          nullable: true
+        source_id:
+          type: string
+          nullable: true
+        source_updated_at:
+          type: string
+          nullable: true
   responses:
     '404':
       description: Example response

@@ -1,7 +1,0 @@
-extends: [[spectral:oas, all]]
-rules:
-  operation-operationId: off
-  info-license: off
-  license-url: off
-  oas3-parameter-description: off
-  tag-description: off
