@@ -10,6 +10,10 @@ info:
 servers:
   - url: 'http://localhost:81/api'
     description: testing
+  - description: staging
+    url: 'https://synth.neurostore.org/api'
+  - url: 'https://compose.neurosynth.org/api'
+    description: production
 paths:
   '/users/{id}':
     parameters:
