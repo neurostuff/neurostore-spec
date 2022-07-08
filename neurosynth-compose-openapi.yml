@@ -530,18 +530,18 @@ components:
             - $ref: '#/components/schemas/specification'
           description: Either a string representation of the id of the specification (nested=False) or a JSON representation of the specification itself (nested=True).
         studyset:
-          readOnly: true
           oneOf:
             - type: string
             - $ref: '#/components/schemas/studyset'
           description: Either a string representation of the id of the studyset (nested=False) or a JSON representation of the studyset itself (nested=True).
-        annotation:
           readOnly: true
+        annotation:
           oneOf:
             - type: string
               nullable: true
             - $ref: '#/components/schemas/annotation'
           description: Either a string representation of the id of the annotation (nested=False) or a JSON representation of the annotation itself (nested=True).
+          readOnly: true
         name:
           type: string
           description: Human-readable name of the meta-analysis.
@@ -558,6 +558,13 @@ components:
           type: string
           description: The id of the annotation on neurosynth-compose (as opposed to the id of the annotation on neurostore). Multiple snapshots of the annotation can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
           writeOnly: true
+        results:
+          type: array
+          description: 'array of neurostore ids representing the results of this meta-analysis (nominally all results should be the same, but machine architecture differences/algorithm stochastic-ness may lead to slightly different outcomes for each result.'
+          items:
+            type: string
+            minLength: 12
+            maxLength: 12
     annotation:
       title: annotation
       type: object
