@@ -1,7 +1,6 @@
 title: point
 x-stoplight:
   id: jvo7bj99mufnq
-type: object
-properties:
-  id:
-    type: string
+allOf:
+  - $ref: ./pointBase.yaml
+  - $ref: ./pointRelationships.yaml

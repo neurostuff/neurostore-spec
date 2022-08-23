@@ -769,7 +769,7 @@ components:
       x-tags:
         - studyset
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/studysetBase
+        - $ref: ./reference/studysetBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/clone'
         - type: object
@@ -780,7 +780,6 @@ components:
                 oneOf:
                   - $ref: '#/components/schemas/study-return'
                   - type: string
-                    properties: {}
                     nullable: true
     studyset-list:
       title: studyset-get

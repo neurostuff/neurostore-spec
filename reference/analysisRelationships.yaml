@@ -26,6 +26,6 @@ properties:
         - type: string
   study:
     oneOf:
-      - $ref: ./study-2.yaml
+      - $ref: ./study.yaml
       - type: string
     description: 'The study this analysis is associated with. Each analysis can only be associated to one and only one study, but a study can have multiple analyses.'
