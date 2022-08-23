@@ -1,0 +1,7 @@
+title: annotationRelationships
+x-stoplight:
+  id: 25qke5pi9s7et
+type: object
+properties:
+  id:
+    type: string

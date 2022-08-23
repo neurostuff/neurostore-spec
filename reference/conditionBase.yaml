@@ -1,0 +1,7 @@
+title: conditionBase
+x-stoplight:
+  id: gj3bgwj49nnvn
+type: object
+properties:
+  id:
+    type: string

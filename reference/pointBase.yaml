@@ -1,0 +1,7 @@
+title: pointBase
+x-stoplight:
+  id: 3lk7bkg1b20eu
+type: object
+properties:
+  id:
+    type: string

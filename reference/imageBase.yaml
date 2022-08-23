@@ -1,0 +1,7 @@
+title: imageBase
+x-stoplight:
+  id: lpuzyjm8yyx2f
+type: object
+properties:
+  id:
+    type: string

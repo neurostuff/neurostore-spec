@@ -1,0 +1,7 @@
+title: condition
+x-stoplight:
+  id: m99oo4pzi4745
+type: object
+properties:
+  id:
+    type: string

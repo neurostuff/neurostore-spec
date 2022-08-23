@@ -1,0 +1,7 @@
+title: analysis
+x-stoplight:
+  id: v3tekc9f48itl
+type: object
+properties:
+  id:
+    type: string

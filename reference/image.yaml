@@ -1,0 +1,7 @@
+title: image
+x-stoplight:
+  id: p2egesdkd01q5
+type: object
+properties:
+  id:
+    type: string

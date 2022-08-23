@@ -1,0 +1,7 @@
+title: imageRelationships
+x-stoplight:
+  id: 8ijdpuyz8m2nr
+type: object
+properties:
+  id:
+    type: string

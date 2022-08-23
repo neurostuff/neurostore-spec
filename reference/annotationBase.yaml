@@ -1,0 +1,7 @@
+title: annotationBase
+x-stoplight:
+  id: elhp55f53a6en
+type: object
+properties:
+  id:
+    type: string

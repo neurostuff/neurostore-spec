@@ -1,0 +1,7 @@
+title: pointRelationships
+x-stoplight:
+  id: uc0ogrf5u336b
+type: object
+properties:
+  id:
+    type: string

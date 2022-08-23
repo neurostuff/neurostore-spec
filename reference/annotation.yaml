@@ -1,0 +1,7 @@
+title: annotation
+x-stoplight:
+  id: 8l7jw2pf3vo7y
+type: object
+properties:
+  id:
+    type: string

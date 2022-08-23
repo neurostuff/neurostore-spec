@@ -1,0 +1,7 @@
+title: noteCollectionBase
+x-stoplight:
+  id: b1v17xbu79anb
+type: object
+properties:
+  id:
+    type: string
