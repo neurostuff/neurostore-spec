@@ -1,6 +1,0 @@
-title: annotation
-x-stoplight:
-  id: 8l7jw2pf3vo7y
-allOf:
-  - $ref: ./annotationBase.yaml
-  - $ref: ./annotationRelationships.yaml

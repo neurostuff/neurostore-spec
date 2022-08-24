@@ -1,7 +1,0 @@
-title: studyset
-x-stoplight:
-  id: cdhh0d1qiz966
-allOf:
-  - $ref: ./studysetBase.yaml
-  - $ref: ./studysetRelationships.yaml
-description: 'A collection of studies (e.g., publications).'
