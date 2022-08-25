@@ -1,0 +1,3 @@
+[submodule "nimads"]
+	path = nimads
+	url = https://github.com/neurostuff/NIMADS.git

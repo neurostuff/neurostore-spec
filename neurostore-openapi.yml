@@ -61,7 +61,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/studyset
+              $ref: ./nimads/nimads/studyset.yaml
   '/studysets/{id}':
     parameters:
       - schema:
@@ -102,7 +102,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/studyset
+              $ref: ./nimads/nimads/studyset.yaml
       tags:
         - studysets
       security:
@@ -163,7 +163,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/study
+              $ref: ./nimads/nimads/study.yaml
         description: ''
       tags:
         - studies
@@ -214,7 +214,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/study
+              $ref: ./nimads/nimads/study.yaml
       tags:
         - studies
       security:
@@ -266,7 +266,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/analysis
+              $ref: ./nimads/nimads/analysis.yaml
       tags:
         - analyses
       description: create an analysis
@@ -311,7 +311,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/analysis
+              $ref: ./nimads/nimads/analysis.yaml
       tags:
         - analyses
       description: Update an existing analysis.
@@ -358,7 +358,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/point
+              $ref: ./nimads/nimads/point.yaml
   '/points/{id}':
     parameters:
       - schema:
@@ -396,7 +396,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/point
+              $ref: ./nimads/nimads/point.yaml
       tags:
         - points
       description: Update a particular MRI coordinate.
@@ -448,7 +448,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/image
+              $ref: ./nimads/nimads/image.yaml
       tags:
         - images
       description: Create an image
@@ -490,7 +490,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/image
+              $ref: ./nimads/nimads/image.yaml
         description: ''
       tags:
         - images
@@ -546,7 +546,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/condition
+              $ref: ./nimads/nimads/condition.yaml
   '/conditions/{id}':
     parameters:
       - schema:
@@ -583,7 +583,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/condition
+              $ref: ./nimads/nimads/condition.yaml
         description: ''
       tags:
         - conditions
@@ -637,7 +637,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/annotation
+              $ref: ./nimads/nimads/annotation.yaml
   '/annotations/{id}':
     parameters:
       - schema:
@@ -677,7 +677,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/annotation
+              $ref: ./nimads/nimads/annotation.yaml
     delete:
       summary: DELETE an annotation
       responses:
@@ -769,7 +769,7 @@ components:
       x-tags:
         - studyset
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/studysetBase
+        - $ref: ./nimads/nimads/studysetBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/clone'
         - type: object
@@ -780,7 +780,6 @@ components:
                 oneOf:
                   - $ref: '#/components/schemas/study-return'
                   - type: string
-                    properties: {}
                     nullable: true
     studyset-list:
       title: studyset-get
@@ -797,7 +796,7 @@ components:
     study-return:
       title: study-return
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/studyBase
+        - $ref: ./nimads/nimads/studyBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/clone'
         - type: object
@@ -826,7 +825,7 @@ components:
     analysis-return:
       title: analysis-return
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/analysisBase
+        - $ref: ./nimads/nimads/analysisBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
         - type: object
           properties:
@@ -872,7 +871,7 @@ components:
         - analysis
     point-return:
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/pointBase
+        - $ref: ./nimads/nimads/pointBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
         - type: object
           properties:
@@ -926,7 +925,7 @@ components:
         - point
     image-return:
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/imageBase
+        - $ref: ./nimads/nimads/imageBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
         - type: object
           properties:
@@ -956,7 +955,7 @@ components:
     condition-return:
       title: condition-return
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/conditionBase
+        - $ref: ./nimads/nimads/conditionBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
       x-tags:
         - condition
@@ -979,7 +978,7 @@ components:
             - $ref: '#/components/schemas/annotation-export'
             - {}
         - allOf:
-            - $ref: ./reference/nimads.yml#/components/schemas/annotationBase
+            - $ref: ./nimads/nimads/annotationBase.yaml
             - $ref: '#/components/schemas/resource-attributes'
             - $ref: '#/components/schemas/clone'
             - type: object
@@ -1011,7 +1010,7 @@ components:
       x-stoplight:
         id: fy0w02pre2yes
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/noteCollectionBase
+        - $ref: ./nimads/nimads/noteCollectionBase.yaml
         - type: object
           properties:
             analysis:
