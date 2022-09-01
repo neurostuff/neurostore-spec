@@ -1136,7 +1136,6 @@ components:
           readOnly: true
         annotation_csv:
           type: string
-          readOnly: true
       required:
         - annotation_csv
     user:
