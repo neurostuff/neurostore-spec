@@ -822,7 +822,7 @@ components:
       allOf:
         - $ref: ./nimads/nimads/studyBase.yaml
         - $ref: '#/components/schemas/study-relationships'
-        - $ref: '#/components/schemas/nested-put-resources'
+        - $ref: '#/components/schemas/nested-put-attributes'
       x-tags:
         - study
     study-relationships:
@@ -864,7 +864,7 @@ components:
       allOf:
         - $ref: ./nimads/nimads/analysisBase.yaml
         - $ref: '#/components/schemas/analysis-relationships'
-        - $ref: '#/components/schemas/nested-put-resources'
+        - $ref: '#/components/schemas/nested-put-attributes'
       x-tags:
         - analysis
     analysis-relationships:
@@ -922,7 +922,7 @@ components:
       allOf:
         - $ref: ./nimads/nimads/pointBase.yaml
         - $ref: '#/components/schemas/point-relationships'
-        - $ref: '#/components/schemas/nested-put-resources'
+        - $ref: '#/components/schemas/nested-put-attributes'
       x-tags:
         - point
     point-relationships:
@@ -987,7 +987,7 @@ components:
       allOf:
         - $ref: ./nimads/nimads/imageBase.yaml
         - $ref: '#/components/schemas/image-relationships'
-        - $ref: '#/components/schemas/nested-put-resources'
+        - $ref: '#/components/schemas/nested-put-attributes'
       x-tags:
         - image
     image-relationships:
@@ -1028,7 +1028,7 @@ components:
       title: condition-request
       allOf:
         - $ref: ./nimads/nimads/conditionBase.yaml
-        - $ref: '#/components/schemas/nested-put-resources'
+        - $ref: '#/components/schemas/nested-put-attributes'
       x-tags:
         - condition
     condition-list:
@@ -1065,7 +1065,7 @@ components:
         - allOf:
             - $ref: ./nimads/nimads/annotationBase.yaml
             - $ref: '#/components/schemas/annotation-relationships'
-            - $ref: '#/components/schemas/nested-put-resources'
+            - $ref: '#/components/schemas/nested-put-attributes'
       x-tags:
         - annotation
     annotation-relationships:
@@ -1129,7 +1129,7 @@ components:
         id: fy0w02pre2yes
       allOf:
         - $ref: ./nimads/nimads/noteCollectionBase.yaml
-        - $ref: '#/components/schemas/nested-put-resources'
+        - $ref: '#/components/schemas/nested-put-attributes'
     annotation-export:
       type: object
       title: annotation-export
@@ -1282,13 +1282,15 @@ components:
           nullable: true
           readOnly: true
     nested-put-attributes:
-      title: nested-put-resources
+      type: object
+      title: nested-put-attributes
       x-stoplight:
         id: 9mprupprwm2sr
-      type: object
+      additionalProperties: false
       properties:
         id:
           type: string
+      writeOnly: true
   responses:
     '404':
       description: Example response
