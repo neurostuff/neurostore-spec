@@ -774,7 +774,7 @@ components:
         - $ref: '#/components/schemas/clone'
         - $ref: '#/components/schemas/studyset-relationships'
     studyset-request:
-      title: studyset-return
+      title: studyset-request
       description: ''
       x-examples: {}
       x-tags:
@@ -818,7 +818,7 @@ components:
       x-tags:
         - study
     study-request:
-      title: study-return
+      title: study-request
       allOf:
         - $ref: ./nimads/nimads/studyBase.yaml
         - $ref: '#/components/schemas/study-relationships'
@@ -859,7 +859,7 @@ components:
       x-tags:
         - analysis
     analysis-request:
-      title: analysis-return
+      title: analysis-request
       allOf:
         - $ref: ./nimads/nimads/analysisBase.yaml
         - $ref: '#/components/schemas/analysis-relationships'
@@ -894,9 +894,9 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/condition-return'
+              - $ref: '#/components/schemas/condition-request'
               - type: string
                 nullable: true
-              - $ref: '#/components/schemas/condition-request'
     analysis-list:
       title: analysis-list
       type: object
@@ -1021,7 +1021,7 @@ components:
       x-tags:
         - condition
     condition-request:
-      title: condition-return
+      title: condition-request
       allOf:
         - $ref: ./nimads/nimads/conditionBase.yaml
       x-tags:
@@ -1052,7 +1052,7 @@ components:
       x-tags:
         - annotation
     annotation-request:
-      title: annotation-return
+      title: annotation-request
       oneOf:
         - allOf:
             - $ref: '#/components/schemas/annotation-export'
@@ -1073,6 +1073,7 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/note-collection-return'
+              - $ref: '#/components/schemas/note-collection-request'
               - type: string
                 nullable: true
     annotation-list:
@@ -1117,7 +1118,7 @@ components:
               type: string
               nullable: true
     note-collection-request:
-      title: note-collection-return
+      title: note-collection-request
       x-stoplight:
         id: fy0w02pre2yes
       allOf:
