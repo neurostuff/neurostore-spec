@@ -1286,7 +1286,6 @@ components:
       title: nested-put-attributes
       x-stoplight:
         id: 9mprupprwm2sr
-      additionalProperties: false
       properties:
         id:
           type: string
