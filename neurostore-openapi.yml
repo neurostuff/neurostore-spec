@@ -835,7 +835,7 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/analysis-return'
-              - $ref: '#/components/schemas/study-request'
+              - $ref: '#/components/schemas/analysis-request'
               - type: string
                 nullable: true
     study-list:
