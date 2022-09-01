@@ -61,7 +61,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./nimads/nimads/studyset.yaml
+              $ref: '#/components/schemas/studyset-return'
   '/studysets/{id}':
     parameters:
       - schema:
@@ -102,7 +102,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./nimads/nimads/studyset.yaml
+              $ref: '#/components/schemas/studyset-return'
       tags:
         - studysets
       security:
@@ -772,15 +772,20 @@ components:
         - $ref: ./nimads/nimads/studysetBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/clone'
-        - type: object
-          properties:
-            studies:
-              type: array
-              items:
-                oneOf:
-                  - $ref: '#/components/schemas/study-return'
-                  - type: string
-                    nullable: true
+        - $ref: '#/components/schemas/studyset-relationships'
+    studyset-relationships:
+      title: studyset-relationships
+      x-stoplight:
+        id: ted3fijjlxyhx
+      type: object
+      properties:
+        studies:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/study-return'
+              - type: string
+                nullable: true
     studyset-list:
       title: studyset-get
       type: object
@@ -799,17 +804,22 @@ components:
         - $ref: ./nimads/nimads/studyBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/clone'
-        - type: object
-          properties:
-            analyses:
-              type: array
-              items:
-                oneOf:
-                  - $ref: '#/components/schemas/analysis-return'
-                  - type: string
-                    nullable: true
+        - $ref: '#/components/schemas/study-relationships'
       x-tags:
         - study
+    study-relationships:
+      title: study-relationships
+      x-tags:
+        - study
+      type: object
+      properties:
+        analyses:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/analysis-return'
+              - type: string
+                nullable: true
     study-list:
       title: study-get
       type: object
@@ -827,36 +837,38 @@ components:
       allOf:
         - $ref: ./nimads/nimads/analysisBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
-        - type: object
-          properties:
-            study:
-              type: string
-            images:
-              type: array
-              items:
-                oneOf:
-                  - $ref: '#/components/schemas/image-return'
-                  - type: string
-                    properties: {}
-                    nullable: true
-            points:
-              type: array
-              items:
-                oneOf:
-                  - $ref: '#/components/schemas/point-return'
-                  - type: string
-                    properties: {}
-                    nullable: true
-            conditions:
-              type: array
-              items:
-                oneOf:
-                  - $ref: '#/components/schemas/condition-return'
-                  - type: string
-                    properties: {}
-                    nullable: true
+        - $ref: '#/components/schemas/analysis-relationships'
       x-tags:
         - analysis
+    analysis-relationships:
+      title: analysis-relationships
+      x-tags:
+        - analysis
+      type: object
+      properties:
+        study:
+          type: string
+        images:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/image-return'
+              - type: string
+                nullable: true
+        points:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/point-return'
+              - type: string
+                nullable: true
+        conditions:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/condition-return'
+              - type: string
+                nullable: true
     analysis-list:
       title: analysis-list
       type: object
@@ -873,31 +885,35 @@ components:
       allOf:
         - $ref: ./nimads/nimads/pointBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
-        - type: object
-          properties:
-            image:
-              type: string
-              nullable: true
-            value:
-              oneOf:
-                - $ref: '#/components/schemas/point-value'
-                - type: string
-                  nullable: true
-            x:
-              type: number
-              writeOnly: true
-            'y':
-              type: number
-              writeOnly: true
-            z:
-              type: number
-              writeOnly: true
-            entities:
-              type: array
-              items:
-                $ref: '#/components/schemas/entity'
+        - $ref: '#/components/schemas/point-relationships'
       x-tags:
         - point
+    point-relationships:
+      x-tags:
+        - point
+      type: object
+      properties:
+        image:
+          type: string
+          nullable: true
+        value:
+          oneOf:
+            - $ref: '#/components/schemas/point-value'
+            - type: string
+              nullable: true
+        x:
+          type: number
+          writeOnly: true
+        'y':
+          type: number
+          writeOnly: true
+        z:
+          type: number
+          writeOnly: true
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/entity'
     point-list:
       title: point-list
       type: object
@@ -927,19 +943,24 @@ components:
       allOf:
         - $ref: ./nimads/nimads/imageBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
-        - type: object
-          properties:
-            analysis:
-              type: string
-            entities:
-              type: array
-              items:
-                $ref: '#/components/schemas/entity'
-            analysis_name:
-              type: string
-              nullable: true
+        - $ref: '#/components/schemas/image-relationships'
       x-tags:
         - image
+    image-relationships:
+      x-tags:
+        - image
+      type: object
+      properties:
+        analysis:
+          type: string
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/entity'
+        analysis_name:
+          type: string
+          nullable: true
+      title: ''
     image-list:
       title: image-list
       type: object
@@ -981,18 +1002,22 @@ components:
             - $ref: ./nimads/nimads/annotationBase.yaml
             - $ref: '#/components/schemas/resource-attributes'
             - $ref: '#/components/schemas/clone'
-            - type: object
-              properties:
-                notes:
-                  type: array
-                  items:
-                    oneOf:
-                      - $ref: '#/components/schemas/note-collection-return'
-                      - type: string
-                        properties: {}
-                        nullable: true
+            - $ref: '#/components/schemas/annotation-relationships'
       x-tags:
         - annotation
+    annotation-relationships:
+      title: annotation-relationships
+      x-tags:
+        - annotation
+      type: object
+      properties:
+        notes:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/note-collection-return'
+              - type: string
+                nullable: true
     annotation-list:
       title: annotation-list
       type: object
@@ -1185,6 +1210,7 @@ components:
         source_updated_at:
           type: string
           nullable: true
+          readOnly: true
   responses:
     '404':
       description: Example response
