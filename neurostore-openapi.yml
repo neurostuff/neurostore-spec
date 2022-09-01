@@ -822,6 +822,7 @@ components:
       allOf:
         - $ref: ./nimads/nimads/studyBase.yaml
         - $ref: '#/components/schemas/study-relationships'
+        - $ref: '#/components/schemas/nested-put-resources'
       x-tags:
         - study
     study-relationships:
@@ -863,6 +864,7 @@ components:
       allOf:
         - $ref: ./nimads/nimads/analysisBase.yaml
         - $ref: '#/components/schemas/analysis-relationships'
+        - $ref: '#/components/schemas/nested-put-resources'
       x-tags:
         - analysis
     analysis-relationships:
@@ -920,6 +922,7 @@ components:
       allOf:
         - $ref: ./nimads/nimads/pointBase.yaml
         - $ref: '#/components/schemas/point-relationships'
+        - $ref: '#/components/schemas/nested-put-resources'
       x-tags:
         - point
     point-relationships:
@@ -984,6 +987,7 @@ components:
       allOf:
         - $ref: ./nimads/nimads/imageBase.yaml
         - $ref: '#/components/schemas/image-relationships'
+        - $ref: '#/components/schemas/nested-put-resources'
       x-tags:
         - image
     image-relationships:
@@ -1024,6 +1028,7 @@ components:
       title: condition-request
       allOf:
         - $ref: ./nimads/nimads/conditionBase.yaml
+        - $ref: '#/components/schemas/nested-put-resources'
       x-tags:
         - condition
     condition-list:
@@ -1060,6 +1065,7 @@ components:
         - allOf:
             - $ref: ./nimads/nimads/annotationBase.yaml
             - $ref: '#/components/schemas/annotation-relationships'
+            - $ref: '#/components/schemas/nested-put-resources'
       x-tags:
         - annotation
     annotation-relationships:
@@ -1123,6 +1129,7 @@ components:
         id: fy0w02pre2yes
       allOf:
         - $ref: ./nimads/nimads/noteCollectionBase.yaml
+        - $ref: '#/components/schemas/nested-put-resources'
     annotation-export:
       type: object
       title: annotation-export
@@ -1274,6 +1281,14 @@ components:
           type: string
           nullable: true
           readOnly: true
+    nested-put-attributes:
+      title: nested-put-resources
+      x-stoplight:
+        id: 9mprupprwm2sr
+      type: object
+      properties:
+        id:
+          type: string
   responses:
     '404':
       description: Example response
