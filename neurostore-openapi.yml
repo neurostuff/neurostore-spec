@@ -793,6 +793,7 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/study-return'
+              - $ref: '#/components/schemas/study-request'
               - type: string
                 nullable: true
     studyset-list:
@@ -834,6 +835,7 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/analysis-return'
+              - $ref: '#/components/schemas/study-request'
               - type: string
                 nullable: true
     study-list:
@@ -876,6 +878,7 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/image-return'
+              - $ref: '#/components/schemas/image-request'
               - type: string
                 nullable: true
         points:
@@ -883,6 +886,7 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/point-return'
+              - $ref: '#/components/schemas/point-request'
               - type: string
                 nullable: true
         conditions:
@@ -892,6 +896,7 @@ components:
               - $ref: '#/components/schemas/condition-return'
               - type: string
                 nullable: true
+              - $ref: '#/components/schemas/condition-request'
     analysis-list:
       title: analysis-list
       type: object
