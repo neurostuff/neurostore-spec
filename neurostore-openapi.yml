@@ -1164,29 +1164,36 @@ components:
       allOf:
         - $ref: ./nimads/nimads/noteCollectionBase.yaml
         - type: object
-          behavior: Read Only
           properties:
             analysis:
               type: string
+              readOnly: true
             analysis_name:
               type: string
               nullable: true
+              readOnly: true
             study:
               type: string
+              readOnly: true
             study_name:
               type: string
               nullable: true
+              readOnly: true
             annotation:
               type: string
+              readOnly: true
             study_year:
               type: integer
               nullable: true
+              readOnly: true
             publication:
               type: string
               nullable: true
+              readOnly: true
             authors:
               type: string
               nullable: true
+              readOnly: true
     note-collection-request:
       title: note-collection-request
       x-stoplight:
