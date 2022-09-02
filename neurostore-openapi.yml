@@ -783,7 +783,7 @@ components:
         - $ref: ./nimads/nimads/studysetBase.yaml
         - $ref: '#/components/schemas/studyset-relationships'
         - $ref: '#/components/schemas/writeable-resource-attributes'
-    studyset-relationships:
+    studyset-return-relationships:
       title: studyset-relationships
       x-stoplight:
         id: ted3fijjlxyhx
@@ -794,6 +794,18 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/study-return'
+              - type: string
+                nullable: true
+    studyset-request-relationships:
+      title: studyset-relationships
+      x-stoplight:
+        id: ted3fijjlxyhx
+      type: object
+      properties:
+        studies:
+          type: array
+          items:
+            oneOf:
               - $ref: '#/components/schemas/study-request'
               - type: string
                 nullable: true
@@ -826,7 +838,7 @@ components:
         - $ref: '#/components/schemas/writeable-resource-attributes'
       x-tags:
         - study
-    study-relationships:
+    study-return-relationships:
       title: study-relationships
       x-tags:
         - study
@@ -837,6 +849,18 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/analysis-return'
+              - type: string
+                nullable: true
+    study-request-relationships:
+      title: study-relationships
+      x-tags:
+        - study
+      type: object
+      properties:
+        analyses:
+          type: array
+          items:
+            oneOf:
               - $ref: '#/components/schemas/analysis-request'
               - type: string
                 nullable: true
@@ -868,7 +892,7 @@ components:
         - $ref: '#/components/schemas/writeable-resource-attributes'
       x-tags:
         - analysis
-    analysis-relationships:
+    analysis-return-relationships:
       title: analysis-relationships
       x-tags:
         - analysis
@@ -881,7 +905,6 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/image-return'
-              - $ref: '#/components/schemas/image-request'
               - type: string
                 nullable: true
         points:
@@ -889,7 +912,6 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/point-return'
-              - $ref: '#/components/schemas/point-request'
               - type: string
                 nullable: true
         conditions:
@@ -897,6 +919,34 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/condition-return'
+              - type: string
+                nullable: true
+    analysis-request-relationships:
+      title: analysis-relationships
+      x-tags:
+        - analysis
+      type: object
+      properties:
+        study:
+          type: string
+        images:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/image-request'
+              - type: string
+                nullable: true
+        points:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/point-request'
+              - type: string
+                nullable: true
+        conditions:
+          type: array
+          items:
+            oneOf:
               - $ref: '#/components/schemas/condition-request'
               - type: string
                 nullable: true
@@ -1069,7 +1119,7 @@ components:
             - $ref: '#/components/schemas/writeable-resource-attributes'
       x-tags:
         - annotation
-    annotation-relationships:
+    annotation-return-relationships:
       title: annotation-relationships
       x-tags:
         - annotation
@@ -1080,6 +1130,18 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/note-collection-return'
+              - type: string
+                nullable: true
+    annotation-request-relationships:
+      title: annotation-relationships
+      x-tags:
+        - annotation
+      type: object
+      properties:
+        notes:
+          type: array
+          items:
+            oneOf:
               - $ref: '#/components/schemas/note-collection-request'
               - type: string
                 nullable: true
@@ -1102,6 +1164,7 @@ components:
       allOf:
         - $ref: ./nimads/nimads/noteCollectionBase.yaml
         - type: object
+          behavior: Read Only
           properties:
             analysis:
               type: string
