@@ -782,6 +782,7 @@ components:
       allOf:
         - $ref: ./nimads/nimads/studysetBase.yaml
         - $ref: '#/components/schemas/studyset-relationships'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
     studyset-relationships:
       title: studyset-relationships
       x-stoplight:
@@ -822,7 +823,7 @@ components:
       allOf:
         - $ref: ./nimads/nimads/studyBase.yaml
         - $ref: '#/components/schemas/study-relationships'
-        - $ref: '#/components/schemas/nested-put-attributes'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
       x-tags:
         - study
     study-relationships:
@@ -864,7 +865,7 @@ components:
       allOf:
         - $ref: ./nimads/nimads/analysisBase.yaml
         - $ref: '#/components/schemas/analysis-relationships'
-        - $ref: '#/components/schemas/nested-put-attributes'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
       x-tags:
         - analysis
     analysis-relationships:
@@ -922,7 +923,7 @@ components:
       allOf:
         - $ref: ./nimads/nimads/pointBase.yaml
         - $ref: '#/components/schemas/point-relationships'
-        - $ref: '#/components/schemas/nested-put-attributes'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
       x-tags:
         - point
     point-relationships:
@@ -987,7 +988,7 @@ components:
       allOf:
         - $ref: ./nimads/nimads/imageBase.yaml
         - $ref: '#/components/schemas/image-relationships'
-        - $ref: '#/components/schemas/nested-put-attributes'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
       x-tags:
         - image
     image-relationships:
@@ -1028,7 +1029,7 @@ components:
       title: condition-request
       allOf:
         - $ref: ./nimads/nimads/conditionBase.yaml
-        - $ref: '#/components/schemas/nested-put-attributes'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
       x-tags:
         - condition
     condition-list:
@@ -1065,7 +1066,7 @@ components:
         - allOf:
             - $ref: ./nimads/nimads/annotationBase.yaml
             - $ref: '#/components/schemas/annotation-relationships'
-            - $ref: '#/components/schemas/nested-put-attributes'
+            - $ref: '#/components/schemas/writeable-resource-attributes'
       x-tags:
         - annotation
     annotation-relationships:
@@ -1129,7 +1130,7 @@ components:
         id: fy0w02pre2yes
       allOf:
         - $ref: ./nimads/nimads/noteCollectionBase.yaml
-        - $ref: '#/components/schemas/nested-put-attributes'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
     annotation-export:
       type: object
       title: annotation-export
@@ -1188,6 +1189,16 @@ components:
       x-tags:
         - support
     resource-attributes:
+      allOf:
+        - $ref: '#/components/schemas/readable-resource-attributes'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
+        - readOnly: true
+        - required:
+            - id
+            - created_at
+            - updated_at
+            - user
+    readable-resource-attributes:
       title: resource-attributes
       type: object
       description: common resource attributes
@@ -1195,13 +1206,6 @@ components:
       x-tags:
         - support
       properties:
-        id:
-          type: string
-          description: short UUID specifying the location of this resource
-          example: 38jobTomPDqt
-          minLength: 12
-          maxLength: 12
-          readOnly: true
         created_at:
           type: string
           format: date-time
@@ -1217,11 +1221,24 @@ components:
           description: who owns the resource
           nullable: true
           readOnly: true
+    writeable-resource-attributes:
+      title: resource-attributes
+      type: object
+      description: common resource attributes
+      x-internal: true
+      x-tags:
+        - support
+      properties:
+        id:
+          type: string
+          description: short UUID specifying the location of this resource
+          example: 38jobTomPDqt
+          minLength: 12
+          maxLength: 12
         public:
           type: boolean
           default: true
-      required:
-        - id
+          description: whether the resource is listed in public searches or not
     json-ld:
       title: json-ld
       type: object
