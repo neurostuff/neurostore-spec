@@ -1207,6 +1207,7 @@ components:
       additionalProperties: false
       x-tags:
         - annotation
+      description: exporting an annotation as a CSV for easier editing
       properties:
         metadata:
           type: object
@@ -1214,6 +1215,7 @@ components:
           readOnly: true
         annotation_csv:
           type: string
+          description: annotation object expressed as a CSV
       required:
         - annotation_csv
     user:
@@ -1266,11 +1268,12 @@ components:
             - updated_at
         - $ref: '#/components/schemas/writeable-resource-attributes'
           requred:
-              - id
+            - id
         - $ref: '#/components/schemas/user-resource-attributes'
           requred:
-              - user
+            - user
         - readOnly: true
+      description: common attributes for user owned resources
     userless-resource-attributes:
       allOf:
         - $ref: '#/components/schemas/readable-resource-attributes'
@@ -1281,6 +1284,7 @@ components:
           requred:
             - id
         - readOnly: true
+      description: common resource attributes not tied to a specific user
     user-resource-attributes:
       title: user-resource-attributes
       type: object
@@ -1297,7 +1301,7 @@ components:
     readable-resource-attributes:
       title: readable-resource-attributes
       type: object
-      description: common resource attributes
+      description: common readable resource attributes
       x-internal: true
       x-tags:
         - support
@@ -1310,10 +1314,11 @@ components:
           readOnly: true
         updated_at:
           type: string
+          description: when was the resource last modified/updated.
           nullable: true
           readOnly: true
     writeable-resource-attributes:
-      title: resource-attributes
+      title: writeable-resource-attributes
       type: object
       description: common resource attributes
       x-internal: true
