@@ -1261,10 +1261,16 @@ components:
     resource-attributes:
       allOf:
         - $ref: '#/components/schemas/readable-resource-attributes'
+          required:
+            - created_at
+            - updated_at
         - $ref: '#/components/schemas/writeable-resource-attributes'
+          requred:
+              - id
         - $ref: '#/components/schemas/user-resource-attributes'
+          requred:
+              - user
         - readOnly: true
-        - {}
     userless-resource-attributes:
       allOf:
         - $ref: '#/components/schemas/readable-resource-attributes'
