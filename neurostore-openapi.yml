@@ -1262,14 +1262,21 @@ components:
       allOf:
         - $ref: '#/components/schemas/readable-resource-attributes'
         - $ref: '#/components/schemas/writeable-resource-attributes'
+        - $ref: '#/components/schemas/user-resource-attributes'
         - readOnly: true
-        - required:
+        - {}
+    userless-resource-attributes:
+      allOf:
+        - $ref: '#/components/schemas/readable-resource-attributes'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
+        - readOnly: true
+        - requred:
             - id
             - created_at
             - updated_at
             - user
     readable-resource-attributes:
-      title: resource-attributes
+      title: readable-resource-attributes
       type: object
       description: common resource attributes
       x-internal: true
@@ -1286,6 +1293,14 @@ components:
           type: string
           nullable: true
           readOnly: true
+    user-resource-attributes:
+      title: user-resource-attributes
+      type: object
+      description: common resource attributes
+      x-internal: true
+      x-tags:
+        - support
+      properties:
         user:
           type: string
           description: who owns the resource
@@ -1351,7 +1366,7 @@ components:
                 - meta
             analysis:
               type: string
-        - $ref: '#/components/schemas/resource-attributes'
+        - $ref: '#/components/schemas/userless-resource-attributes'
     clone:
       title: clone
       x-stoplight:
