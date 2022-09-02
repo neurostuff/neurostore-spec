@@ -772,7 +772,7 @@ components:
         - $ref: ./nimads/nimads/studysetBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/clone'
-        - $ref: '#/components/schemas/studyset-relationships'
+        - $ref: '#/components/schemas/studyset-return-relationships'
     studyset-request:
       title: studyset-request
       description: ''
@@ -781,7 +781,7 @@ components:
         - studyset
       allOf:
         - $ref: ./nimads/nimads/studysetBase.yaml
-        - $ref: '#/components/schemas/studyset-relationships'
+        - $ref: '#/components/schemas/studyset-request-relationships'
         - $ref: '#/components/schemas/writeable-resource-attributes'
     studyset-return-relationships:
       title: studyset-relationships
@@ -827,14 +827,14 @@ components:
         - $ref: ./nimads/nimads/studyBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/clone'
-        - $ref: '#/components/schemas/study-relationships'
+        - $ref: '#/components/schemas/study-return-relationships'
       x-tags:
         - study
     study-request:
       title: study-request
       allOf:
         - $ref: ./nimads/nimads/studyBase.yaml
-        - $ref: '#/components/schemas/study-relationships'
+        - $ref: '#/components/schemas/study-request-relationships'
         - $ref: '#/components/schemas/writeable-resource-attributes'
       x-tags:
         - study
@@ -881,14 +881,14 @@ components:
       allOf:
         - $ref: ./nimads/nimads/analysisBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
-        - $ref: '#/components/schemas/analysis-relationships'
+        - $ref: '#/components/schemas/analysis-return-relationships'
       x-tags:
         - analysis
     analysis-request:
       title: analysis-request
       allOf:
         - $ref: ./nimads/nimads/analysisBase.yaml
-        - $ref: '#/components/schemas/analysis-relationships'
+        - $ref: '#/components/schemas/analysis-request-relationships'
         - $ref: '#/components/schemas/writeable-resource-attributes'
       x-tags:
         - analysis
@@ -1104,7 +1104,7 @@ components:
             - $ref: ./nimads/nimads/annotationBase.yaml
             - $ref: '#/components/schemas/resource-attributes'
             - $ref: '#/components/schemas/clone'
-            - $ref: '#/components/schemas/annotation-relationships'
+            - $ref: '#/components/schemas/annotation-return-relationships'
       x-tags:
         - annotation
     annotation-request:
@@ -1115,7 +1115,7 @@ components:
             - {}
         - allOf:
             - $ref: ./nimads/nimads/annotationBase.yaml
-            - $ref: '#/components/schemas/annotation-relationships'
+            - $ref: '#/components/schemas/annotation-request-relationships'
             - $ref: '#/components/schemas/writeable-resource-attributes'
       x-tags:
         - annotation
