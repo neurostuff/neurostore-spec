@@ -835,7 +835,12 @@ components:
             studysets:
               type: array
               items:
-                type: string
+                type: object
+                properties:
+                  name:
+                    type: string
+                  id:
+                    type: string
       x-tags:
         - study
     study-request:
