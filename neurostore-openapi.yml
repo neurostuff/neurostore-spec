@@ -828,6 +828,12 @@ components:
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/clone'
         - $ref: '#/components/schemas/study-return-relationships'
+        - type: object
+          properties:
+            studysets:
+              type: array
+              items:
+                type: string
       x-tags:
         - study
     study-request:
