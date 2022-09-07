@@ -146,6 +146,7 @@ paths:
         - $ref: '#/components/parameters/authors'
         - $ref: '#/components/parameters/user_id'
         - $ref: '#/components/parameters/data_type'
+        - $ref: '#/components/parameters/studyset_owner'
       security:
         - JSON-Web-Token: []
         - {}
@@ -197,6 +198,7 @@ paths:
       description: Get a study.
       parameters:
         - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/studyset_owner'
     put:
       summary: PUT/update a study
       responses:
@@ -1609,6 +1611,13 @@ components:
           - image
           - both
       description: 'whether searching for studies that contain coordinates, images, or both'
+    studyset_owner:
+      name: studyset_owner
+      in: query
+      required: false
+      schema:
+        type: string
+      description: for all studies filter which studysets are listed based on who owns the studyset
   securitySchemes:
     JSON-Web-Token:
       type: http
