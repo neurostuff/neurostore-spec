@@ -841,6 +841,8 @@ components:
                     type: string
                   id:
                     type: string
+                  description:
+                    type: string
       x-tags:
         - study
     study-request:
