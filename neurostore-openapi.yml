@@ -891,12 +891,22 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - study
+    analysis-common:
+      title: analysis-common
+      x-stoplight:
+        id: wi1i0ho2165t4
+      description: attributes common between request and return objects
+      type: object
+      properties:
+        study:
+          type: string
     analysis-return:
       title: analysis-return
       allOf:
         - $ref: ./nimads/nimads/analysisBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/analysis-return-relationships'
+        - $ref: '#/components/schemas/analysis-common'
       x-tags:
         - analysis
     analysis-request:
@@ -905,6 +915,7 @@ components:
         - $ref: ./nimads/nimads/analysisBase.yaml
         - $ref: '#/components/schemas/analysis-request-relationships'
         - $ref: '#/components/schemas/writeable-resource-attributes'
+        - $ref: '#/components/schemas/analysis-common'
       x-tags:
         - analysis
     analysis-return-relationships:
@@ -977,11 +988,20 @@ components:
             $ref: '#/components/schemas/analysis-return'
       x-tags:
         - analysis
+    point-common:
+      title: point-common
+      x-stoplight:
+        id: x6l9xeepkc38i
+      type: object
+      properties:
+        analysis:
+          type: string
     point-return:
       allOf:
         - $ref: ./nimads/nimads/pointBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/point-relationships'
+        - $ref: '#/components/schemas/point-common'
       x-tags:
         - point
     point-request:
@@ -989,6 +1009,7 @@ components:
         - $ref: ./nimads/nimads/pointBase.yaml
         - $ref: '#/components/schemas/point-relationships'
         - $ref: '#/components/schemas/writeable-resource-attributes'
+        - $ref: '#/components/schemas/point-common'
       x-tags:
         - point
     point-relationships:
@@ -1042,11 +1063,20 @@ components:
       description: ''
       x-tags:
         - point
+    image-common:
+      title: image-common
+      x-stoplight:
+        id: 5r2hzvvua1avd
+      type: object
+      properties:
+        analysis:
+          type: string
     image-return:
       allOf:
         - $ref: ./nimads/nimads/imageBase.yaml
-        - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/image-relationships'
+        - $ref: '#/components/schemas/resource-attributes'
+        - $ref: '#/components/schemas/image-common'
       x-tags:
         - image
     image-request:
@@ -1054,6 +1084,7 @@ components:
         - $ref: ./nimads/nimads/imageBase.yaml
         - $ref: '#/components/schemas/image-relationships'
         - $ref: '#/components/schemas/writeable-resource-attributes'
+        - $ref: '#/components/schemas/image-common'
       x-tags:
         - image
     image-relationships:
@@ -1120,6 +1151,7 @@ components:
             - $ref: '#/components/schemas/resource-attributes'
             - $ref: '#/components/schemas/clone'
             - $ref: '#/components/schemas/annotation-return-relationships'
+            - $ref: '#/components/schemas/annotation-common'
       x-tags:
         - annotation
     annotation-request:
@@ -1132,6 +1164,7 @@ components:
             - $ref: ./nimads/nimads/annotationBase.yaml
             - $ref: '#/components/schemas/annotation-request-relationships'
             - $ref: '#/components/schemas/writeable-resource-attributes'
+            - $ref: '#/components/schemas/annotation-common'
       x-tags:
         - annotation
     annotation-return-relationships:
@@ -1233,6 +1266,14 @@ components:
           description: annotation object expressed as a CSV
       required:
         - annotation_csv
+    annotation-common:
+      title: annotation-common
+      x-stoplight:
+        id: owg2697jjfj6y
+      type: object
+      properties:
+        studyset:
+          type: string
     user:
       type: object
       title: user
