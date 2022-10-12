@@ -61,7 +61,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/studyset
+              $ref: '#/components/schemas/studyset-request'
   '/studysets/{id}':
     parameters:
       - schema:
@@ -102,7 +102,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/studyset
+              $ref: '#/components/schemas/studyset-request'
       tags:
         - studysets
       security:
@@ -146,6 +146,7 @@ paths:
         - $ref: '#/components/parameters/authors'
         - $ref: '#/components/parameters/user_id'
         - $ref: '#/components/parameters/data_type'
+        - $ref: '#/components/parameters/studyset_owner'
       security:
         - JSON-Web-Token: []
         - {}
@@ -163,7 +164,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/study
+              $ref: '#/components/schemas/study-request'
         description: ''
       tags:
         - studies
@@ -197,6 +198,7 @@ paths:
       description: Get a study.
       parameters:
         - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/studyset_owner'
     put:
       summary: PUT/update a study
       responses:
@@ -214,7 +216,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/study
+              $ref: '#/components/schemas/study-request'
       tags:
         - studies
       security:
@@ -266,7 +268,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/analysis
+              $ref: '#/components/schemas/analysis-request'
       tags:
         - analyses
       description: create an analysis
@@ -311,7 +313,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/analysis
+              $ref: '#/components/schemas/analysis-request'
       tags:
         - analyses
       description: Update an existing analysis.
@@ -358,7 +360,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/point
+              $ref: '#/components/schemas/point-request'
   '/points/{id}':
     parameters:
       - schema:
@@ -396,7 +398,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/point
+              $ref: '#/components/schemas/point-request'
       tags:
         - points
       description: Update a particular MRI coordinate.
@@ -448,7 +450,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/image
+              $ref: '#/components/schemas/image-request'
       tags:
         - images
       description: Create an image
@@ -490,7 +492,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/image
+              $ref: '#/components/schemas/image-request'
         description: ''
       tags:
         - images
@@ -546,7 +548,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/condition
+              $ref: '#/components/schemas/condition-request'
   '/conditions/{id}':
     parameters:
       - schema:
@@ -583,7 +585,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/condition
+              $ref: '#/components/schemas/condition-request'
         description: ''
       tags:
         - conditions
@@ -637,7 +639,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/annotation
+              $ref: '#/components/schemas/annotation-request'
   '/annotations/{id}':
     parameters:
       - schema:
@@ -677,7 +679,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./reference/nimads.yml#/components/schemas/annotation
+              $ref: '#/components/schemas/annotation-request'
     delete:
       summary: DELETE an annotation
       responses:
@@ -769,19 +771,46 @@ components:
       x-tags:
         - studyset
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/studysetBase
+        - $ref: ./nimads/nimads/studysetBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/clone'
-        - type: object
-          properties:
-            studies:
-              type: array
-              items:
-                oneOf:
-                  - $ref: '#/components/schemas/study-return'
-                  - type: string
-                    properties: {}
-                    nullable: true
+        - $ref: '#/components/schemas/studyset-return-relationships'
+    studyset-request:
+      title: studyset-request
+      description: ''
+      x-examples: {}
+      x-tags:
+        - studyset
+      allOf:
+        - $ref: ./nimads/nimads/studysetBase.yaml
+        - $ref: '#/components/schemas/studyset-request-relationships'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
+    studyset-return-relationships:
+      title: studyset-relationships
+      x-stoplight:
+        id: ted3fijjlxyhx
+      type: object
+      properties:
+        studies:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/study-return'
+              - type: string
+                nullable: true
+    studyset-request-relationships:
+      title: studyset-relationships
+      x-stoplight:
+        id: ted3fijjlxyhx
+      type: object
+      properties:
+        studies:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/study-request'
+              - type: string
+                nullable: true
     studyset-list:
       title: studyset-get
       type: object
@@ -797,20 +826,59 @@ components:
     study-return:
       title: study-return
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/studyBase
+        - $ref: ./nimads/nimads/studyBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/clone'
+        - $ref: '#/components/schemas/study-return-relationships'
         - type: object
           properties:
-            analyses:
+            studysets:
               type: array
               items:
-                oneOf:
-                  - $ref: '#/components/schemas/analysis-return'
-                  - type: string
-                    nullable: true
+                type: object
+                properties:
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  description:
+                    type: string
       x-tags:
         - study
+    study-request:
+      title: study-request
+      allOf:
+        - $ref: ./nimads/nimads/studyBase.yaml
+        - $ref: '#/components/schemas/study-request-relationships'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
+      x-tags:
+        - study
+    study-return-relationships:
+      title: study-relationships
+      x-tags:
+        - study
+      type: object
+      properties:
+        analyses:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/analysis-return'
+              - type: string
+                nullable: true
+    study-request-relationships:
+      title: study-relationships
+      x-tags:
+        - study
+      type: object
+      properties:
+        analyses:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/analysis-request'
+              - type: string
+                nullable: true
     study-list:
       title: study-get
       type: object
@@ -823,41 +891,91 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - study
+    analysis-common:
+      title: analysis-common
+      x-stoplight:
+        id: wi1i0ho2165t4
+      description: attributes common between request and return objects
+      type: object
+      properties:
+        study:
+          type: string
     analysis-return:
       title: analysis-return
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/analysisBase
+        - $ref: ./nimads/nimads/analysisBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
-        - type: object
-          properties:
-            study:
-              type: string
-            images:
-              type: array
-              items:
-                oneOf:
-                  - $ref: '#/components/schemas/image-return'
-                  - type: string
-                    properties: {}
-                    nullable: true
-            points:
-              type: array
-              items:
-                oneOf:
-                  - $ref: '#/components/schemas/point-return'
-                  - type: string
-                    properties: {}
-                    nullable: true
-            conditions:
-              type: array
-              items:
-                oneOf:
-                  - $ref: '#/components/schemas/condition-return'
-                  - type: string
-                    properties: {}
-                    nullable: true
+        - $ref: '#/components/schemas/analysis-return-relationships'
+        - $ref: '#/components/schemas/analysis-common'
       x-tags:
         - analysis
+    analysis-request:
+      title: analysis-request
+      allOf:
+        - $ref: ./nimads/nimads/analysisBase.yaml
+        - $ref: '#/components/schemas/analysis-request-relationships'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
+        - $ref: '#/components/schemas/analysis-common'
+      x-tags:
+        - analysis
+    analysis-return-relationships:
+      title: analysis-relationships
+      x-tags:
+        - analysis
+      type: object
+      properties:
+        study:
+          type: string
+        images:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/image-return'
+              - type: string
+                nullable: true
+        points:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/point-return'
+              - type: string
+                nullable: true
+        conditions:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/condition-return'
+              - type: string
+                nullable: true
+    analysis-request-relationships:
+      title: analysis-relationships
+      x-tags:
+        - analysis
+      type: object
+      properties:
+        study:
+          type: string
+        images:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/image-request'
+              - type: string
+                nullable: true
+        points:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/point-request'
+              - type: string
+                nullable: true
+        conditions:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/condition-request'
+              - type: string
+                nullable: true
     analysis-list:
       title: analysis-list
       type: object
@@ -870,35 +988,56 @@ components:
             $ref: '#/components/schemas/analysis-return'
       x-tags:
         - analysis
+    point-common:
+      title: point-common
+      x-stoplight:
+        id: x6l9xeepkc38i
+      type: object
+      properties:
+        analysis:
+          type: string
     point-return:
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/pointBase
+        - $ref: ./nimads/nimads/pointBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
-        - type: object
-          properties:
-            image:
-              type: string
-              nullable: true
-            value:
-              oneOf:
-                - $ref: '#/components/schemas/point-value'
-                - type: string
-                  nullable: true
-            x:
-              type: number
-              writeOnly: true
-            'y':
-              type: number
-              writeOnly: true
-            z:
-              type: number
-              writeOnly: true
-            entities:
-              type: array
-              items:
-                $ref: '#/components/schemas/entity'
+        - $ref: '#/components/schemas/point-relationships'
+        - $ref: '#/components/schemas/point-common'
       x-tags:
         - point
+    point-request:
+      allOf:
+        - $ref: ./nimads/nimads/pointBase.yaml
+        - $ref: '#/components/schemas/point-relationships'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
+        - $ref: '#/components/schemas/point-common'
+      x-tags:
+        - point
+    point-relationships:
+      x-tags:
+        - point
+      type: object
+      properties:
+        image:
+          type: string
+          nullable: true
+        value:
+          oneOf:
+            - $ref: '#/components/schemas/point-value'
+            - type: string
+              nullable: true
+        x:
+          type: number
+          writeOnly: true
+        'y':
+          type: number
+          writeOnly: true
+        z:
+          type: number
+          writeOnly: true
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/entity'
     point-list:
       title: point-list
       type: object
@@ -924,23 +1063,45 @@ components:
       description: ''
       x-tags:
         - point
+    image-common:
+      title: image-common
+      x-stoplight:
+        id: 5r2hzvvua1avd
+      type: object
+      properties:
+        analysis:
+          type: string
     image-return:
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/imageBase
+        - $ref: ./nimads/nimads/imageBase.yaml
+        - $ref: '#/components/schemas/image-relationships'
         - $ref: '#/components/schemas/resource-attributes'
-        - type: object
-          properties:
-            analysis:
-              type: string
-            entities:
-              type: array
-              items:
-                $ref: '#/components/schemas/entity'
-            analysis_name:
-              type: string
-              nullable: true
+        - $ref: '#/components/schemas/image-common'
       x-tags:
         - image
+    image-request:
+      allOf:
+        - $ref: ./nimads/nimads/imageBase.yaml
+        - $ref: '#/components/schemas/image-relationships'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
+        - $ref: '#/components/schemas/image-common'
+      x-tags:
+        - image
+    image-relationships:
+      x-tags:
+        - image
+      type: object
+      properties:
+        analysis:
+          type: string
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/entity'
+        analysis_name:
+          type: string
+          nullable: true
+      title: ''
     image-list:
       title: image-list
       type: object
@@ -956,8 +1117,15 @@ components:
     condition-return:
       title: condition-return
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/conditionBase
+        - $ref: ./nimads/nimads/conditionBase.yaml
         - $ref: '#/components/schemas/resource-attributes'
+      x-tags:
+        - condition
+    condition-request:
+      title: condition-request
+      allOf:
+        - $ref: ./nimads/nimads/conditionBase.yaml
+        - $ref: '#/components/schemas/writeable-resource-attributes'
       x-tags:
         - condition
     condition-list:
@@ -979,21 +1147,52 @@ components:
             - $ref: '#/components/schemas/annotation-export'
             - {}
         - allOf:
-            - $ref: ./reference/nimads.yml#/components/schemas/annotationBase
+            - $ref: ./nimads/nimads/annotationBase.yaml
             - $ref: '#/components/schemas/resource-attributes'
             - $ref: '#/components/schemas/clone'
-            - type: object
-              properties:
-                notes:
-                  type: array
-                  items:
-                    oneOf:
-                      - $ref: '#/components/schemas/note-collection-return'
-                      - type: string
-                        properties: {}
-                        nullable: true
+            - $ref: '#/components/schemas/annotation-return-relationships'
+            - $ref: '#/components/schemas/annotation-common'
       x-tags:
         - annotation
+    annotation-request:
+      title: annotation-request
+      oneOf:
+        - allOf:
+            - $ref: '#/components/schemas/annotation-export'
+            - {}
+        - allOf:
+            - $ref: ./nimads/nimads/annotationBase.yaml
+            - $ref: '#/components/schemas/annotation-request-relationships'
+            - $ref: '#/components/schemas/writeable-resource-attributes'
+            - $ref: '#/components/schemas/annotation-common'
+      x-tags:
+        - annotation
+    annotation-return-relationships:
+      title: annotation-relationships
+      x-tags:
+        - annotation
+      type: object
+      properties:
+        notes:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/note-collection-return'
+              - type: string
+                nullable: true
+    annotation-request-relationships:
+      title: annotation-relationships
+      x-tags:
+        - annotation
+      type: object
+      properties:
+        notes:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/note-collection-request'
+              - type: string
+                nullable: true
     annotation-list:
       title: annotation-list
       type: object
@@ -1011,36 +1210,52 @@ components:
       x-stoplight:
         id: fy0w02pre2yes
       allOf:
-        - $ref: ./reference/nimads.yml#/components/schemas/noteCollectionBase
+        - $ref: ./nimads/nimads/noteCollectionBase.yaml
         - type: object
           properties:
             analysis:
               type: string
+              readOnly: true
             analysis_name:
               type: string
               nullable: true
+              readOnly: true
             study:
               type: string
+              readOnly: true
             study_name:
               type: string
               nullable: true
+              readOnly: true
             annotation:
               type: string
+              readOnly: true
             study_year:
               type: integer
               nullable: true
+              readOnly: true
             publication:
               type: string
               nullable: true
+              readOnly: true
             authors:
               type: string
               nullable: true
+              readOnly: true
+    note-collection-request:
+      title: note-collection-request
+      x-stoplight:
+        id: fy0w02pre2yes
+      allOf:
+        - $ref: ./nimads/nimads/noteCollectionBase.yaml
+        - $ref: '#/components/schemas/writeable-resource-attributes'
     annotation-export:
       type: object
       title: annotation-export
       additionalProperties: false
       x-tags:
         - annotation
+      description: exporting an annotation as a CSV for easier editing
       properties:
         metadata:
           type: object
@@ -1048,9 +1263,17 @@ components:
           readOnly: true
         annotation_csv:
           type: string
-          readOnly: true
+          description: annotation object expressed as a CSV
       required:
         - annotation_csv
+    annotation-common:
+      title: annotation-common
+      x-stoplight:
+        id: owg2697jjfj6y
+      type: object
+      properties:
+        studyset:
+          type: string
     user:
       type: object
       title: user
@@ -1094,7 +1317,64 @@ components:
       x-tags:
         - support
     resource-attributes:
-      title: resource-attributes
+      allOf:
+        - $ref: '#/components/schemas/readable-resource-attributes'
+          required:
+            - created_at
+            - updated_at
+        - $ref: '#/components/schemas/writeable-resource-attributes'
+          requred:
+            - id
+        - $ref: '#/components/schemas/user-resource-attributes'
+          requred:
+            - user
+        - readOnly: true
+      description: common attributes for user owned resources
+    userless-resource-attributes:
+      allOf:
+        - $ref: '#/components/schemas/readable-resource-attributes'
+          required:
+            - created_at
+            - updated_at
+        - $ref: '#/components/schemas/writeable-resource-attributes'
+          requred:
+            - id
+        - readOnly: true
+      description: common resource attributes not tied to a specific user
+    user-resource-attributes:
+      title: user-resource-attributes
+      type: object
+      description: common resource attributes
+      x-internal: true
+      x-tags:
+        - support
+      properties:
+        user:
+          type: string
+          description: who owns the resource
+          nullable: true
+          readOnly: true
+    readable-resource-attributes:
+      title: readable-resource-attributes
+      type: object
+      description: common readable resource attributes
+      x-internal: true
+      x-tags:
+        - support
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          example: '2021-01-16T20:50:38.009318+00:00'
+          description: time the resource was created on the database
+          readOnly: true
+        updated_at:
+          type: string
+          description: when was the resource last modified/updated.
+          nullable: true
+          readOnly: true
+    writeable-resource-attributes:
+      title: writeable-resource-attributes
       type: object
       description: common resource attributes
       x-internal: true
@@ -1107,27 +1387,10 @@ components:
           example: 38jobTomPDqt
           minLength: 12
           maxLength: 12
-          readOnly: true
-        created_at:
-          type: string
-          format: date-time
-          example: '2021-01-16T20:50:38.009318+00:00'
-          description: time the resource was created on the database
-          readOnly: true
-        updated_at:
-          type: string
-          nullable: true
-          readOnly: true
-        user:
-          type: string
-          description: who owns the resource
-          nullable: true
-          readOnly: true
         public:
           type: boolean
           default: true
-      required:
-        - id
+          description: whether the resource is listed in public searches or not
     json-ld:
       title: json-ld
       type: object
@@ -1170,7 +1433,7 @@ components:
                 - meta
             analysis:
               type: string
-        - $ref: '#/components/schemas/resource-attributes'
+        - $ref: '#/components/schemas/userless-resource-attributes'
     clone:
       title: clone
       x-stoplight:
@@ -1186,6 +1449,16 @@ components:
         source_updated_at:
           type: string
           nullable: true
+          readOnly: true
+    nested-put-attributes:
+      type: object
+      title: nested-put-attributes
+      x-stoplight:
+        id: 9mprupprwm2sr
+      properties:
+        id:
+          type: string
+      writeOnly: true
   responses:
     '404':
       description: Example response
@@ -1386,6 +1659,13 @@ components:
           - image
           - both
       description: 'whether searching for studies that contain coordinates, images, or both'
+    studyset_owner:
+      name: studyset_owner
+      in: query
+      required: false
+      schema:
+        type: string
+      description: for all studies filter which studysets are listed based on who owns the studyset
   securitySchemes:
     JSON-Web-Token:
       type: http
