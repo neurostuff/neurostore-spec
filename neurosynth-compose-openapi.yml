@@ -476,6 +476,17 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/result-return'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/result'
+      security:
+        - JSON-Web-Token: []
   '/results/{id}':
     parameters:
       - schema:
@@ -493,26 +504,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/result-return'
-      operationId: ''
     put:
       summary: ''
-      operationId: put-results-id
       responses:
         '200':
           description: OK
-  /neurovault-collection:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/result-return'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/result'
+  /neurovault-collections:
     get:
       summary: Your GET endpoint
       tags: []
-      responses: {}
-      operationId: ''
-    post:
-      summary: ''
-      operationId: ''
       responses:
         '200':
           description: OK
-  '/neurovault-collection/{id}':
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+    parameters: []
+  '/neurovault-collections/{id}':
     parameters:
       - schema:
           type: string
@@ -522,14 +541,86 @@ paths:
     get:
       summary: Your GET endpoint
       tags: []
-      responses: {}
-      operationId: ''
-    put:
-      summary: ''
-      operationId: ''
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurovault-collection-return'
+    put:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurovault-collection-return'
+      security:
+        - JSON-Web-Token: []
+  /neurovault-files/:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurovault-file-list'
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurovault-file-return'
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/neurovault-file'
+  '/neurovault-files/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurovault-file-return'
+      operationId: ''
+    put:
+      summary: ''
+      operationId: put-neurovault-files-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurovault-file-return'
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/neurovault-file'
 components:
   schemas:
     specification:
@@ -864,8 +955,11 @@ components:
           type: string
         estimator:
           type: string
-        neurovault_collection:
-          type: integer
+        neurovault_collection_id:
+          oneOf:
+            - type: integer
+              properties: {}
+            - $ref: '#/components/schemas/neurovault-collection'
     result-return:
       title: result-return
       x-stoplight:
@@ -920,6 +1014,10 @@ components:
           type: string
         status:
           type: string
+        file:
+          type: string
+          format: byte
+          writeOnly: true
     neurovault-collection-return:
       title: neurovault-collection-return
       x-stoplight:
