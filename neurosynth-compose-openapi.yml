@@ -500,6 +500,36 @@ paths:
       responses:
         '200':
           description: OK
+  /neurovault-collection:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: ''
+    post:
+      summary: ''
+      operationId: ''
+      responses:
+        '200':
+          description: OK
+  '/neurovault-collection/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: ''
+    put:
+      summary: ''
+      operationId: ''
+      responses:
+        '200':
+          description: OK
 components:
   schemas:
     specification:
@@ -834,6 +864,8 @@ components:
           type: string
         estimator:
           type: string
+        neurovault_collection:
+          type: integer
     result-return:
       title: result-return
       x-stoplight:
@@ -851,6 +883,43 @@ components:
           $ref: '#/components/schemas/result-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+    neurovault-collection:
+      title: neurovault-collection
+      x-stoplight:
+        id: jezigu623umbv
+      type: object
+      properties:
+        collection_id:
+          type: string
+        meta_analysis_id:
+          type: string
+        files:
+          type: array
+          items:
+            oneOf:
+              - type: string
+              - $ref: '#/components/schemas/neurovault-file'
+            type: object
+        result:
+          oneOf:
+            - type: string
+            - $ref: '#/components/schemas/result'
+    neurovault-file:
+      title: neurovault-file
+      x-stoplight:
+        id: kfys0q5bzuq3u
+      type: object
+      properties:
+        collection_id:
+          type: string
+        path:
+          type: string
+        exception:
+          type: string
+        traceback:
+          type: string
+        status:
+          type: string
   securitySchemes:
     JSON-Web-Token:
       type: http
