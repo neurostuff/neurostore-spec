@@ -555,6 +555,7 @@ components:
           writeOnly: true
         provenance:
           type: object
+          nullable: true
     annotation:
       title: annotation
       type: object
