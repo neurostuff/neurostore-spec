@@ -530,6 +530,9 @@ paths:
       responses:
         '200':
           description: OK
+      description: ''
+      security:
+        - JSON-Web-Token: []
     parameters: []
   '/neurovault-collections/{id}':
     parameters:
@@ -559,7 +562,7 @@ paths:
                 $ref: '#/components/schemas/neurovault-collection-return'
       security:
         - JSON-Web-Token: []
-  /neurovault-files/:
+  /neurovault-files:
     get:
       summary: Your GET endpoint
       tags: []
@@ -586,6 +589,7 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/neurovault-file'
+    parameters: []
   '/neurovault-files/{id}':
     parameters:
       - schema:
@@ -603,10 +607,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/neurovault-file-return'
-      operationId: ''
     put:
       summary: ''
-      operationId: put-neurovault-files-id
       responses:
         '200':
           description: OK
@@ -985,13 +987,14 @@ components:
       properties:
         collection_id:
           type: string
+          readOnly: true
         meta_analysis_id:
           type: string
         files:
           type: array
           items:
             oneOf:
-              - type: string
+              - {}
               - $ref: '#/components/schemas/neurovault-file'
             type: object
         result:
