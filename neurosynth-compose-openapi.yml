@@ -1021,6 +1021,8 @@ components:
           type: string
           format: byte
           writeOnly: true
+        image_id:
+          type: string
     neurovault-collection-return:
       title: neurovault-collection-return
       x-stoplight:
