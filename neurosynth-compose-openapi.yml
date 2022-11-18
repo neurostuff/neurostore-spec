@@ -478,6 +478,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/project'
+      security:
+        - JSON-Web-Token: []
   '/projects/{id}':
     parameters:
       - schema:
@@ -510,6 +512,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/project'
+      security:
+        - JSON-Web-Token: []
 components:
   schemas:
     specification:
