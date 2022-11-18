@@ -834,6 +834,7 @@ components:
       properties:
         provenance:
           type: object
+          nullable: true
         meta_analyses:
           type: array
           items:
