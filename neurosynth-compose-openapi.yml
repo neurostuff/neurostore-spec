@@ -612,6 +612,8 @@ components:
         provenance:
           type: object
           nullable: true
+        project:
+          type: string
     annotation:
       title: annotation
       type: object
