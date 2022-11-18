@@ -451,9 +451,69 @@ paths:
             schema:
               $ref: '#/components/schemas/specification'
       description: update an existing meta analysis specification
-      operationId: ''
       tags:
         - specification
+  /projects:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project-list'
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project-return'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/project'
+      security:
+        - JSON-Web-Token: []
+  '/projects/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project-return'
+      parameters: []
+    put:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project-return'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/project'
+      security:
+        - JSON-Web-Token: []
 components:
   schemas:
     specification:
@@ -556,6 +616,8 @@ components:
         provenance:
           type: object
           nullable: true
+        project:
+          type: string
     annotation:
       title: annotation
       type: object
@@ -764,6 +826,44 @@ components:
             - specification
       x-tags:
         - meta-analysis
+    project:
+      title: project
+      x-stoplight:
+        id: 8uh4pofrwtwzb
+      type: object
+      properties:
+        provenance:
+          type: object
+          nullable: true
+        meta_analyses:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/meta-analysis'
+              - type: string
+                nullable: true
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+    project-return:
+      allOf:
+        - $ref: '#/components/schemas/read-only'
+        - $ref: '#/components/schemas/project'
+    project-list:
+      title: project-list
+      x-stoplight:
+        id: r1a0nbvnorype
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/project-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
   securitySchemes:
     JSON-Web-Token:
       type: http
