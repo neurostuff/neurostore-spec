@@ -835,6 +835,10 @@ components:
               - $ref: '#/components/schemas/meta-analysis'
               - type: string
                 nullable: true
+        name:
+          type: string
+        description:
+          type: string
     project-return:
       allOf:
         - $ref: '#/components/schemas/read-only'
