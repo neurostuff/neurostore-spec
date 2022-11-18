@@ -844,8 +844,10 @@ components:
                 nullable: true
         name:
           type: string
+          nullable: true
         description:
           type: string
+          nullable: true
     project-return:
       allOf:
         - $ref: '#/components/schemas/read-only'
