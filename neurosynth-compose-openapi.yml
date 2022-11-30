@@ -954,12 +954,11 @@ components:
         cli_version:
           type: string
         estimator:
+          $ref: '#/components/schemas/estimator'
+        neurostore_id:
           type: string
-        neurovault_collection_id:
-          oneOf:
-            - type: integer
-              properties: {}
-            - $ref: '#/components/schemas/neurovault-collection'
+        neurovault_collection:
+          $ref: '#/components/schemas/neurovault-collection'
     result-return:
       title: result-return
       x-stoplight:
