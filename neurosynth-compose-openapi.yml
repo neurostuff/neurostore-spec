@@ -1019,6 +1019,18 @@ components:
           writeOnly: true
         image_id:
           type: string
+        name:
+          type: string
+        map_type:
+          type: string
+        cognitive_contrast_cogatlas:
+          type: string
+        cognitive_contrast_cogatlas_id:
+          type: string
+        cognitive_paradigm_cogatlas:
+          type: string
+        cognitive_paradigm_cogatlas_id:
+          type: string
     neurovault-collection-return:
       title: neurovault-collection-return
       x-stoplight:
