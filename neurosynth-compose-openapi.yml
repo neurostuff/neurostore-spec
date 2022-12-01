@@ -1024,6 +1024,7 @@ components:
           writeOnly: true
         image_id:
           type: string
+          nullable: true
         name:
           type: string
           nullable: true
