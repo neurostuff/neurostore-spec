@@ -1001,6 +1001,7 @@ components:
                 $ref: '#/components/schemas/neurovault-file'
         result:
           type: string
+          readOnly: true
     neurovault-file:
       title: neurovault-file
       x-stoplight:
