@@ -953,10 +953,12 @@ components:
           type: string
         cli_version:
           type: string
+          nullable: true
         estimator:
           $ref: '#/components/schemas/estimator'
         neurostore_id:
           type: string
+          nullable: true
         neurovault_collection:
           $ref: '#/components/schemas/neurovault-collection'
     result-return:
@@ -1009,8 +1011,10 @@ components:
           type: string
         exception:
           type: string
+          nullable: true
         traceback:
           type: string
+          nullable: true
         status:
           type: string
         file:
@@ -1021,16 +1025,22 @@ components:
           type: string
         name:
           type: string
+          nullable: true
         map_type:
           type: string
+          nullable: true
         cognitive_contrast_cogatlas:
           type: string
+          nullable: true
         cognitive_contrast_cogatlas_id:
           type: string
+          nullable: true
         cognitive_paradigm_cogatlas:
           type: string
+          nullable: true
         cognitive_paradigm_cogatlas_id:
           type: string
+          nullable: true
     neurovault-collection-return:
       title: neurovault-collection-return
       x-stoplight:
