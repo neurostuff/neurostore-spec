@@ -618,6 +618,7 @@ components:
           nullable: true
         project:
           type: string
+          nullable: true
     annotation:
       title: annotation
       type: object
