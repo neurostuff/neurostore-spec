@@ -178,6 +178,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/meta-analysis'
+        description: ''
       description: update an existing meta-analysis (that has not yet been run)
       tags:
         - meta-analysis
@@ -453,6 +454,177 @@ paths:
       description: update an existing meta analysis specification
       tags:
         - specification
+  /meta-analysis-results:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/result-list'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: meta_analysis_id
+          description: search for results with this meta-analysis id
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/result-return'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/result'
+      security:
+        - JSON-Web-Token: []
+    parameters: []
+  '/meta-analysis-results/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/result-return'
+    put:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/result-return'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/result'
+  /neurovault-collections:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+      description: ''
+      security:
+        - JSON-Web-Token: []
+    parameters: []
+  '/neurovault-collections/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurovault-collection-return'
+    put:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurovault-collection-return'
+      security:
+        - JSON-Web-Token: []
+  /neurovault-files:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurovault-file-list'
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurovault-file-return'
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/neurovault-file'
+        description: ''
+    parameters: []
+  '/neurovault-files/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurovault-file-return'
+    put:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurovault-file-return'
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/neurovault-file'
   /projects:
     get:
       summary: Your GET endpoint
@@ -613,6 +785,14 @@ components:
           type: string
           description: The id of the annotation on neurosynth-compose (as opposed to the id of the annotation on neurostore). Multiple snapshots of the annotation can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
           writeOnly: true
+        results:
+          description: 'array of neurostore ids representing the results of this meta-analysis (nominally all results should be the same, but machine architecture differences/algorithm stochastic-ness may lead to slightly different outcomes for each result.'
+          type: array
+          items:
+            oneOf:
+              - type: string
+                nullable: true
+              - $ref: '#/components/schemas/result-return'
         provenance:
           type: object
           nullable: true
@@ -827,6 +1007,147 @@ components:
             - specification
       x-tags:
         - meta-analysis
+    result:
+      title: result
+      x-stoplight:
+        id: bu7w84za6m75g
+      type: object
+      description: describes the output of a meta-analysis
+      properties:
+        images:
+          type: object
+        meta_analysis_id:
+          type: string
+        cli_version:
+          type: string
+          nullable: true
+        estimator:
+          $ref: '#/components/schemas/estimator'
+        neurostore_id:
+          type: string
+          nullable: true
+        neurovault_collection:
+          $ref: '#/components/schemas/neurovault-collection'
+    result-return:
+      title: result-return
+      x-stoplight:
+        id: 37rioayiuvw01
+      allOf:
+        - $ref: '#/components/schemas/result'
+        - $ref: '#/components/schemas/read-only'
+    result-list:
+      title: result-list
+      x-stoplight:
+        id: 4ktdtuulnummw
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            oneOf:
+              - type: string
+                nullable: true
+              - $ref: '#/components/schemas/result-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    neurovault-collection:
+      title: neurovault-collection
+      x-stoplight:
+        id: jezigu623umbv
+      type: object
+      properties:
+        collection_id:
+          type: string
+          readOnly: true
+        files:
+          type: array
+          items:
+            oneOf:
+              - type: string
+              - type: object
+                $ref: '#/components/schemas/neurovault-file'
+        result:
+          type: string
+          readOnly: true
+    neurovault-file:
+      title: neurovault-file
+      x-stoplight:
+        id: kfys0q5bzuq3u
+      type: object
+      properties:
+        collection_id:
+          type: string
+        exception:
+          type: string
+          nullable: true
+        traceback:
+          type: string
+          nullable: true
+        status:
+          type: string
+        file:
+          type: string
+          format: byte
+          writeOnly: true
+        image_id:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        map_type:
+          type: string
+          nullable: true
+        cognitive_contrast_cogatlas:
+          type: string
+          nullable: true
+        cognitive_contrast_cogatlas_id:
+          type: string
+          nullable: true
+        cognitive_paradigm_cogatlas:
+          type: string
+          nullable: true
+        cognitive_paradigm_cogatlas_id:
+          type: string
+          nullable: true
+    neurovault-collection-return:
+      title: neurovault-collection-return
+      x-stoplight:
+        id: 2bsw2vz8ye52t
+      allOf:
+        - $ref: '#/components/schemas/neurovault-collection'
+        - $ref: '#/components/schemas/read-only'
+    neurovault-list:
+      title: neurovault-list
+      x-stoplight:
+        id: k5ezj2ga77zuk
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/neurovault-collection-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    neurovault-file-return:
+      title: neurovault-file-return
+      x-stoplight:
+        id: ewxeawtiwzwz7
+      allOf:
+        - $ref: '#/components/schemas/neurovault-file'
+        - $ref: '#/components/schemas/read-only'
+    neurovault-file-list:
+      title: neurovault-file-list
+      x-stoplight:
+        id: 06gijla4dazsf
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/neurovault-file-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
     project:
       title: project
       x-stoplight:
