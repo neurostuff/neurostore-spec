@@ -793,6 +793,12 @@ components:
               - type: string
                 nullable: true
               - $ref: '#/components/schemas/result-return'
+        provenance:
+          type: object
+          nullable: true
+        project:
+          type: string
+          nullable: true
     annotation:
       title: annotation
       type: object
