@@ -1110,6 +1110,14 @@ components:
         cognitive_paradigm_cogatlas_id:
           type: string
           nullable: true
+        modality:
+          type: string
+          description: the modality of the component images that went into generating this statistical map
+          nullable: true
+        space:
+          type: string
+          description: the template space the statistical image is reported in.
+          nullable: true
     neurovault-collection-return:
       title: neurovault-collection-return
       x-stoplight:
