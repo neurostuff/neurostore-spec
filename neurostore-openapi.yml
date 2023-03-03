@@ -1538,7 +1538,7 @@ components:
       required: false
       schema:
         type: integer
-        maximum: 100
+        maximum: 30000
         exclusiveMaximum: true
         minimum: 1
         format: int32
