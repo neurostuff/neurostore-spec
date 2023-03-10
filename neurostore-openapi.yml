@@ -1303,6 +1303,9 @@ components:
       title: metadata
       description: data included in every list response
       additionalProperties: false
+      x-internal: true
+      x-tags:
+        - support
       properties:
         total_count:
           type: integer
@@ -1313,9 +1316,6 @@ components:
           type: integer
           description: count of elements for unique entries
           readOnly: true
-      x-internal: true
-      x-tags:
-        - support
     resource-attributes:
       allOf:
         - $ref: '#/components/schemas/readable-resource-attributes'
@@ -1617,8 +1617,7 @@ components:
       name: unique
       in: query
       required: false
-      schema:
-        type: boolean
+      schema: {}
       description: whether to list clones with originals
     authors:
       name: authors
