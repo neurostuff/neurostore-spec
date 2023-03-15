@@ -102,7 +102,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/nested'
       tags:
-        - meta-analyses
+        - meta_analyses
     parameters: []
     post:
       summary: Create a new meta-analysis
