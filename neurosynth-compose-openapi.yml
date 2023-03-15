@@ -128,7 +128,7 @@ paths:
               $ref: '#/components/schemas/meta-analysis-post-body'
       description: 'create a new specification, studyset, annotation bundle'
       tags:
-        - meta-analyses
+        - meta_analyses
   '/meta-analyses/{id}':
     parameters:
       - schema:
@@ -153,7 +153,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/nested'
       tags:
-        - meta-analyses
+        - meta_analyses
     put:
       summary: Update a meta-analysis
       responses:
@@ -181,7 +181,7 @@ paths:
         description: ''
       description: update an existing meta-analysis (that has not yet been run)
       tags:
-        - meta-analyses
+        - meta_analyses
   /studysets:
     get:
       summary: Get a list of Studysets
@@ -458,7 +458,7 @@ paths:
     get:
       summary: Your GET endpoint
       tags:
-        - meta-analyses
+        - meta_analyses
       responses:
         '200':
           description: OK
@@ -489,7 +489,7 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
-        - meta-analyses
+        - meta_analyses
     parameters: []
   '/meta-analysis-results/{id}':
     parameters:
@@ -501,7 +501,7 @@ paths:
     get:
       summary: Your GET endpoint
       tags:
-        - meta-analyses
+        - meta_analyses
       responses:
         '200':
           description: OK
@@ -524,7 +524,7 @@ paths:
             schema:
               $ref: '#/components/schemas/result'
       tags:
-        - meta-analyses
+        - meta_analyses
   /neurovault-collections:
     get:
       summary: Your GET endpoint
@@ -778,7 +778,7 @@ components:
       type: object
       description: 'The combination of the specification determining what meta-analysis to run (required), the studyset to act as input to the meta-analytic algorithm (required), and the annotation to provide human readable annotations as well as acts as an optional filter on which analyses to select within the studyset (optional, but suggested).'
       x-tags:
-        - meta-analyses
+        - meta_analyses
       properties:
         specification:
           oneOf:
@@ -950,7 +950,7 @@ components:
         - $ref: '#/components/schemas/meta-analysis'
         - $ref: '#/components/schemas/read-only'
       x-tags:
-        - meta-analyses
+        - meta_analyses
     meta-analysis-list:
       title: meta-analysis-list
       type: object
@@ -962,7 +962,7 @@ components:
         metadata:
           $ref: '#/components/schemas/metadata'
       x-tags:
-        - meta-analyses
+        - meta_analyses
     user-return:
       title: user-return
       allOf:
@@ -1030,7 +1030,7 @@ components:
             - internal_studyset_id
             - specification
       x-tags:
-        - meta-analyses
+        - meta_analyses
     result:
       title: result
       x-stoplight:
@@ -1053,7 +1053,7 @@ components:
         neurovault_collection:
           $ref: '#/components/schemas/neurovault-collection'
       x-tags:
-        - meta-analyses
+        - meta_analyses
     result-return:
       title: result-return
       x-stoplight:
@@ -1062,7 +1062,7 @@ components:
         - $ref: '#/components/schemas/result'
         - $ref: '#/components/schemas/read-only'
       x-tags:
-        - meta-analyses
+        - meta_analyses
     result-list:
       title: result-list
       x-stoplight:
@@ -1079,7 +1079,7 @@ components:
         metadata:
           $ref: '#/components/schemas/metadata'
       x-tags:
-        - meta-analyses
+        - meta_analyses
     neurovault-collection:
       title: neurovault-collection
       x-stoplight:
@@ -1264,7 +1264,7 @@ components:
                 type: string
 tags:
   - name: annotations
-  - name: meta-analyses
+  - name: meta_analyses
   - name: neurovault
   - name: projects
   - name: specifications
