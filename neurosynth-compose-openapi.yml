@@ -186,7 +186,7 @@ paths:
     get:
       summary: Get a list of Studysets
       tags:
-        - studyset
+        - studysets
       responses:
         '200':
           description: OK
@@ -214,7 +214,7 @@ paths:
         '500':
           $ref: '#/components/responses/bad-request'
       tags:
-        - studyset
+        - studysets
       security:
         - JSON-Web-Token: []
       requestBody:
@@ -233,7 +233,7 @@ paths:
     get:
       summary: Get information about a Studyset
       tags:
-        - studyset
+        - studysets
       responses:
         '200':
           description: OK
@@ -264,7 +264,7 @@ paths:
         '422':
           $ref: '#/components/responses/bad-request'
       tags:
-        - studyset
+        - studysets
       security:
         - JSON-Web-Token: []
       requestBody:
