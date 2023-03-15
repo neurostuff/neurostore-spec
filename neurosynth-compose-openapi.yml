@@ -25,7 +25,7 @@ paths:
     get:
       summary: Get User Info by User ID
       tags:
-        - user
+        - users
       description: Retrieve the information of the user with the matching user ID.
       responses:
         '200':
@@ -44,7 +44,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/user-return'
       tags:
-        - user
+        - users
       description: update information about a user
       security:
         - JSON-Web-Token: []
@@ -66,7 +66,7 @@ paths:
                 $ref: '#/components/schemas/user-list'
       description: List all users
       tags:
-        - user
+        - users
     post:
       summary: Create A New User
       responses:
@@ -79,7 +79,7 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
-        - user
+        - users
       description: create a single user
       requestBody:
         content:
@@ -488,6 +488,8 @@ paths:
               $ref: '#/components/schemas/result'
       security:
         - JSON-Web-Token: []
+      tags:
+        - meta-analyses
     parameters: []
   '/meta-analysis-results/{id}':
     parameters:
@@ -521,6 +523,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/result'
+      tags:
+        - meta-analyses
   /neurovault-collections:
     get:
       summary: Your GET endpoint
@@ -537,6 +541,8 @@ paths:
       description: ''
       security:
         - JSON-Web-Token: []
+      tags:
+        - neurovault
     parameters: []
   '/neurovault-collections/{id}':
     parameters:
@@ -567,6 +573,8 @@ paths:
                 $ref: '#/components/schemas/neurovault-collection-return'
       security:
         - JSON-Web-Token: []
+      tags:
+        - neurovault
   /neurovault-files:
     get:
       summary: Your GET endpoint
@@ -596,6 +604,8 @@ paths:
             schema:
               $ref: '#/components/schemas/neurovault-file'
         description: ''
+      tags:
+        - neurovault
     parameters: []
   '/neurovault-files/{id}':
     parameters:
@@ -631,6 +641,8 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/neurovault-file'
+      tags:
+        - neurovault
   /projects:
     get:
       summary: Your GET endpoint
@@ -659,6 +671,8 @@ paths:
               $ref: '#/components/schemas/project'
       security:
         - JSON-Web-Token: []
+      tags:
+        - projects
   '/projects/{id}':
     parameters:
       - schema:
@@ -694,6 +708,8 @@ paths:
               $ref: '#/components/schemas/project'
       security:
         - JSON-Web-Token: []
+      tags:
+        - projects
 components:
   schemas:
     specification:
