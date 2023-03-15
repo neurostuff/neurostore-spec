@@ -102,7 +102,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/nested'
       tags:
-        - meta-analysis
+        - meta-analyses
     parameters: []
     post:
       summary: Create a new meta-analysis
@@ -128,7 +128,7 @@ paths:
               $ref: '#/components/schemas/meta-analysis-post-body'
       description: 'create a new specification, studyset, annotation bundle'
       tags:
-        - meta-analysis
+        - meta-analyses
   '/meta-analyses/{id}':
     parameters:
       - schema:
@@ -153,7 +153,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/nested'
       tags:
-        - meta-analysis
+        - meta-analyses
     put:
       summary: Update a meta-analysis
       responses:
@@ -181,7 +181,7 @@ paths:
         description: ''
       description: update an existing meta-analysis (that has not yet been run)
       tags:
-        - meta-analysis
+        - meta-analyses
   /studysets:
     get:
       summary: Get a list of Studysets
@@ -277,7 +277,7 @@ paths:
     get:
       summary: GET a list of annotations
       tags:
-        - annotation
+        - annotations
       responses:
         '200':
           description: OK
@@ -304,7 +304,7 @@ paths:
         '500':
           $ref: '#/components/responses/bad-request'
       tags:
-        - annotation
+        - annotations
       requestBody:
         content:
           application/json:
@@ -323,7 +323,7 @@ paths:
     get:
       summary: GET information about an annotation
       tags:
-        - annotation
+        - annotations
       responses:
         '200':
           description: OK
@@ -354,7 +354,7 @@ paths:
         '422':
           $ref: '#/components/responses/bad-request'
       tags:
-        - annotation
+        - annotations
       security:
         - JSON-Web-Token: []
       requestBody:
@@ -377,7 +377,7 @@ paths:
           $ref: '#/components/responses/bad-request'
       description: list of meta-analysis specifications
       tags:
-        - specification
+        - specifications
     parameters: []
     post:
       summary: Create a Specification
@@ -403,7 +403,7 @@ paths:
               $ref: '#/components/schemas/specification-post-body'
       description: create a new meta-analysis specification
       tags:
-        - specification
+        - specifications
   '/specifications/{id}':
     parameters:
       - schema:
@@ -426,7 +426,7 @@ paths:
           $ref: '#/components/responses/bad-request'
       description: get a meta-analysis specification
       tags:
-        - specification
+        - specifications
     put:
       summary: Update Meta-Analysis specification
       responses:
@@ -453,11 +453,12 @@ paths:
               $ref: '#/components/schemas/specification'
       description: update an existing meta analysis specification
       tags:
-        - specification
+        - specifications
   /meta-analysis-results:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - meta-analyses
       responses:
         '200':
           description: OK
@@ -497,7 +498,8 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - meta-analyses
       responses:
         '200':
           description: OK
@@ -522,7 +524,8 @@ paths:
   /neurovault-collections:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - neurovault
       responses:
         '200':
           description: OK
@@ -544,7 +547,8 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - neurovault
       responses:
         '200':
           description: OK
@@ -566,7 +570,8 @@ paths:
   /neurovault-files:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - neurovault
       responses:
         '200':
           description: OK
@@ -601,7 +606,8 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - neurovault
       responses:
         '200':
           description: OK
@@ -628,7 +634,8 @@ paths:
   /projects:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - projects
       responses:
         '200':
           description: OK
@@ -661,7 +668,8 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - projects
       responses:
         '200':
           description: OK
@@ -692,7 +700,7 @@ components:
       title: specification
       type: object
       x-tags:
-        - specification
+        - specifications
       description: a machine readable specification of how to run a meta-analysis (currently specifically tailored to NiMARE).
       properties:
         type:
@@ -732,7 +740,7 @@ components:
           description: 'arbitrary keyword arguments to be passed into the function/class to modify default functionality, this could modify the kernel, resampling methods, or any other behavior defined in the function/class (like MKDADensity).'
       description: the specification for the function/class running the meta-analysis
       x-tags:
-        - specification
+        - specifications
     corrector:
       title: corrector
       type: object
@@ -748,13 +756,13 @@ components:
           type: object
           description: 'key word arguments passed to the corrector to modidy default functionality, such as number of iterations, or the particular method of correction being applied.'
       x-tags:
-        - specification
+        - specifications
     meta-analysis:
       title: meta-analysis
       type: object
       description: 'The combination of the specification determining what meta-analysis to run (required), the studyset to act as input to the meta-analytic algorithm (required), and the annotation to provide human readable annotations as well as acts as an optional filter on which analyses to select within the studyset (optional, but suggested).'
       x-tags:
-        - meta-analysis
+        - meta-analyses
       properties:
         specification:
           oneOf:
@@ -803,7 +811,7 @@ components:
       title: annotation
       type: object
       x-tags:
-        - annotation
+        - annotations
       description: a holder/reference to the annotation on neurostore
       properties:
         neurostore_id:
@@ -821,7 +829,7 @@ components:
       title: studyset
       type: object
       x-tags:
-        - studyset
+        - studysets
       properties:
         neurostore_id:
           type: string
@@ -838,7 +846,7 @@ components:
           type: string
       description: attributes of the user object
       x-tags:
-        - user
+        - users
     read-only:
       title: read-only
       type: object
@@ -868,7 +876,7 @@ components:
         - $ref: '#/components/schemas/read-only'
       description: The view of the specification through an endpoint.
       x-tags:
-        - specification
+        - specifications
     specification-list:
       title: specification-list
       type: object
@@ -881,14 +889,14 @@ components:
           $ref: '#/components/schemas/metadata'
       description: The representation of a list of specifications.
       x-tags:
-        - specification
+        - specifications
     annotation-return:
       title: annotation-return
       allOf:
         - $ref: '#/components/schemas/annotation'
         - $ref: '#/components/schemas/read-only'
       x-tags:
-        - annotation
+        - annotations
     annotation-list:
       title: annotation-list
       type: object
@@ -900,14 +908,14 @@ components:
         metadata:
           $ref: '#/components/schemas/metadata'
       x-tags:
-        - annotation
+        - annotations
     studyset-return:
       title: studyset-return
       allOf:
         - $ref: '#/components/schemas/studyset'
         - $ref: '#/components/schemas/read-only'
       x-tags:
-        - studyset
+        - studysets
     studyset-list:
       title: studyset-list
       type: object
@@ -919,14 +927,14 @@ components:
         metadata:
           $ref: '#/components/schemas/metadata'
       x-tags:
-        - studyset
+        - studysets
     meta-analysis-return:
       title: meta-analysis-return
       allOf:
         - $ref: '#/components/schemas/meta-analysis'
         - $ref: '#/components/schemas/read-only'
       x-tags:
-        - meta-analysis
+        - meta-analyses
     meta-analysis-list:
       title: meta-analysis-list
       type: object
@@ -938,14 +946,14 @@ components:
         metadata:
           $ref: '#/components/schemas/metadata'
       x-tags:
-        - meta-analysis
+        - meta-analyses
     user-return:
       title: user-return
       allOf:
         - $ref: '#/components/schemas/user'
         - $ref: '#/components/schemas/read-only'
       x-tags:
-        - user
+        - users
     user-list:
       title: user-list
       type: object
@@ -957,7 +965,7 @@ components:
         metadata:
           $ref: '#/components/schemas/metadata'
       x-tags:
-        - user
+        - users
     metadata:
       title: metadata
       type: object
@@ -971,7 +979,7 @@ components:
               writeOnly: true
         - $ref: '#/components/schemas/annotation'
       x-tags:
-        - annotation
+        - annotations
     specification-post-body:
       title: specification-post-body
       allOf:
@@ -980,7 +988,7 @@ components:
             - type
             - estimator
       x-tags:
-        - specification
+        - specifications
     annotation-post-body:
       title: annotation-post-body
       allOf:
@@ -988,7 +996,7 @@ components:
         - required:
             - internal_studyset_id
       x-tags:
-        - annotation
+        - annotations
     studyset-post-body:
       title: studyset-post-body
       allOf:
@@ -996,7 +1004,7 @@ components:
         - required:
             - neurostore_id
       x-tags:
-        - studyset
+        - studysets
     meta-analysis-post-body:
       title: meta-analysis-post-body
       allOf:
@@ -1006,7 +1014,7 @@ components:
             - internal_studyset_id
             - specification
       x-tags:
-        - meta-analysis
+        - meta-analyses
     result:
       title: result
       x-stoplight:
@@ -1028,6 +1036,8 @@ components:
           nullable: true
         neurovault_collection:
           $ref: '#/components/schemas/neurovault-collection'
+      x-tags:
+        - meta-analyses
     result-return:
       title: result-return
       x-stoplight:
@@ -1035,6 +1045,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/result'
         - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - meta-analyses
     result-list:
       title: result-list
       x-stoplight:
@@ -1050,6 +1062,8 @@ components:
               - $ref: '#/components/schemas/result-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - meta-analyses
     neurovault-collection:
       title: neurovault-collection
       x-stoplight:
@@ -1069,6 +1083,8 @@ components:
         result:
           type: string
           readOnly: true
+      x-tags:
+        - neurovault
     neurovault-file:
       title: neurovault-file
       x-stoplight:
@@ -1110,6 +1126,8 @@ components:
         cognitive_paradigm_cogatlas_id:
           type: string
           nullable: true
+      x-tags:
+        - neurovault
     neurovault-collection-return:
       title: neurovault-collection-return
       x-stoplight:
@@ -1117,6 +1135,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/neurovault-collection'
         - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - neurovault
     neurovault-list:
       title: neurovault-list
       x-stoplight:
@@ -1129,6 +1149,8 @@ components:
             $ref: '#/components/schemas/neurovault-collection-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - neurovault
     neurovault-file-return:
       title: neurovault-file-return
       x-stoplight:
@@ -1136,6 +1158,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/neurovault-file'
         - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - neurovault
     neurovault-file-list:
       title: neurovault-file-list
       x-stoplight:
@@ -1148,6 +1172,8 @@ components:
             $ref: '#/components/schemas/neurovault-file-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - neurovault
     project:
       title: project
       x-stoplight:
@@ -1170,10 +1196,14 @@ components:
         description:
           type: string
           nullable: true
+      x-tags:
+        - projects
     project-return:
       allOf:
         - $ref: '#/components/schemas/read-only'
         - $ref: '#/components/schemas/project'
+      x-tags:
+        - projects
     project-list:
       title: project-list
       x-stoplight:
@@ -1186,6 +1216,8 @@ components:
             $ref: '#/components/schemas/project-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+      x-tags:
+        - projects
   securitySchemes:
     JSON-Web-Token:
       type: http
@@ -1215,8 +1247,10 @@ components:
               type:
                 type: string
 tags:
-  - name: annotation
-  - name: meta-analysis
-  - name: specification
-  - name: studyset
-  - name: user
+  - name: annotations
+  - name: meta-analyses
+  - name: neurovault
+  - name: projects
+  - name: specifications
+  - name: studysets
+  - name: users
