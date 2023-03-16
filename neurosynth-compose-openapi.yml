@@ -11,7 +11,7 @@ servers:
   - url: 'http://localhost:81/api'
     description: testing
   - description: staging
-    url: 'https://synth.neurostore.org/api'
+    url: 'https://synth.neurostore.xyz/api'
   - url: 'https://compose.neurosynth.org/api'
     description: production
 paths:
@@ -103,6 +103,8 @@ paths:
         - $ref: '#/components/parameters/nested'
       tags:
         - meta_analyses
+        - get
+        - compose
     parameters: []
     post:
       summary: Create a new meta-analysis
@@ -129,6 +131,8 @@ paths:
       description: 'create a new specification, studyset, annotation bundle'
       tags:
         - meta_analyses
+        - post
+        - compose
   '/meta-analyses/{id}':
     parameters:
       - schema:
@@ -154,6 +158,8 @@ paths:
         - $ref: '#/components/parameters/nested'
       tags:
         - meta_analyses
+        - get
+        - compose
     put:
       summary: Update a meta-analysis
       responses:
@@ -182,11 +188,15 @@ paths:
       description: update an existing meta-analysis (that has not yet been run)
       tags:
         - meta_analyses
+        - put
+        - compose
   /studysets:
     get:
       summary: Get a list of Studysets
       tags:
         - studysets
+        - get
+        - compose
       responses:
         '200':
           description: OK
@@ -215,6 +225,8 @@ paths:
           $ref: '#/components/responses/bad-request'
       tags:
         - studysets
+        - post
+        - compose
       security:
         - JSON-Web-Token: []
       requestBody:
@@ -234,6 +246,8 @@ paths:
       summary: Get information about a Studyset
       tags:
         - studysets
+        - get
+        - compose
       responses:
         '200':
           description: OK
@@ -265,6 +279,8 @@ paths:
           $ref: '#/components/responses/bad-request'
       tags:
         - studysets
+        - put
+        - compose
       security:
         - JSON-Web-Token: []
       requestBody:
@@ -278,6 +294,8 @@ paths:
       summary: GET a list of annotations
       tags:
         - annotations
+        - get
+        - compose
       responses:
         '200':
           description: OK
@@ -305,6 +323,8 @@ paths:
           $ref: '#/components/responses/bad-request'
       tags:
         - annotations
+        - post
+        - compose
       requestBody:
         content:
           application/json:
@@ -324,6 +344,8 @@ paths:
       summary: GET information about an annotation
       tags:
         - annotations
+        - get
+        - compose
       responses:
         '200':
           description: OK
@@ -355,6 +377,8 @@ paths:
           $ref: '#/components/responses/bad-request'
       tags:
         - annotations
+        - put
+        - compose
       security:
         - JSON-Web-Token: []
       requestBody:
@@ -378,6 +402,8 @@ paths:
       description: list of meta-analysis specifications
       tags:
         - specifications
+        - get
+        - compose
     parameters: []
     post:
       summary: Create a Specification
@@ -404,6 +430,8 @@ paths:
       description: create a new meta-analysis specification
       tags:
         - specifications
+        - post
+        - compose
   '/specifications/{id}':
     parameters:
       - schema:
@@ -427,6 +455,8 @@ paths:
       description: get a meta-analysis specification
       tags:
         - specifications
+        - get
+        - compose
     put:
       summary: Update Meta-Analysis specification
       responses:
@@ -454,11 +484,15 @@ paths:
       description: update an existing meta analysis specification
       tags:
         - specifications
+        - put
+        - compose
   /meta-analysis-results:
     get:
       summary: Your GET endpoint
       tags:
         - meta_analyses
+        - get
+        - compose
       responses:
         '200':
           description: OK
@@ -490,6 +524,8 @@ paths:
         - JSON-Web-Token: []
       tags:
         - meta_analyses
+        - post
+        - compose
     parameters: []
   '/meta-analysis-results/{id}':
     parameters:
@@ -502,6 +538,8 @@ paths:
       summary: Your GET endpoint
       tags:
         - meta_analyses
+        - get
+        - compose
       responses:
         '200':
           description: OK
@@ -525,11 +563,15 @@ paths:
               $ref: '#/components/schemas/result'
       tags:
         - meta_analyses
+        - put
+        - compose
   /neurovault-collections:
     get:
       summary: Your GET endpoint
       tags:
         - neurovault
+        - get
+        - compose
       responses:
         '200':
           description: OK
@@ -543,6 +585,8 @@ paths:
         - JSON-Web-Token: []
       tags:
         - neurovault
+        - post
+        - compose
     parameters: []
   '/neurovault-collections/{id}':
     parameters:
@@ -555,6 +599,8 @@ paths:
       summary: Your GET endpoint
       tags:
         - neurovault
+        - get
+        - compose
       responses:
         '200':
           description: OK
@@ -575,11 +621,15 @@ paths:
         - JSON-Web-Token: []
       tags:
         - neurovault
+        - put
+        - compose
   /neurovault-files:
     get:
       summary: Your GET endpoint
       tags:
         - neurovault
+        - get
+        - compose
       responses:
         '200':
           description: OK
@@ -606,6 +656,8 @@ paths:
         description: ''
       tags:
         - neurovault
+        - post
+        - compose
     parameters: []
   '/neurovault-files/{id}':
     parameters:
@@ -618,6 +670,8 @@ paths:
       summary: Your GET endpoint
       tags:
         - neurovault
+        - get
+        - compose
       responses:
         '200':
           description: OK
@@ -643,11 +697,15 @@ paths:
               $ref: '#/components/schemas/neurovault-file'
       tags:
         - neurovault
+        - put
+        - compose
   /projects:
     get:
       summary: Your GET endpoint
       tags:
         - projects
+        - get
+        - compose
       responses:
         '200':
           description: OK
@@ -673,6 +731,8 @@ paths:
         - JSON-Web-Token: []
       tags:
         - projects
+        - post
+        - compose
   '/projects/{id}':
     parameters:
       - schema:
@@ -684,6 +744,8 @@ paths:
       summary: Your GET endpoint
       tags:
         - projects
+        - get
+        - compose
       responses:
         '200':
           description: OK
@@ -710,6 +772,8 @@ paths:
         - JSON-Web-Token: []
       tags:
         - projects
+        - put
+        - compose
 components:
   schemas:
     specification:
@@ -1264,9 +1328,13 @@ components:
                 type: string
 tags:
   - name: annotations
+  - name: compose
+  - name: get
   - name: meta_analyses
   - name: neurovault
+  - name: post
   - name: projects
+  - name: put
   - name: specifications
   - name: studysets
   - name: users
