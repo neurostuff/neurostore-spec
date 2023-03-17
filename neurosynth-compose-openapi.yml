@@ -887,6 +887,13 @@ components:
         project:
           type: string
           nullable: true
+        run_key:
+          type: string
+          x-stoplight:
+            id: 1djoqtpdnobc7
+          description: |
+            a special key used to upload the results of this meta analysis. Can be used as an alternative to using your auth token from login.
+          readOnly: true
     annotation:
       title: annotation
       type: object
@@ -1063,6 +1070,7 @@ components:
     specification-post-body:
       title: specification-post-body
       allOf:
+        - $ref: '#/components/schemas/public'
         - $ref: '#/components/schemas/specification'
         - required:
             - type
@@ -1072,6 +1080,7 @@ components:
     annotation-post-body:
       title: annotation-post-body
       allOf:
+        - $ref: '#/components/schemas/public'
         - $ref: '#/components/schemas/annotation-update'
         - required:
             - internal_studyset_id
@@ -1080,6 +1089,7 @@ components:
     studyset-post-body:
       title: studyset-post-body
       allOf:
+        - $ref: '#/components/schemas/public'
         - $ref: '#/components/schemas/studyset'
         - required:
             - neurostore_id
@@ -1088,6 +1098,7 @@ components:
     meta-analysis-post-body:
       title: meta-analysis-post-body
       allOf:
+        - $ref: '#/components/schemas/public'
         - $ref: '#/components/schemas/meta-analysis'
         - required:
             - internal_annotation_id
@@ -1282,6 +1293,9 @@ components:
       allOf:
         - $ref: '#/components/schemas/read-only'
         - $ref: '#/components/schemas/project'
+        - $ref: '#/components/schemas/public'
+          x-stoplight:
+            id: bbxnz8dopvj1b
       x-tags:
         - projects
     project-list:
@@ -1298,6 +1312,13 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - projects
+    public:
+      title: public
+      x-stoplight:
+        id: zou1w677pakmo
+      type: boolean
+      default: false
+      description: Whether the resource is public or private
   securitySchemes:
     JSON-Web-Token:
       type: http
