@@ -826,12 +826,16 @@ components:
       type: object
       properties:
         studies:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/study-return'
+            - x-stoplight:
+                id: g3yu53to7fb9d
+              items:
+                x-stoplight:
+                  id: o3kmypcumhctz
+                type: string
           type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/study-return'
-              - type: string
-                nullable: true
     studyset-request-relationships:
       title: studyset-relationships
       x-stoplight:
@@ -839,12 +843,16 @@ components:
       type: object
       properties:
         studies:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/study-request'
+            - x-stoplight:
+                id: ycfveun10m753
+              items:
+                x-stoplight:
+                  id: krivuvtyni2bt
+                type: string
           type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/study-request'
-              - type: string
-                nullable: true
     studyset-list:
       title: studyset-get
       type: object
@@ -894,12 +902,16 @@ components:
       type: object
       properties:
         analyses:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/analysis-return'
+            - x-stoplight:
+                id: c5vmp3r2w0fhe
+              items:
+                x-stoplight:
+                  id: f89zre7wfnd1y
+                type: string
           type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/analysis-return'
-              - type: string
-                nullable: true
     study-request-relationships:
       title: study-relationships
       x-tags:
@@ -907,12 +919,16 @@ components:
       type: object
       properties:
         analyses:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/analysis-request'
+            - x-stoplight:
+                id: uaszwv47o8dof
+              items:
+                x-stoplight:
+                  id: xybkth9rhjntr
+                type: string
           type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/analysis-request'
-              - type: string
-                nullable: true
     study-list:
       title: study-get
       type: object
@@ -961,26 +977,38 @@ components:
         study:
           type: string
         images:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/image-return'
+            - x-stoplight:
+                id: 19e0e213cqztd
+              items:
+                x-stoplight:
+                  id: ejmlwvq6prsb8
+                type: string
           type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/image-return'
-              - type: string
-                nullable: true
         points:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/point-return'
+            - x-stoplight:
+                id: rqzjrnbn8701m
+              items:
+                x-stoplight:
+                  id: t8wb0q3i94eoa
+                type: string
           type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/point-return'
-              - type: string
-                nullable: true
         conditions:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/condition-return'
+            - x-stoplight:
+                id: 0f8lp4bs07qjw
+              items:
+                x-stoplight:
+                  id: um8ydotunqtvr
+                type: string
           type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/condition-return'
-              - type: string
-                nullable: true
     analysis-request-relationships:
       title: analysis-relationships
       x-tags:
@@ -990,26 +1018,40 @@ components:
         study:
           type: string
         images:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/image-request'
+            - x-stoplight:
+                id: ek895hzxx0x1q
+              items:
+                x-stoplight:
+                  id: azppkkl5ms5zi
+                type: string
           type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/image-request'
-              - type: string
-                nullable: true
         points:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/point-request'
+                x-stoplight:
+                  id: detihdndsr9kk
+            - x-stoplight:
+                id: 9ynz725nmi1ak
+              items:
+                x-stoplight:
+                  id: obp6kqsvnppwo
+                type: string
           type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/point-request'
-              - type: string
-                nullable: true
         conditions:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/condition-request'
+            - x-stoplight:
+                id: 17sj1o9shj9hd
+              items:
+                x-stoplight:
+                  id: 5vezfz2pedxqt
+                type: string
           type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/condition-request'
-              - type: string
-                nullable: true
     analysis-list:
       title: analysis-list
       type: object
@@ -1208,12 +1250,16 @@ components:
       type: object
       properties:
         notes:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/note-collection-return'
+            - x-stoplight:
+                id: glb1ewhvjp6b1
+              items:
+                x-stoplight:
+                  id: hf7ckl8x0jexr
+                type: string
           type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/note-collection-return'
-              - type: string
-                nullable: true
     annotation-request-relationships:
       title: annotation-relationships
       x-tags:
@@ -1221,12 +1267,16 @@ components:
       type: object
       properties:
         notes:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/note-collection-request'
+            - x-stoplight:
+                id: 1kp0x1cc9b2vr
+              items:
+                x-stoplight:
+                  id: ejou20xteib2q
+                type: string
           type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/note-collection-request'
-              - type: string
-                nullable: true
     annotation-list:
       title: annotation-list
       type: object

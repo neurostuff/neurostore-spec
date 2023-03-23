@@ -875,12 +875,16 @@ components:
           writeOnly: true
         results:
           description: 'array of neurostore ids representing the results of this meta-analysis (nominally all results should be the same, but machine architecture differences/algorithm stochastic-ness may lead to slightly different outcomes for each result.'
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/result-return'
+            - x-stoplight:
+                id: ltt302ru6e32d
+              items:
+                x-stoplight:
+                  id: njp6dnk7l25eg
+                type: string
           type: array
-          items:
-            oneOf:
-              - type: string
-                nullable: true
-              - $ref: '#/components/schemas/result-return'
         provenance:
           type: object
           nullable: true
@@ -1132,39 +1136,47 @@ components:
       x-stoplight:
         id: 4ktdtuulnummw
       type: object
-      properties:
-        results:
-          type: array
-          items:
-            oneOf:
-              - type: string
-                nullable: true
-              - $ref: '#/components/schemas/result-return'
-        metadata:
-          $ref: '#/components/schemas/metadata'
       x-tags:
         - meta_analyses
+      properties:
+        results:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/result-return'
+            - x-stoplight:
+                id: o0wzszwomkl8s
+              items:
+                x-stoplight:
+                  id: sjgfytsa4y4nw
+                type: string
+          type: array
+        metadata:
+          $ref: '#/components/schemas/metadata'
     neurovault-collection:
       title: neurovault-collection
       x-stoplight:
         id: jezigu623umbv
       type: object
+      x-tags:
+        - neurovault
       properties:
         collection_id:
           type: string
           readOnly: true
         files:
-          type: array
-          items:
-            oneOf:
-              - type: string
-              - type: object
+          oneOf:
+            - items:
                 $ref: '#/components/schemas/neurovault-file'
+            - x-stoplight:
+                id: t9e061eafmsgt
+              items:
+                x-stoplight:
+                  id: ogmk8h8seny0n
+                type: string
+          type: array
         result:
           type: string
           readOnly: true
-      x-tags:
-        - neurovault
     neurovault-file:
       title: neurovault-file
       x-stoplight:
@@ -1259,25 +1271,29 @@ components:
       x-stoplight:
         id: 8uh4pofrwtwzb
       type: object
+      x-tags:
+        - projects
       properties:
         provenance:
           type: object
           nullable: true
         meta_analyses:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/meta-analysis'
+            - x-stoplight:
+                id: e52bzwoz46elj
+              items:
+                x-stoplight:
+                  id: eyoo0hw0267tk
+                type: string
           type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/meta-analysis'
-              - type: string
-                nullable: true
         name:
           type: string
           nullable: true
         description:
           type: string
           nullable: true
-      x-tags:
-        - projects
     project-return:
       allOf:
         - $ref: '#/components/schemas/read-only'
