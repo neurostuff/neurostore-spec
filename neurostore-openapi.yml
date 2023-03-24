@@ -828,9 +828,11 @@ components:
             - items:
                 $ref: '#/components/schemas/study-return'
               type: array
+              minItems: 1
             - items:
                 type: string
               type: array
+
     studyset-request-relationships:
       title: studyset-relationships
       type: object
@@ -840,6 +842,7 @@ components:
             - items:
                 $ref: '#/components/schemas/study-request'
               type: array
+              minItems: 1
             - items:
                 type: string
               type: array
@@ -895,6 +898,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/analysis-return'
+              minItems: 1
               type: array
             - items:
                 type: string
@@ -909,6 +913,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/analysis-request'
+              minItems: 1
               type: array
             - items:
                 type: string
@@ -962,6 +967,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/image-return'
+              minItems: 1
               type: array
             - items:
                 type: string
@@ -970,6 +976,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/point-return'
+              minItems: 1
               type: array
             - items:
                 type: string
@@ -978,6 +985,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/condition-return'
+              minItems: 1
               type: array
             - items:
                 type: string
@@ -994,6 +1002,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/image-request'
+              minItems: 1
               type: array
             - items:
                 type: string
@@ -1002,6 +1011,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/point-request'
+              minItems: 1
               type: array
             - items:
                 type: string
@@ -1010,6 +1020,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/condition-request'
+              minItems: 1
             - items:
                 type: string
               type: array

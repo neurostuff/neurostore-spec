@@ -878,6 +878,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/result-return'
+              minItems: 1
               type: array
             - items:
                 type: string
@@ -1134,6 +1135,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/result-return'
+              minItems: 1
               type: array
             - items:
                 type: string
@@ -1153,6 +1155,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/neurovault-file'
+              minItems: 1
               type: array
             - items:
                 type: string
@@ -1252,6 +1255,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/meta-analysis'
+              minItems: 1
               type: array
             - items:
                 type: string
