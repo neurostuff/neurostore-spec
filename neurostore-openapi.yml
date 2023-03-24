@@ -970,9 +970,10 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/point-return'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
         conditions:
           oneOf:
             - items:
@@ -1004,7 +1005,7 @@ components:
               type: array
             - items:
                 type: string
-          type: array
+              type: array
         conditions:
           oneOf:
             - items:
