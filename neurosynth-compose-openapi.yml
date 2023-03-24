@@ -878,9 +878,10 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/result-return'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
         provenance:
           type: object
           nullable: true
@@ -1133,9 +1134,10 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/result-return'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
         metadata:
           $ref: '#/components/schemas/metadata'
     neurovault-collection:
@@ -1151,9 +1153,10 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/neurovault-file'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
         result:
           type: string
           readOnly: true
@@ -1249,9 +1252,10 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/meta-analysis'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
         name:
           type: string
           nullable: true

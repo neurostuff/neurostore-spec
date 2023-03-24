@@ -827,9 +827,10 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/study-return'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
     studyset-request-relationships:
       title: studyset-relationships
       type: object
@@ -838,9 +839,10 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/study-request'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
     studyset-list:
       title: studyset-get
       type: object
@@ -893,9 +895,10 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/analysis-return'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
     study-request-relationships:
       title: study-relationships
       x-tags:
@@ -906,9 +909,10 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/analysis-request'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
     study-list:
       title: study-get
       type: object
@@ -958,9 +962,10 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/image-return'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
         points:
           oneOf:
             - items:
@@ -972,9 +977,10 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/condition-return'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
     analysis-request-relationships:
       title: analysis-relationships
       x-tags:
@@ -987,13 +993,15 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/image-request'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
         points:
           oneOf:
             - items:
                 $ref: '#/components/schemas/point-request'
+              type: array
             - items:
                 type: string
           type: array
@@ -1003,7 +1011,7 @@ components:
                 $ref: '#/components/schemas/condition-request'
             - items:
                 type: string
-          type: array
+              type: array
     analysis-list:
       title: analysis-list
       type: object
@@ -1201,9 +1209,10 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/note-collection-return'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
     annotation-request-relationships:
       title: annotation-relationships
       x-tags:
@@ -1214,9 +1223,10 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/note-collection-request'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
     annotation-list:
       title: annotation-list
       type: object
