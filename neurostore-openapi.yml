@@ -821,36 +821,24 @@ components:
         - $ref: '#/components/schemas/writeable-resource-attributes'
     studyset-return-relationships:
       title: studyset-relationships
-      x-stoplight:
-        id: ted3fijjlxyhx
       type: object
       properties:
         studies:
           oneOf:
             - items:
                 $ref: '#/components/schemas/study-return'
-            - x-stoplight:
-                id: g3yu53to7fb9d
-              items:
-                x-stoplight:
-                  id: o3kmypcumhctz
+            - items:
                 type: string
           type: array
     studyset-request-relationships:
       title: studyset-relationships
-      x-stoplight:
-        id: ted3fijjlxyhx
       type: object
       properties:
         studies:
           oneOf:
             - items:
                 $ref: '#/components/schemas/study-request'
-            - x-stoplight:
-                id: ycfveun10m753
-              items:
-                x-stoplight:
-                  id: krivuvtyni2bt
+            - items:
                 type: string
           type: array
     studyset-list:
@@ -905,11 +893,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/analysis-return'
-            - x-stoplight:
-                id: c5vmp3r2w0fhe
-              items:
-                x-stoplight:
-                  id: f89zre7wfnd1y
+            - items:
                 type: string
           type: array
     study-request-relationships:
@@ -922,11 +906,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/analysis-request'
-            - x-stoplight:
-                id: uaszwv47o8dof
-              items:
-                x-stoplight:
-                  id: xybkth9rhjntr
+            - items:
                 type: string
           type: array
     study-list:
@@ -943,8 +923,6 @@ components:
         - study
     analysis-common:
       title: analysis-common
-      x-stoplight:
-        id: wi1i0ho2165t4
       description: attributes common between request and return objects
       type: object
       properties:
@@ -980,33 +958,21 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/image-return'
-            - x-stoplight:
-                id: 19e0e213cqztd
-              items:
-                x-stoplight:
-                  id: ejmlwvq6prsb8
+            - items:
                 type: string
           type: array
         points:
           oneOf:
             - items:
                 $ref: '#/components/schemas/point-return'
-            - x-stoplight:
-                id: rqzjrnbn8701m
-              items:
-                x-stoplight:
-                  id: t8wb0q3i94eoa
+            - items:
                 type: string
           type: array
         conditions:
           oneOf:
             - items:
                 $ref: '#/components/schemas/condition-return'
-            - x-stoplight:
-                id: 0f8lp4bs07qjw
-              items:
-                x-stoplight:
-                  id: um8ydotunqtvr
+            - items:
                 type: string
           type: array
     analysis-request-relationships:
@@ -1021,35 +987,21 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/image-request'
-            - x-stoplight:
-                id: ek895hzxx0x1q
-              items:
-                x-stoplight:
-                  id: azppkkl5ms5zi
+            - items:
                 type: string
           type: array
         points:
           oneOf:
             - items:
                 $ref: '#/components/schemas/point-request'
-                x-stoplight:
-                  id: detihdndsr9kk
-            - x-stoplight:
-                id: 9ynz725nmi1ak
-              items:
-                x-stoplight:
-                  id: obp6kqsvnppwo
+            - items:
                 type: string
           type: array
         conditions:
           oneOf:
             - items:
                 $ref: '#/components/schemas/condition-request'
-            - x-stoplight:
-                id: 17sj1o9shj9hd
-              items:
-                x-stoplight:
-                  id: 5vezfz2pedxqt
+            - items:
                 type: string
           type: array
     analysis-list:
@@ -1066,8 +1018,6 @@ components:
         - analysis
     point-common:
       title: point-common
-      x-stoplight:
-        id: x6l9xeepkc38i
       type: object
       properties:
         analysis:
@@ -1141,8 +1091,6 @@ components:
         - point
     image-common:
       title: image-common
-      x-stoplight:
-        id: 5r2hzvvua1avd
       type: object
       properties:
         analysis:
@@ -1253,11 +1201,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/note-collection-return'
-            - x-stoplight:
-                id: glb1ewhvjp6b1
-              items:
-                x-stoplight:
-                  id: hf7ckl8x0jexr
+            - items:
                 type: string
           type: array
     annotation-request-relationships:
@@ -1270,11 +1214,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/note-collection-request'
-            - x-stoplight:
-                id: 1kp0x1cc9b2vr
-              items:
-                x-stoplight:
-                  id: ejou20xteib2q
+            - items:
                 type: string
           type: array
     annotation-list:
@@ -1291,8 +1231,6 @@ components:
         - annotation
     note-collection-return:
       title: note-collection-return
-      x-stoplight:
-        id: fy0w02pre2yes
       allOf:
         - $ref: ./nimads/nimads/noteCollectionBase.yaml
         - type: object
@@ -1328,8 +1266,6 @@ components:
               readOnly: true
     note-collection-request:
       title: note-collection-request
-      x-stoplight:
-        id: fy0w02pre2yes
       allOf:
         - $ref: ./nimads/nimads/noteCollectionBase.yaml
         - $ref: '#/components/schemas/writeable-resource-attributes'
@@ -1352,8 +1288,6 @@ components:
         - annotation_csv
     annotation-common:
       title: annotation-common
-      x-stoplight:
-        id: owg2697jjfj6y
       type: object
       properties:
         studyset:
@@ -1520,8 +1454,6 @@ components:
         - $ref: '#/components/schemas/userless-resource-attributes'
     clone:
       title: clone
-      x-stoplight:
-        id: x93bgkqihq25v
       type: object
       properties:
         source:
@@ -1537,8 +1469,6 @@ components:
     nested-put-attributes:
       type: object
       title: nested-put-attributes
-      x-stoplight:
-        id: 9mprupprwm2sr
       properties:
         id:
           type: string

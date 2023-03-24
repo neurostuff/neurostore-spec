@@ -878,11 +878,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/result-return'
-            - x-stoplight:
-                id: ltt302ru6e32d
-              items:
-                x-stoplight:
-                  id: njp6dnk7l25eg
+            - items:
                 type: string
           type: array
         provenance:
@@ -1101,8 +1097,6 @@ components:
         - meta_analyses
     result:
       title: result
-      x-stoplight:
-        id: bu7w84za6m75g
       type: object
       description: describes the output of a meta-analysis
       properties:
@@ -1124,8 +1118,6 @@ components:
         - meta_analyses
     result-return:
       title: result-return
-      x-stoplight:
-        id: 37rioayiuvw01
       allOf:
         - $ref: '#/components/schemas/result'
         - $ref: '#/components/schemas/read-only'
@@ -1133,8 +1125,6 @@ components:
         - meta_analyses
     result-list:
       title: result-list
-      x-stoplight:
-        id: 4ktdtuulnummw
       type: object
       x-tags:
         - meta_analyses
@@ -1143,19 +1133,13 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/result-return'
-            - x-stoplight:
-                id: o0wzszwomkl8s
-              items:
-                x-stoplight:
-                  id: sjgfytsa4y4nw
+            - items:
                 type: string
           type: array
         metadata:
           $ref: '#/components/schemas/metadata'
     neurovault-collection:
       title: neurovault-collection
-      x-stoplight:
-        id: jezigu623umbv
       type: object
       x-tags:
         - neurovault
@@ -1167,11 +1151,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/neurovault-file'
-            - x-stoplight:
-                id: t9e061eafmsgt
-              items:
-                x-stoplight:
-                  id: ogmk8h8seny0n
+            - items:
                 type: string
           type: array
         result:
@@ -1179,8 +1159,6 @@ components:
           readOnly: true
     neurovault-file:
       title: neurovault-file
-      x-stoplight:
-        id: kfys0q5bzuq3u
       type: object
       properties:
         collection_id:
@@ -1222,8 +1200,6 @@ components:
         - neurovault
     neurovault-collection-return:
       title: neurovault-collection-return
-      x-stoplight:
-        id: 2bsw2vz8ye52t
       allOf:
         - $ref: '#/components/schemas/neurovault-collection'
         - $ref: '#/components/schemas/read-only'
@@ -1231,8 +1207,6 @@ components:
         - neurovault
     neurovault-list:
       title: neurovault-list
-      x-stoplight:
-        id: k5ezj2ga77zuk
       type: object
       properties:
         results:
@@ -1245,8 +1219,6 @@ components:
         - neurovault
     neurovault-file-return:
       title: neurovault-file-return
-      x-stoplight:
-        id: ewxeawtiwzwz7
       allOf:
         - $ref: '#/components/schemas/neurovault-file'
         - $ref: '#/components/schemas/read-only'
@@ -1254,8 +1226,6 @@ components:
         - neurovault
     neurovault-file-list:
       title: neurovault-file-list
-      x-stoplight:
-        id: 06gijla4dazsf
       type: object
       properties:
         results:
@@ -1268,8 +1238,6 @@ components:
         - neurovault
     project:
       title: project
-      x-stoplight:
-        id: 8uh4pofrwtwzb
       type: object
       x-tags:
         - projects
@@ -1281,11 +1249,7 @@ components:
           oneOf:
             - items:
                 $ref: '#/components/schemas/meta-analysis'
-            - x-stoplight:
-                id: e52bzwoz46elj
-              items:
-                x-stoplight:
-                  id: eyoo0hw0267tk
+            - items:
                 type: string
           type: array
         name:
@@ -1302,8 +1266,6 @@ components:
         - projects
     project-list:
       title: project-list
-      x-stoplight:
-        id: r1a0nbvnorype
       type: object
       properties:
         results:
