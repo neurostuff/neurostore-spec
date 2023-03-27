@@ -522,6 +522,7 @@ paths:
               $ref: '#/components/schemas/result'
       security:
         - JSON-Web-Token: []
+        - run_key: []
       tags:
         - meta_analyses
         - post
@@ -1309,6 +1310,10 @@ components:
     JSON-Web-Token:
       type: http
       scheme: bearer
+    run_key:
+      name: upload meta-analysis
+      type: apiKey
+      in: header
   parameters:
     nested:
       name: nested
