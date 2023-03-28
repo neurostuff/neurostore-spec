@@ -1311,9 +1311,10 @@ components:
       type: http
       scheme: bearer
     run_key:
-      name: upload meta-analysis
+      name: run_key
       type: apiKey
       in: header
+      description: ''
   parameters:
     nested:
       name: nested
