@@ -1113,6 +1113,8 @@ components:
       title: result
       type: object
       description: describes the output of a meta-analysis
+      x-tags:
+        - meta_analyses
       properties:
         images:
           type: object
@@ -1121,15 +1123,20 @@ components:
         cli_version:
           type: string
           nullable: true
-        estimator:
-          $ref: '#/components/schemas/estimator'
         neurostore_id:
           type: string
           nullable: true
         neurovault_collection:
           $ref: '#/components/schemas/neurovault-collection'
-      x-tags:
-        - meta_analyses
+        specification_snapshot:
+          type: object
+          writeOnly: true
+        studyset_snapshot:
+          type: object
+          writeOnly: true
+        annotation_snapshot:
+          type: object
+          writeOnly: true
     result-return:
       title: result-return
       allOf:
