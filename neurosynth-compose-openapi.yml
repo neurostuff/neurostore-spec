@@ -840,63 +840,63 @@ components:
         - specifications
     meta-analysis:
       title: meta-analysis
-      type: object
       description: 'The combination of the specification determining what meta-analysis to run (required), the studyset to act as input to the meta-analytic algorithm (required), and the annotation to provide human readable annotations as well as acts as an optional filter on which analyses to select within the studyset (optional, but suggested).'
       x-tags:
         - meta_analyses
-      properties:
-        specification:
-          oneOf:
-            - type: string
-            - $ref: '#/components/schemas/specification'
-        studyset:
-          oneOf:
-            - type: string
-            - $ref: '#/components/schemas/studyset'
-        annotation:
-          oneOf:
-            - type: string
+      allOf:
+        - properties:
+            specification:
+              oneOf:
+                - type: string
+                - $ref: '#/components/schemas/specification'
+            studyset:
+              oneOf:
+                - type: string
+                - $ref: '#/components/schemas/studyset'
+            annotation:
+              oneOf:
+                - type: string
+                  nullable: true
+                - $ref: '#/components/schemas/annotation'
+            name:
+              type: string
+              description: Human-readable name of the meta-analysis.
               nullable: true
-            - $ref: '#/components/schemas/annotation'
-        name:
-          type: string
-          description: Human-readable name of the meta-analysis.
-          nullable: true
-        description:
-          type: string
-          description: Long form description of the meta-analysis.
-          nullable: true
-        internal_studyset_id:
-          type: string
-          description: The id of the studyset on neurosynth-compose (as opposed to the id of the studyset on neurostore). Multiple snapshots of the studyset can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
-          writeOnly: true
-        internal_annotation_id:
-          type: string
-          description: The id of the annotation on neurosynth-compose (as opposed to the id of the annotation on neurostore). Multiple snapshots of the annotation can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
-          writeOnly: true
-        results:
-          description: 'array of neurostore ids representing the results of this meta-analysis (nominally all results should be the same, but machine architecture differences/algorithm stochastic-ness may lead to slightly different outcomes for each result.'
-          oneOf:
-            - items:
-                $ref: '#/components/schemas/result-return'
-              minItems: 1
+            description:
+              type: string
+              description: Long form description of the meta-analysis.
+              nullable: true
+            internal_studyset_id:
+              type: string
+              description: The id of the studyset on neurosynth-compose (as opposed to the id of the studyset on neurostore). Multiple snapshots of the studyset can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
+              writeOnly: true
+            internal_annotation_id:
+              type: string
+              description: The id of the annotation on neurosynth-compose (as opposed to the id of the annotation on neurostore). Multiple snapshots of the annotation can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
+              writeOnly: true
+            results:
+              description: 'array of neurostore ids representing the results of this meta-analysis (nominally all results should be the same, but machine architecture differences/algorithm stochastic-ness may lead to slightly different outcomes for each result.'
+              oneOf:
+                - minItems: 1
+                  items:
+                    $ref: '#/components/schemas/result-return'
+                - items:
+                    type: string
               type: array
-            - items:
-                type: string
-              type: array
-        provenance:
-          type: object
-          nullable: true
-        project:
-          type: string
-          nullable: true
-        run_key:
-          type: string
-          x-stoplight:
-            id: 1djoqtpdnobc7
-          description: |
-            a special key used to upload the results of this meta analysis. Can be used as an alternative to using your auth token from login.
-          readOnly: true
+            provenance:
+              type: object
+              nullable: true
+            project:
+              type: string
+              nullable: true
+            run_key:
+              type: string
+              x-stoplight:
+                id: 1djoqtpdnobc7
+              description: |
+                a special key used to upload the results of this meta analysis. Can be used as an alternative to using your auth token from login.
+              readOnly: true
+      type: object
     annotation:
       title: annotation
       type: object
@@ -1073,17 +1073,13 @@ components:
     specification-post-body:
       title: specification-post-body
       allOf:
-        - $ref: '#/components/schemas/public'
         - $ref: '#/components/schemas/specification'
-        - required:
-            - type
-            - estimator
+        - {}
       x-tags:
         - specifications
     annotation-post-body:
       title: annotation-post-body
       allOf:
-        - $ref: '#/components/schemas/public'
         - $ref: '#/components/schemas/annotation-update'
         - required:
             - internal_studyset_id
@@ -1092,7 +1088,6 @@ components:
     studyset-post-body:
       title: studyset-post-body
       allOf:
-        - $ref: '#/components/schemas/public'
         - $ref: '#/components/schemas/studyset'
         - required:
             - neurostore_id
@@ -1101,7 +1096,6 @@ components:
     meta-analysis-post-body:
       title: meta-analysis-post-body
       allOf:
-        - $ref: '#/components/schemas/public'
         - $ref: '#/components/schemas/meta-analysis'
         - required:
             - internal_annotation_id
@@ -1263,33 +1257,36 @@ components:
         - neurovault
     project:
       title: project
-      type: object
       x-tags:
         - projects
+      type: object
       properties:
         provenance:
           type: object
           nullable: true
         meta_analyses:
           oneOf:
-            - items:
+            - minItems: 1
+              items:
                 $ref: '#/components/schemas/meta-analysis'
-              minItems: 1
-              type: array
             - items:
                 type: string
-              type: array
+          type: array
         name:
           type: string
           nullable: true
         description:
           type: string
           nullable: true
+        public:
+          type: boolean
+          x-stoplight:
+            id: 5l1dh6afdc5pv
+          description: whether the project is public or private
     project-return:
       allOf:
         - $ref: '#/components/schemas/read-only'
         - $ref: '#/components/schemas/project'
-        - $ref: '#/components/schemas/public'
           x-stoplight:
             id: bbxnz8dopvj1b
       x-tags:
@@ -1306,13 +1303,6 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - projects
-    public:
-      title: public
-      x-stoplight:
-        id: zou1w677pakmo
-      type: boolean
-      default: false
-      description: Whether the resource is public or private
   securitySchemes:
     JSON-Web-Token:
       type: http
