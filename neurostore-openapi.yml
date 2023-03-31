@@ -1467,22 +1467,20 @@ components:
     entity:
       title: entity
       description: 'descriptor of level of analysis for a particular image/point (run, session, subject, group, meta)'
-      allOf:
-        - type: object
-          properties:
-            label:
-              type: string
-            level:
-              type: string
-              enum:
-                - run
-                - session
-                - subject
-                - group
-                - meta
-            analysis:
-              type: string
-        - $ref: '#/components/schemas/userless-resource-attributes'
+      type: object
+      properties:
+        label:
+          type: string
+          x-stoplight:
+            id: f12wushemxy2x
+        level:
+          type: string
+          x-stoplight:
+            id: eb4zy1dh61x9t
+        analysis:
+          type: string
+          x-stoplight:
+            id: s064lv0pqh9km
     clone:
       title: clone
       type: object
