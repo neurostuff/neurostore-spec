@@ -832,7 +832,6 @@ components:
             - items:
                 type: string
               type: array
-
     studyset-request-relationships:
       title: studyset-relationships
       type: object
@@ -937,6 +936,14 @@ components:
       properties:
         study:
           type: string
+        entities:
+          type: array
+          x-stoplight:
+            id: 7ou6xrem7bwps
+          items:
+            $ref: '#/components/schemas/entity'
+            x-stoplight:
+              id: 46bl0p1xing9l
     analysis-return:
       title: analysis-return
       allOf:
