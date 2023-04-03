@@ -775,6 +775,68 @@ paths:
         - projects
         - put
         - compose
+  /neurostore-studies:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurostore-study-list'
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurostore-study-return'
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
+  '/neurostore-studies/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurostore-study-return'
+    put:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/neurostore-study-return'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
+      security:
+        - JSON-Web-Token: []
 components:
   schemas:
     specification:
@@ -1303,6 +1365,49 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - projects
+    neurostore-study:
+      title: neurostore-study
+      x-stoplight:
+        id: z4zw7ohgt8v57
+      type: object
+      properties:
+        neurostore_id:
+          type: string
+          x-stoplight:
+            id: gk2igdiaddu99
+          readOnly: true
+    neurostore-study-return:
+      title: neurostore-study-return
+      x-stoplight:
+        id: 65xu2guz65gfe
+      allOf:
+        - $ref: '#/components/schemas/neurostore-study'
+        - $ref: '#/components/schemas/read-only'
+          x-stoplight:
+            id: xw8753s5g7fil
+    neurostore-study-list:
+      title: neurostore-study-list
+      x-stoplight:
+        id: vu8v3zpp05j7n
+      type: object
+      properties:
+        id:
+          type: string
+    neurostore-list:
+      type: object
+      properties:
+        results:
+          type: array
+          x-stoplight:
+            id: taugpbd1m1ijr
+          items:
+            $ref: '#/components/schemas/neurostore-study-return'
+            x-stoplight:
+              id: i3nvt2mfktv8a
+        metadata:
+          $ref: '#/components/schemas/metadata'
+          x-stoplight:
+            id: v2lgxit1izwqb
   securitySchemes:
     JSON-Web-Token:
       type: http
