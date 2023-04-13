@@ -1382,11 +1382,14 @@ components:
           x-stoplight:
             id: gk2igdiaddu99
           readOnly: true
-        table:
-          type: string
+        analyses:
+          type: array
           x-stoplight:
-            id: d6g4f2dszu9e5
-          writeOnly: true
+            id: x05fzrq0xkq7y
+          items:
+            $ref: '#/components/schemas/neurostore-analysis'
+            x-stoplight:
+              id: w7dhgh1947n8m
     neurostore-study-return:
       title: neurostore-study-return
       x-stoplight:
@@ -1397,15 +1400,9 @@ components:
           x-stoplight:
             id: xw8753s5g7fil
     neurostore-study-list:
-      title: neurostore-study-list
+      type: object
       x-stoplight:
-        id: vu8v3zpp05j7n
-      type: object
-      properties:
-        id:
-          type: string
-    neurostore-list:
-      type: object
+        id: 37ac20ef62547
       properties:
         results:
           type: array
@@ -1419,6 +1416,23 @@ components:
           $ref: '#/components/schemas/metadata'
           x-stoplight:
             id: v2lgxit1izwqb
+      title: neurostore-study-list
+    neurostore-analysis:
+      title: neurostore-analysis
+      x-stoplight:
+        id: bkl08nw9b6ljn
+      type: object
+      properties:
+        table:
+          type: string
+          x-stoplight:
+            id: avsr9coodde0s
+          writeOnly: true
+        neurostore_id:
+          type: string
+          x-stoplight:
+            id: 8ggmq4xak40fi
+          readOnly: true
   securitySchemes:
     JSON-Web-Token:
       type: http
