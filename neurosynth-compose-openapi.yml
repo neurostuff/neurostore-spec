@@ -942,9 +942,10 @@ components:
                 - minItems: 1
                   items:
                     $ref: '#/components/schemas/result-return'
+                  type: array
                 - items:
                     type: string
-              type: array
+                  type: array
             provenance:
               type: object
               nullable: true
@@ -1332,12 +1333,13 @@ components:
           nullable: true
         meta_analyses:
           oneOf:
-            - minItems: 1
-              items:
+            - items:
                 $ref: '#/components/schemas/meta-analysis'
+              minItems: 1
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
         name:
           type: string
           nullable: true
