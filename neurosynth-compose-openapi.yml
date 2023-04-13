@@ -1193,6 +1193,10 @@ components:
         annotation_snapshot:
           type: object
           writeOnly: true
+        neurostore_study:
+          $ref: '#/components/schemas/neurostore-study'
+          x-stoplight:
+            id: gfjtoxcjgrw5k
     result-return:
       title: result-return
       allOf:
@@ -1376,6 +1380,11 @@ components:
           x-stoplight:
             id: gk2igdiaddu99
           readOnly: true
+        table:
+          type: string
+          x-stoplight:
+            id: d6g4f2dszu9e5
+          writeOnly: true
     neurostore-study-return:
       title: neurostore-study-return
       x-stoplight:

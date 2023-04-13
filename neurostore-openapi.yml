@@ -152,6 +152,7 @@ paths:
         - $ref: '#/components/parameters/user_id'
         - $ref: '#/components/parameters/data_type'
         - $ref: '#/components/parameters/studyset_owner'
+        - $ref: '#/components/parameters/level'
       security:
         - JSON-Web-Token: []
         - {}
@@ -800,7 +801,6 @@ components:
   schemas:
     studyset-return:
       title: studyset-return
-      description: ''
       x-examples: {}
       x-tags:
         - studyset
@@ -809,9 +809,11 @@ components:
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/clone'
         - $ref: '#/components/schemas/studyset-return-relationships'
+        - $ref: '#/components/schemas/study-common'
+          x-stoplight:
+            id: y17p9ubfmmpgg
     studyset-request:
       title: studyset-request
-      description: ''
       x-examples: {}
       x-tags:
         - studyset
@@ -819,6 +821,9 @@ components:
         - $ref: ./nimads/nimads/studysetBase.yaml
         - $ref: '#/components/schemas/studyset-request-relationships'
         - $ref: '#/components/schemas/writeable-resource-attributes'
+        - $ref: '#/components/schemas/study-common'
+          x-stoplight:
+            id: zlm0t5muprjr3
     studyset-return-relationships:
       title: studyset-relationships
       type: object
@@ -1477,7 +1482,7 @@ components:
         - support
     entity:
       title: entity
-      description: 'descriptor of level of analysis for a particular image/point (run, session, subject, group, meta)'
+      description: 'WARNING: not currently used. descriptor of level of analysis for a particular image/point (run, session, subject, group, meta)'
       type: object
       properties:
         label:
@@ -1513,6 +1518,19 @@ components:
         id:
           type: string
       writeOnly: true
+    study-common:
+      title: study-common
+      x-stoplight:
+        id: qufxwmzs9ihnf
+      type: object
+      properties:
+        level:
+          type: string
+          x-stoplight:
+            id: oygujzdxh8h8q
+          enum:
+            - group
+            - meta
   responses:
     '404':
       description: Example response
@@ -1719,6 +1737,16 @@ components:
       schema:
         type: string
       description: for all studies filter which studysets are listed based on who owns the studyset
+    level:
+      name: level
+      in: query
+      schema:
+        type: string
+        enum:
+          - group
+          - meta
+        default: group
+      description: select between studies with group results or meta results
   securitySchemes:
     JSON-Web-Token:
       type: http
