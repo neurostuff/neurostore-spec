@@ -1489,14 +1489,17 @@ components:
           type: string
           x-stoplight:
             id: f12wushemxy2x
+          nullable: true
         level:
           type: string
           x-stoplight:
             id: eb4zy1dh61x9t
+          nullable: true
         analysis:
           type: string
           x-stoplight:
             id: s064lv0pqh9km
+          nullable: true
     clone:
       title: clone
       type: object
