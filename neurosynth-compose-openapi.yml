@@ -517,7 +517,7 @@ paths:
                 $ref: '#/components/schemas/result-return'
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/result'
       security:
