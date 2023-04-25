@@ -588,6 +588,8 @@ paths:
         - neurovault
         - post
         - compose
+      requestBody:
+        content: {}
     parameters: []
   '/neurovault-collections/{id}':
     parameters:
@@ -942,10 +944,9 @@ components:
                 - minItems: 1
                   items:
                     $ref: '#/components/schemas/result-return'
-                  type: array
                 - items:
                     type: string
-                  type: array
+              type: array
             provenance:
               type: object
               nullable: true
