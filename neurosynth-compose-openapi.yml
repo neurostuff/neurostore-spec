@@ -517,7 +517,7 @@ paths:
                 $ref: '#/components/schemas/result-return'
       requestBody:
         content:
-          multipart/form-data:
+          application/json:
             schema:
               $ref: '#/components/schemas/result-init'
       security:
@@ -593,7 +593,10 @@ paths:
         - post
         - compose
       requestBody:
-        content: {}
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/neurovault-collection'
       x-internal: true
     parameters: []
   '/neurovault-collections/{id}':
@@ -963,9 +966,10 @@ components:
             - minItems: 1
               items:
                 $ref: '#/components/schemas/result-return'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
         provenance:
           type: object
           nullable: true
@@ -1373,11 +1377,12 @@ components:
         meta_analyses:
           oneOf:
             - minItems: 1
+              type: array
               items:
                 $ref: '#/components/schemas/meta-analysis'
             - items:
                 type: string
-          type: array
+              type: array
         name:
           type: string
           nullable: true
