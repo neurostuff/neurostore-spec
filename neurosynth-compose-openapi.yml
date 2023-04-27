@@ -519,7 +519,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/result'
+              $ref: '#/components/schemas/result-init'
       security:
         - JSON-Web-Token: []
         - run_key: []
@@ -562,13 +562,16 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/result'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/result-upload'
       tags:
         - meta_analyses
         - put
         - compose
   /neurovault-collections:
     get:
-      summary: Your GET endpoint
+      summary: Get neurovault collections
       tags:
         - neurovault
         - get
@@ -576,8 +579,9 @@ paths:
       responses:
         '200':
           description: OK
+      x-internal: true
     post:
-      summary: ''
+      summary: Create neurovault collection
       responses:
         '200':
           description: OK
@@ -590,6 +594,7 @@ paths:
         - compose
       requestBody:
         content: {}
+      x-internal: true
     parameters: []
   '/neurovault-collections/{id}':
     parameters:
@@ -611,6 +616,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/neurovault-collection-return'
+      x-internal: true
     put:
       summary: ''
       responses:
@@ -626,6 +632,7 @@ paths:
         - neurovault
         - put
         - compose
+      x-internal: true
   /neurovault-files:
     get:
       summary: Your GET endpoint
@@ -640,6 +647,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/neurovault-file-list'
+      x-internal: true
     post:
       summary: ''
       responses:
@@ -661,6 +669,7 @@ paths:
         - neurovault
         - post
         - compose
+      x-internal: true
     parameters: []
   '/neurovault-files/{id}':
     parameters:
@@ -682,6 +691,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/neurovault-file-return'
+      x-internal: true
     put:
       summary: ''
       responses:
@@ -702,6 +712,7 @@ paths:
         - neurovault
         - put
         - compose
+      x-internal: true
   /projects:
     get:
       summary: Your GET endpoint
@@ -788,6 +799,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/neurostore-study-list'
+      x-internal: true
     post:
       summary: ''
       responses:
@@ -805,6 +817,7 @@ paths:
             schema:
               type: object
               properties: {}
+      x-internal: true
   '/neurostore-studies/{id}':
     parameters:
       - schema:
@@ -822,6 +835,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/neurostore-study-return'
+      x-internal: true
     put:
       summary: ''
       responses:
@@ -839,6 +853,7 @@ paths:
               properties: {}
       security:
         - JSON-Web-Token: []
+      x-internal: true
 components:
   schemas:
     specification:
@@ -907,60 +922,93 @@ components:
       description: 'The combination of the specification determining what meta-analysis to run (required), the studyset to act as input to the meta-analytic algorithm (required), and the annotation to provide human readable annotations as well as acts as an optional filter on which analyses to select within the studyset (optional, but suggested).'
       x-tags:
         - meta_analyses
-      allOf:
-        - properties:
-            specification:
-              oneOf:
-                - type: string
-                - $ref: '#/components/schemas/specification'
-            studyset:
-              oneOf:
-                - type: string
-                - $ref: '#/components/schemas/studyset'
-            annotation:
-              oneOf:
-                - type: string
-                  nullable: true
-                - $ref: '#/components/schemas/annotation'
-            name:
-              type: string
-              description: Human-readable name of the meta-analysis.
-              nullable: true
-            description:
-              type: string
-              description: Long form description of the meta-analysis.
-              nullable: true
-            internal_studyset_id:
-              type: string
-              description: The id of the studyset on neurosynth-compose (as opposed to the id of the studyset on neurostore). Multiple snapshots of the studyset can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
-              writeOnly: true
-            internal_annotation_id:
-              type: string
-              description: The id of the annotation on neurosynth-compose (as opposed to the id of the annotation on neurostore). Multiple snapshots of the annotation can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
-              writeOnly: true
-            results:
-              description: 'array of neurostore ids representing the results of this meta-analysis (nominally all results should be the same, but machine architecture differences/algorithm stochastic-ness may lead to slightly different outcomes for each result.'
-              oneOf:
-                - minItems: 1
-                  items:
-                    $ref: '#/components/schemas/result-return'
-                - items:
-                    type: string
-              type: array
-            provenance:
-              type: object
-              nullable: true
-            project:
-              type: string
-              nullable: true
-            run_key:
-              type: string
-              x-stoplight:
-                id: 1djoqtpdnobc7
-              description: |
-                a special key used to upload the results of this meta analysis. Can be used as an alternative to using your auth token from login.
-              readOnly: true
       type: object
+      properties:
+        specification:
+          oneOf:
+            - type: string
+            - $ref: '#/components/schemas/specification'
+        studyset:
+          oneOf:
+            - type: string
+            - $ref: '#/components/schemas/studyset'
+        annotation:
+          oneOf:
+            - type: string
+              nullable: true
+            - $ref: '#/components/schemas/annotation'
+        name:
+          type: string
+          description: Human-readable name of the meta-analysis.
+          nullable: true
+        description:
+          type: string
+          description: Long form description of the meta-analysis.
+          nullable: true
+        cached_studyset_id:
+          type: string
+          description: The id of the studyset on neurosynth-compose (as opposed to the id of the studyset on neurostore). Multiple snapshots of the studyset can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
+          x-stoplight:
+            id: 5umhos11daq87
+          writeOnly: true
+        cached_annotation_id:
+          type: string
+          description: The id of the annotation on neurosynth-compose (as opposed to the id of the annotation on neurostore). Multiple snapshots of the annotation can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
+          x-stoplight:
+            id: vsgca0e0vmu2n
+          writeOnly: true
+        results:
+          description: 'array of neurostore ids representing the results of this meta-analysis (nominally all results should be the same, but machine architecture differences/algorithm stochastic-ness may lead to slightly different outcomes for each result.'
+          oneOf:
+            - minItems: 1
+              items:
+                $ref: '#/components/schemas/result-return'
+            - items:
+                type: string
+          type: array
+        provenance:
+          type: object
+          nullable: true
+        project:
+          type: string
+          nullable: true
+        run_key:
+          type: string
+          x-stoplight:
+            id: 1djoqtpdnobc7
+          description: |
+            a special key used to upload the results of this meta analysis. Can be used as an alternative to using your auth token from login.
+          readOnly: true
+        neurostore_analysis_id:
+          type: string
+          x-stoplight:
+            id: pm36y2ezfouxp
+          readOnly: true
+        hash:
+          type: string
+          x-stoplight:
+            id: wdawphiwzh9hu
+          nullable: true
+        cognitive_contrast_cogatlas:
+          type: string
+          x-stoplight:
+            id: ufakjy2n7rvpo
+          nullable: true
+        cognitive_contrast_cogatlas_id:
+          type: string
+          x-stoplight:
+            id: 8pf6m3tuu8rfi
+          nullable: true
+        cognitive_paradigm_cogatlas:
+          type: string
+          x-stoplight:
+            id: brbykccgggqb8
+          nullable: true
+        cognitive_paradigm_cogatlas_id:
+          type: string
+          x-stoplight:
+            id: sdiexwaai5l1g
+          nullable: true
     annotation:
       title: annotation
       type: object
@@ -977,7 +1025,7 @@ components:
           nullable: true
         studyset:
           type: string
-          description: The related studyset to this annotation.
+          description: The related cached studyset to this annotation.
           readOnly: true
     studyset:
       title: studyset
@@ -1174,31 +1222,40 @@ components:
       x-tags:
         - meta_analyses
       properties:
-        images:
-          type: object
         meta_analysis_id:
           type: string
         cli_version:
           type: string
           nullable: true
-        neurostore_id:
+        neurovault_collection_id:
+          x-stoplight:
+            id: 8td9kkrw6n2t6
           type: string
           nullable: true
-        neurovault_collection:
-          $ref: '#/components/schemas/neurovault-collection'
-        specification_snapshot:
-          type: object
-          writeOnly: true
-        studyset_snapshot:
-          type: object
-          writeOnly: true
-        annotation_snapshot:
-          type: object
-          writeOnly: true
-        neurostore_study:
-          $ref: '#/components/schemas/neurostore-study'
+        methods_description:
+          type: string
           x-stoplight:
-            id: gfjtoxcjgrw5k
+            id: gyyfasu3c7qgj
+          nullable: true
+        neurovault_images:
+          type: array
+          x-stoplight:
+            id: nnkzn2za6cy69
+          items:
+            $ref: '#/components/schemas/neurovault-file'
+        diagnostic_tables:
+          type: array
+          x-stoplight:
+            id: a5ngt7ya2s7ml
+          items:
+            x-stoplight:
+              id: ym7fnq6scz8bm
+            type: string
+            format: byte
+        '':
+          type: string
+          x-stoplight:
+            id: 1hkx8jiukpyj8
     result-return:
       title: result-return
       allOf:
@@ -1247,6 +1304,8 @@ components:
     neurovault-file:
       title: neurovault-file
       type: object
+      x-tags:
+        - neurovault
       properties:
         collection_id:
           type: string
@@ -1258,33 +1317,12 @@ components:
           nullable: true
         status:
           type: string
-        file:
-          type: string
-          format: byte
-          writeOnly: true
         image_id:
           type: string
           nullable: true
         name:
           type: string
           nullable: true
-        map_type:
-          type: string
-          nullable: true
-        cognitive_contrast_cogatlas:
-          type: string
-          nullable: true
-        cognitive_contrast_cogatlas_id:
-          type: string
-          nullable: true
-        cognitive_paradigm_cogatlas:
-          type: string
-          nullable: true
-        cognitive_paradigm_cogatlas_id:
-          type: string
-          nullable: true
-      x-tags:
-        - neurovault
     neurovault-collection-return:
       title: neurovault-collection-return
       allOf:
@@ -1334,13 +1372,12 @@ components:
           nullable: true
         meta_analyses:
           oneOf:
-            - items:
+            - minItems: 1
+              items:
                 $ref: '#/components/schemas/meta-analysis'
-              minItems: 1
-              type: array
             - items:
                 type: string
-              type: array
+          type: array
         name:
           type: string
           nullable: true
@@ -1352,6 +1389,11 @@ components:
           x-stoplight:
             id: 5l1dh6afdc5pv
           description: whether the project is public or private
+        neurostore_id:
+          type: string
+          x-stoplight:
+            id: tr0keu0ned5xp
+          readOnly: true
     project-return:
       allOf:
         - $ref: '#/components/schemas/read-only'
@@ -1424,16 +1466,87 @@ components:
         id: bkl08nw9b6ljn
       type: object
       properties:
-        table:
-          type: string
-          x-stoplight:
-            id: avsr9coodde0s
-          writeOnly: true
         neurostore_id:
           type: string
           x-stoplight:
             id: 8ggmq4xak40fi
           readOnly: true
+        exception:
+          type: string
+          x-stoplight:
+            id: uioiqm9htn8f5
+        traceback:
+          type: string
+          x-stoplight:
+            id: bip20zsr6l7wq
+        status:
+          type: string
+          x-stoplight:
+            id: eib7hr774pxen
+    result-upload:
+      title: result-upload
+      x-stoplight:
+        id: feleyqwhqeke5
+      type: object
+      properties:
+        statistical_maps:
+          type: array
+          x-stoplight:
+            id: lkxyrr8tetdd0
+          format: byte
+          items:
+            x-stoplight:
+              id: 863sfmz4qo0tw
+            type: string
+            format: byte
+            writeOnly: true
+        cluster_tables:
+          type: array
+          x-stoplight:
+            id: f9w2vqez2fskv
+          items:
+            x-stoplight:
+              id: ufm97m0f563yj
+            type: string
+            format: byte
+            writeOnly: true
+        diagnostic_tables:
+          type: array
+          x-stoplight:
+            id: tzdedwx8qdj37
+          items:
+            x-stoplight:
+              id: 5uiu0p99l9s05
+            type: string
+            format: byte
+            writeOnly: true
+        method_description:
+          type: string
+          x-stoplight:
+            id: vaj7hv8uacxth
+          writeOnly: true
+    result-init:
+      title: result-init
+      x-stoplight:
+        id: 5jzd4ahec4i6m
+      type: object
+      properties:
+        meta_analysis_id:
+          type: string
+          x-stoplight:
+            id: jbludrenxdfdl
+        studyset_snapshot:
+          type: object
+          x-stoplight:
+            id: 034jmd5z1k2pm
+        annotation_snapshot:
+          type: object
+          x-stoplight:
+            id: 2ybs3z7bw47p1
+        cli_version:
+          type: string
+          x-stoplight:
+            id: jl2m62skyazrg
   securitySchemes:
     JSON-Web-Token:
       type: http
