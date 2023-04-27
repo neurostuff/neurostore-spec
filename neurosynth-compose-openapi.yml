@@ -1247,6 +1247,7 @@ components:
             id: nnkzn2za6cy69
           items:
             $ref: '#/components/schemas/neurovault-file'
+          nullable: true
         diagnostic_tables:
           type: array
           x-stoplight:
@@ -1256,10 +1257,19 @@ components:
               id: ym7fnq6scz8bm
             type: string
             format: byte
-        '':
-          type: string
+            nullable: true
+            readOnly: true
+        cluster_tables:
+          type: array
           x-stoplight:
             id: 1hkx8jiukpyj8
+          items:
+            x-stoplight:
+              id: 5suxwq2529nbr
+            type: string
+            format: byte
+            nullable: true
+            readOnly: true
     result-return:
       title: result-return
       allOf:
