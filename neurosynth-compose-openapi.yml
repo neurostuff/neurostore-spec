@@ -569,6 +569,9 @@ paths:
         - meta_analyses
         - put
         - compose
+      security:
+        - JSON-Web-Token: []
+        - run_key: []
   /neurovault-collections:
     get:
       summary: Get neurovault collections
