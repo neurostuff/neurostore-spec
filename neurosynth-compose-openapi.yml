@@ -522,7 +522,7 @@ paths:
               $ref: '#/components/schemas/result-init'
       security:
         - JSON-Web-Token: []
-        - run_key: []
+        - upload_key: []
       tags:
         - meta_analyses
         - post
@@ -571,7 +571,7 @@ paths:
         - compose
       security:
         - JSON-Web-Token: []
-        - run_key: []
+        - upload_key: []
   /neurovault-collections:
     get:
       summary: Get neurovault collections
@@ -1571,11 +1571,10 @@ components:
     JSON-Web-Token:
       type: http
       scheme: bearer
-    run_key:
-      name: run_key
+    upload_key:
       type: apiKey
       in: header
-      description: ''
+      name: compose_upload_key
   parameters:
     nested:
       name: nested
