@@ -1180,8 +1180,10 @@ components:
       allOf:
         - type: object
           properties:
-            internal_studyset_id:
+            cached_studyset_id:
               type: string
+              x-stoplight:
+                id: o1xgfte8bodzp
               writeOnly: true
         - $ref: '#/components/schemas/annotation'
       x-tags:
@@ -1198,7 +1200,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/annotation-update'
         - required:
-            - internal_studyset_id
+            - cached_studyset_id
       x-tags:
         - annotations
     studyset-post-body:
@@ -1214,8 +1216,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/meta-analysis'
         - required:
-            - internal_annotation_id
-            - internal_studyset_id
+            - cached_annotation_id
+            - cached_studyset_id
             - specification
       x-tags:
         - meta_analyses
