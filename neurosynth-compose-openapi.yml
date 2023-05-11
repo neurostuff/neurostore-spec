@@ -735,6 +735,7 @@ paths:
                 $ref: '#/components/schemas/project-list'
       security:
         - JSON-Web-Token: []
+        - {}
     post:
       summary: ''
       responses:
