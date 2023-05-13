@@ -190,6 +190,13 @@ paths:
         - meta_analyses
         - put
         - compose
+    delete:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+      security:
+        - JSON-Web-Token: []
   /studysets:
     get:
       summary: Get a list of Studysets
@@ -797,6 +804,13 @@ paths:
         - projects
         - put
         - compose
+    delete:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+      security:
+        - JSON-Web-Token: []
   /neurostore-studies:
     get:
       summary: Your GET endpoint
