@@ -1591,7 +1591,7 @@ components:
     upload_key:
       type: apiKey
       in: header
-      name: compose_upload_key
+      name: Compose-Upload-Key
   parameters:
     nested:
       name: nested
