@@ -986,10 +986,9 @@ components:
             - minItems: 1
               items:
                 $ref: '#/components/schemas/result-return'
-              type: array
             - items:
                 type: string
-              type: array
+          type: array
         provenance:
           type: object
           nullable: true
@@ -1033,6 +1032,16 @@ components:
           x-stoplight:
             id: sdiexwaai5l1g
           nullable: true
+        cached_studyset:
+          type: string
+          x-stoplight:
+            id: hg5kvvz31sw5j
+          readOnly: true
+        cached_annotation:
+          type: string
+          x-stoplight:
+            id: 262rx5ainvdaa
+          readOnly: true
     annotation:
       title: annotation
       type: object
