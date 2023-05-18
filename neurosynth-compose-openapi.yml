@@ -1288,6 +1288,7 @@ components:
           type: string
           x-stoplight:
             id: a5ngt7ya2s7ml
+          nullable: true
         cli_args:
           type: object
           x-stoplight:
