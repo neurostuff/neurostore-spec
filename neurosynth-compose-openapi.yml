@@ -1036,11 +1036,13 @@ components:
           type: string
           x-stoplight:
             id: hg5kvvz31sw5j
+          nullable: true
           readOnly: true
         cached_annotation:
           type: string
           x-stoplight:
             id: 262rx5ainvdaa
+          nullable: true
           readOnly: true
     annotation:
       title: annotation
