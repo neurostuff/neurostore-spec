@@ -8,10 +8,10 @@ info:
     email: jamesdkent21@gmail.com
     url: 'https://github.com/jdkent'
 servers:
-  - url: 'http://localhost:80/api'
-    description: testing
   - url: 'https://neurostore.org/api'
     description: production
+  - url: 'http://localhost:80/api'
+    description: testing
 paths:
   /studysets/:
     get:

@@ -8,12 +8,12 @@ info:
     url: 'https://github.com/jdkent'
     email: jamesdkent21@gmail.com
 servers:
-  - url: 'http://localhost:81/api'
-    description: testing
-  - description: staging
-    url: 'https://synth.neurostore.xyz/api'
   - url: 'https://compose.neurosynth.org/api'
     description: production
+  - description: staging
+    url: 'https://synth.neurostore.xyz/api'
+  - url: 'http://localhost:81/api'
+    description: testing
 paths:
   '/users/{id}':
     parameters:
@@ -1264,23 +1264,29 @@ components:
       properties:
         meta_analysis_id:
           type: string
+          description: the meta analysis this result was derived from.
         cli_version:
           type: string
+          description: |
+            version of the command-line-tool that is uploading the results.
           nullable: true
         neurovault_collection_id:
           x-stoplight:
             id: 8td9kkrw6n2t6
           type: string
+          description: the specific neurovault collection associated with this result.
           nullable: true
         methods_description:
           type: string
           x-stoplight:
             id: gyyfasu3c7qgj
+          description: the description of the methods applied to create this result.
           nullable: true
         neurovault_images:
           type: array
           x-stoplight:
             id: nnkzn2za6cy69
+          description: the representation of the neurovault images associated with the result.
           nullable: true
           items:
             $ref: '#/components/schemas/neurovault-file'
@@ -1288,11 +1294,14 @@ components:
           type: string
           x-stoplight:
             id: a5ngt7ya2s7ml
+          description: a text representation of a tsv that marks the contribution of each study to each particular cluster.
           nullable: true
         cli_args:
           type: object
           x-stoplight:
             id: xlbb9tg78ypbi
+          description: |
+            additional parameters that were passed to the commandline tool at runtime.
           nullable: true
     result-return:
       title: result-return
