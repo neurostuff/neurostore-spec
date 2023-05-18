@@ -1293,6 +1293,7 @@ components:
           type: object
           x-stoplight:
             id: xlbb9tg78ypbi
+          nullable: true
     result-return:
       title: result-return
       allOf:
