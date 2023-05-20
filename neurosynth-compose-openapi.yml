@@ -1040,6 +1040,8 @@ components:
           type: string
           x-stoplight:
             id: 22t51v0in1cmh
+          nullable: true
+          readOnly: true
     annotation:
       title: annotation
       type: object
@@ -1058,6 +1060,11 @@ components:
           type: string
           description: The related cached studyset to this annotation.
           readOnly: true
+        neurostore_url:
+          type: string
+          x-stoplight:
+            id: 4kh3z3xnthvk9
+          readOnly: true
     studyset:
       title: studyset
       type: object
@@ -1071,6 +1078,11 @@ components:
           type: object
           description: The snapshot of the studyset pending a successful run of the meta-analysis.
           nullable: true
+        neurostore_url:
+          type: string
+          x-stoplight:
+            id: n2e040pj1uxc0
+          readOnly: true
     user:
       title: user
       type: object
@@ -1284,6 +1296,11 @@ components:
           description: |
             additional parameters that were passed to the commandline tool at runtime.
           nullable: true
+        status:
+          type: string
+          x-stoplight:
+            id: ojkan45ot796m
+          nullable: true
     result-return:
       title: result-return
       allOf:
@@ -1325,9 +1342,6 @@ components:
             - items:
                 type: string
           type: array
-        result:
-          type: string
-          readOnly: true
         url:
           type: string
           x-stoplight:
@@ -1460,6 +1474,7 @@ components:
           type: string
           x-stoplight:
             id: gk2igdiaddu99
+          nullable: true
           readOnly: true
         analyses:
           type: array
@@ -1467,8 +1482,21 @@ components:
             id: x05fzrq0xkq7y
           items:
             $ref: '#/components/schemas/neurostore-analysis'
-            x-stoplight:
-              id: w7dhgh1947n8m
+        exception:
+          type: string
+          x-stoplight:
+            id: mhtkjy5hapnyh
+          nullable: true
+        traceback:
+          type: string
+          x-stoplight:
+            id: cs8vznwd2tmzt
+          nullable: true
+        status:
+          type: string
+          x-stoplight:
+            id: haar1h2j2j0xy
+          nullable: true
     neurostore-study-return:
       title: neurostore-study-return
       x-stoplight:
