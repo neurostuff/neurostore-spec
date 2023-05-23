@@ -950,10 +950,12 @@ components:
         specification:
           oneOf:
             - type: string
+              nullable: true
             - $ref: '#/components/schemas/specification'
         studyset:
           oneOf:
             - type: string
+              nullable: true
             - $ref: '#/components/schemas/studyset'
         annotation:
           oneOf:
