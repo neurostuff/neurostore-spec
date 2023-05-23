@@ -950,10 +950,12 @@ components:
         specification:
           oneOf:
             - type: string
+              nullable: true
             - $ref: '#/components/schemas/specification'
         studyset:
           oneOf:
             - type: string
+              nullable: true
             - $ref: '#/components/schemas/studyset'
         annotation:
           oneOf:
@@ -986,10 +988,9 @@ components:
             - minItems: 1
               items:
                 $ref: '#/components/schemas/result-return'
-              type: array
             - items:
                 type: string
-              type: array
+          type: array
         provenance:
           type: object
           nullable: true
