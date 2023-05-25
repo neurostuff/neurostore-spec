@@ -1537,6 +1537,7 @@ components:
           type: string
           x-stoplight:
             id: 8ggmq4xak40fi
+          nullable: true
           readOnly: true
         exception:
           type: string
