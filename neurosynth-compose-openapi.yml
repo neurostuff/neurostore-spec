@@ -988,9 +988,10 @@ components:
             - minItems: 1
               items:
                 $ref: '#/components/schemas/result-return'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
         provenance:
           type: object
           nullable: true
@@ -1342,9 +1343,10 @@ components:
             - minItems: 1
               items:
                 $ref: '#/components/schemas/neurovault-file'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
         url:
           type: string
           x-stoplight:
@@ -1430,9 +1432,10 @@ components:
             - minItems: 1
               items:
                 $ref: '#/components/schemas/meta-analysis'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
         name:
           type: string
           nullable: true
