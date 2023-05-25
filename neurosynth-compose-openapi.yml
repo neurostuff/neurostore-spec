@@ -1446,6 +1446,7 @@ components:
           type: string
           x-stoplight:
             id: mfk6853ojk4kk
+          nullable: true
     project-return:
       allOf:
         - $ref: '#/components/schemas/read-only'
