@@ -1005,18 +1005,8 @@ components:
           description: |
             a special key used to upload the results of this meta analysis. Can be used as an alternative to using your auth token from login.
           readOnly: true
-        neurostore_analysis_id:
-          type: string
-          x-stoplight:
-            id: pm36y2ezfouxp
-          nullable: true
-          readOnly: true
-        hash:
-          type: string
-          x-stoplight:
-            id: wdawphiwzh9hu
-          description: 'TODO: create hash of studyset and annotation and use that for the run_key'
-          nullable: true
+        neurostore_analysis:
+          $ref: '#/components/schemas/neurostore-analysis'
         cognitive_contrast_cogatlas:
           type: string
           x-stoplight:
@@ -1049,6 +1039,12 @@ components:
             id: 262rx5ainvdaa
           nullable: true
           readOnly: true
+        neurostore_url:
+          type: string
+          x-stoplight:
+            id: 22t51v0in1cmh
+          nullable: true
+          readOnly: true
     annotation:
       title: annotation
       type: object
@@ -1067,6 +1063,11 @@ components:
           type: string
           description: The related cached studyset to this annotation.
           readOnly: true
+        neurostore_url:
+          type: string
+          x-stoplight:
+            id: 4kh3z3xnthvk9
+          readOnly: true
     studyset:
       title: studyset
       type: object
@@ -1080,6 +1081,11 @@ components:
           type: object
           description: The snapshot of the studyset pending a successful run of the meta-analysis.
           nullable: true
+        neurostore_url:
+          type: string
+          x-stoplight:
+            id: n2e040pj1uxc0
+          readOnly: true
     user:
       title: user
       type: object
@@ -1272,26 +1278,14 @@ components:
           description: |
             version of the command-line-tool that is uploading the results.
           nullable: true
-        neurovault_collection_id:
-          x-stoplight:
-            id: 8td9kkrw6n2t6
-          type: string
-          description: the specific neurovault collection associated with this result.
-          nullable: true
+        neurovault_collection:
+          $ref: '#/components/schemas/neurovault-collection-return'
         methods_description:
           type: string
           x-stoplight:
             id: gyyfasu3c7qgj
           description: the description of the methods applied to create this result.
           nullable: true
-        neurovault_images:
-          type: array
-          x-stoplight:
-            id: nnkzn2za6cy69
-          description: the representation of the neurovault images associated with the result.
-          nullable: true
-          items:
-            $ref: '#/components/schemas/neurovault-file'
         diagnostic_table:
           type: string
           x-stoplight:
@@ -1304,6 +1298,11 @@ components:
             id: xlbb9tg78ypbi
           description: |
             additional parameters that were passed to the commandline tool at runtime.
+          nullable: true
+        status:
+          type: string
+          x-stoplight:
+            id: ojkan45ot796m
           nullable: true
     result-return:
       title: result-return
@@ -1337,19 +1336,22 @@ components:
       properties:
         collection_id:
           type: string
+          nullable: true
           readOnly: true
         files:
           oneOf:
-            - items:
+            - minItems: 1
+              items:
                 $ref: '#/components/schemas/neurovault-file'
-              minItems: 1
               type: array
             - items:
                 type: string
               type: array
-        result:
+        url:
           type: string
-          readOnly: true
+          x-stoplight:
+            id: twf8h1kfifrco
+          nullable: true
     neurovault-file:
       title: neurovault-file
       type: object
@@ -1358,6 +1360,7 @@ components:
       properties:
         collection_id:
           type: string
+          nullable: true
         exception:
           type: string
           nullable: true
@@ -1371,6 +1374,11 @@ components:
           nullable: true
         name:
           type: string
+          nullable: true
+        url:
+          type: string
+          x-stoplight:
+            id: dnswh7xk0mlu9
           nullable: true
     neurovault-collection-return:
       title: neurovault-collection-return
@@ -1422,9 +1430,9 @@ components:
         meta_analyses:
           oneOf:
             - minItems: 1
-              type: array
               items:
                 $ref: '#/components/schemas/meta-analysis'
+              type: array
             - items:
                 type: string
               type: array
@@ -1439,11 +1447,13 @@ components:
           x-stoplight:
             id: 5l1dh6afdc5pv
           description: whether the project is public or private
-        neurostore_id:
+        neurostore_study:
+          $ref: '#/components/schemas/neurostore-study'
+        neurostore_url:
           type: string
           x-stoplight:
-            id: tr0keu0ned5xp
-          readOnly: true
+            id: mfk6853ojk4kk
+          nullable: true
     project-return:
       allOf:
         - $ref: '#/components/schemas/read-only'
@@ -1474,6 +1484,7 @@ components:
           type: string
           x-stoplight:
             id: gk2igdiaddu99
+          nullable: true
           readOnly: true
         analyses:
           type: array
@@ -1481,8 +1492,21 @@ components:
             id: x05fzrq0xkq7y
           items:
             $ref: '#/components/schemas/neurostore-analysis'
-            x-stoplight:
-              id: w7dhgh1947n8m
+        exception:
+          type: string
+          x-stoplight:
+            id: mhtkjy5hapnyh
+          nullable: true
+        traceback:
+          type: string
+          x-stoplight:
+            id: cs8vznwd2tmzt
+          nullable: true
+        status:
+          type: string
+          x-stoplight:
+            id: haar1h2j2j0xy
+          nullable: true
     neurostore-study-return:
       title: neurostore-study-return
       x-stoplight:
@@ -1520,19 +1544,23 @@ components:
           type: string
           x-stoplight:
             id: 8ggmq4xak40fi
+          nullable: true
           readOnly: true
         exception:
           type: string
           x-stoplight:
             id: uioiqm9htn8f5
+          nullable: true
         traceback:
           type: string
           x-stoplight:
             id: bip20zsr6l7wq
+          nullable: true
         status:
           type: string
           x-stoplight:
             id: eib7hr774pxen
+          nullable: true
     result-upload:
       title: result-upload
       x-stoplight:
