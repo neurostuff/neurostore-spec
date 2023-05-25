@@ -1543,14 +1543,17 @@ components:
           type: string
           x-stoplight:
             id: uioiqm9htn8f5
+          nullable: true
         traceback:
           type: string
           x-stoplight:
             id: bip20zsr6l7wq
+          nullable: true
         status:
           type: string
           x-stoplight:
             id: eib7hr774pxen
+          nullable: true
     result-upload:
       title: result-upload
       x-stoplight:
