@@ -1090,11 +1090,20 @@ components:
         image:
           type: string
           nullable: true
-        value:
+        values:
           oneOf:
-            - $ref: '#/components/schemas/point-value'
-            - type: string
-              nullable: true
+            - items:
+                $ref: '#/components/schemas/point-value'
+              type: array
+            - nullable: true
+              items:
+                x-stoplight:
+                  id: 6wlgfi0s2zefg
+                type: string
+                nullable: true
+              type: array
+          x-stoplight:
+            id: 7ywg6qu86o7yy
         x:
           type: number
           writeOnly: true
