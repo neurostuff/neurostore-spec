@@ -1070,8 +1070,8 @@ components:
           type: integer
           x-stoplight:
             id: 1dx1iw1wt2huo
-          minimum: 0
           description: determines the row to display the coordinate
+          nullable: true
     point-return:
       allOf:
         - $ref: ./nimads/nimads/pointBase.yaml
