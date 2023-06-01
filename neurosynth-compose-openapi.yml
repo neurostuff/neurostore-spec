@@ -183,7 +183,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/meta-analysis'
+              oneOf:
+                - $ref: '#/components/schemas/meta-analysis'
+                - $ref: '#/components/schemas/recreate-neurostore-analysis'
         description: ''
       description: update an existing meta-analysis (that has not yet been run)
       tags:
@@ -797,7 +799,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/project'
+              oneOf:
+                - $ref: '#/components/schemas/project'
+                - $ref: '#/components/schemas/recreate-neurostore-study'
       security:
         - JSON-Web-Token: []
       tags:
@@ -1625,6 +1629,27 @@ components:
           type: string
           x-stoplight:
             id: jl2m62skyazrg
+    recreate-neurostore-study:
+      title: recreate-neurostore-study
+      x-stoplight:
+        id: 4jwm8ixqqakr4
+      type: object
+      properties:
+        create_neurostore_study:
+          type: boolean
+          x-stoplight:
+            id: ukjv352x63evf
+          default: true
+    recreate-neurostore-analysis:
+      title: recreate-neurostore-analysis
+      x-stoplight:
+        id: fnf7awthy9ite
+      type: object
+      properties:
+        create_neurostore_analysis:
+          type: boolean
+          x-stoplight:
+            id: l8iy788v5boql
   securitySchemes:
     JSON-Web-Token:
       type: http
