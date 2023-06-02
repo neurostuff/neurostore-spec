@@ -988,10 +988,9 @@ components:
             - minItems: 1
               items:
                 $ref: '#/components/schemas/result-return'
-              type: array
             - items:
                 type: string
-              type: array
+          type: array
         provenance:
           type: object
           nullable: true
@@ -1007,6 +1006,7 @@ components:
           readOnly: true
         neurostore_analysis:
           $ref: '#/components/schemas/neurostore-analysis'
+          nullable: true
         cognitive_contrast_cogatlas:
           type: string
           x-stoplight:
