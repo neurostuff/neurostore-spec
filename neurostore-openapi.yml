@@ -1551,6 +1551,71 @@ components:
           enum:
             - group
             - meta
+    abstract-study:
+      title: abstract-study
+      x-stoplight:
+        id: dk84wnkoshpxb
+      type: object
+      properties:
+        metadata:
+          type: object
+          x-stoplight:
+            id: at2s31cv9gfg5
+        versions:
+          x-stoplight:
+            id: rqz03bl5z81y4
+          oneOf:
+            - items:
+                x-stoplight:
+                  id: nesbtmu3fl2yy
+                type: string
+                minItems: 1
+              type: array
+            - x-stoplight:
+                id: vdove859ce553
+              items:
+                $ref: '#/components/schemas/study-return'
+              type: array
+        name:
+          type: string
+          x-stoplight:
+            id: zl1wex53acatp
+          nullable: true
+        description:
+          type: string
+          x-stoplight:
+            id: thag7ji2rhr83
+          nullable: true
+        publication:
+          type: string
+          x-stoplight:
+            id: ph412w2el6ebi
+          nullable: true
+        doi:
+          type: string
+          x-stoplight:
+            id: pstkzdb6m745f
+          nullable: true
+        pmid:
+          type: string
+          x-stoplight:
+            id: 0m392ko74gh43
+          nullable: true
+        authors:
+          type: string
+          x-stoplight:
+            id: 6tz6016l564pj
+          nullable: true
+        year:
+          type: string
+          x-stoplight:
+            id: gdrb1hjvs1m68
+          nullable: true
+        level:
+          type: string
+          x-stoplight:
+            id: voxamooj7ob5l
+          nullable: true
   responses:
     '404':
       description: Example response
