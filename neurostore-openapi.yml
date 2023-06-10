@@ -797,6 +797,78 @@ paths:
         - JSON-Web-Token: []
       tags:
         - user
+  /abstract-studies/:
+    get:
+      summary: ''
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/abstract-study-return'
+      parameters:
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/description'
+        - $ref: '#/components/parameters/authors'
+        - $ref: '#/components/parameters/level'
+        - $ref: '#/components/parameters/data_type'
+        - $ref: '#/components/parameters/source'
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/abstract-study-list'
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/abstract-study'
+  '/abstract-studies/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/abstract-study-return'
+    put:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/abstract-study-return'
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/abstract-study'
 components:
   schemas:
     studyset-return:
@@ -1616,6 +1688,25 @@ components:
           x-stoplight:
             id: voxamooj7ob5l
           nullable: true
+    abstract-study-return:
+      title: abstract-study-return
+      x-stoplight:
+        id: wjlatdng999oq
+      allOf:
+        - $ref: '#/components/schemas/abstract-study'
+        - $ref: '#/components/schemas/resource-attributes'
+    abstract-study-list:
+      title: abstract-study-list
+      x-stoplight:
+        id: mhmsku38rqcfq
+      type: object
+      properties:
+        results:
+          type: array
+          x-stoplight:
+            id: 8txl0ha4pe7y0
+          items:
+            $ref: '#/components/schemas/abstract-study-return'
   responses:
     '404':
       description: Example response
