@@ -823,6 +823,8 @@ paths:
         - $ref: '#/components/parameters/publication'
         - $ref: '#/components/parameters/pmid'
         - $ref: '#/components/parameters/doi'
+      security:
+        - JSON-Web-Token: []
     post:
       summary: ''
       responses:
@@ -834,6 +836,7 @@ paths:
                 $ref: '#/components/schemas/abstract-study-list'
       security:
         - JSON-Web-Token: []
+        - {}
       requestBody:
         content:
           application/json:
