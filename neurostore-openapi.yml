@@ -820,6 +820,9 @@ paths:
         - $ref: '#/components/parameters/level'
         - $ref: '#/components/parameters/data_type'
         - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/publication'
+        - $ref: '#/components/parameters/pmid'
+        - $ref: '#/components/parameters/doi'
     post:
       summary: ''
       responses:
@@ -1923,6 +1926,27 @@ components:
           - meta
         default: group
       description: select between studies with group results or meta results
+    publication:
+      name: publication
+      in: query
+      required: false
+      schema:
+        type: string
+      description: search for papers from a particular journal
+    pmid:
+      name: pmid
+      in: query
+      required: false
+      schema:
+        type: string
+      description: search for particular pmid
+    doi:
+      name: doi
+      in: query
+      required: false
+      schema:
+        type: string
+      description: search for study with specific doi
   securitySchemes:
     JSON-Web-Token:
       type: http
