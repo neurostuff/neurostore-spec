@@ -797,7 +797,7 @@ paths:
         - JSON-Web-Token: []
       tags:
         - user
-  /abstract-studies/:
+  /base-studies/:
     get:
       summary: ''
       tags: []
@@ -807,7 +807,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/abstract-study-return'
+                $ref: '#/components/schemas/base-study-return'
       parameters:
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
@@ -833,7 +833,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/abstract-study-list'
+                $ref: '#/components/schemas/base-study-list'
       security:
         - JSON-Web-Token: []
         - {}
@@ -841,8 +841,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/abstract-study'
-  '/abstract-studies/{id}':
+              $ref: '#/components/schemas/base-study'
+  '/base-studies/{id}':
     parameters:
       - schema:
           type: string
@@ -858,7 +858,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/abstract-study-return'
+                $ref: '#/components/schemas/base-study-return'
     put:
       summary: ''
       responses:
@@ -867,14 +867,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/abstract-study-return'
+                $ref: '#/components/schemas/base-study-return'
       security:
         - JSON-Web-Token: []
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/abstract-study'
+              $ref: '#/components/schemas/base-study'
 components:
   schemas:
     studyset-return:
@@ -1629,8 +1629,8 @@ components:
           enum:
             - group
             - meta
-    abstract-study:
-      title: abstract-study
+    base-study:
+      title: base-study
       x-stoplight:
         id: dk84wnkoshpxb
       type: object
@@ -1694,15 +1694,15 @@ components:
           x-stoplight:
             id: voxamooj7ob5l
           nullable: true
-    abstract-study-return:
-      title: abstract-study-return
+    base-study-return:
+      title: base-study-return
       x-stoplight:
         id: wjlatdng999oq
       allOf:
-        - $ref: '#/components/schemas/abstract-study'
+        - $ref: '#/components/schemas/base-study'
         - $ref: '#/components/schemas/resource-attributes'
-    abstract-study-list:
-      title: abstract-study-list
+    base-study-list:
+      title: base-study-list
       x-stoplight:
         id: mhmsku38rqcfq
       type: object
@@ -1712,7 +1712,7 @@ components:
           x-stoplight:
             id: 8txl0ha4pe7y0
           items:
-            $ref: '#/components/schemas/abstract-study-return'
+            $ref: '#/components/schemas/base-study-return'
   responses:
     '404':
       description: Example response
