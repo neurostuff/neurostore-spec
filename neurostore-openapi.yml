@@ -797,6 +797,84 @@ paths:
         - JSON-Web-Token: []
       tags:
         - user
+  /base-studies/:
+    get:
+      summary: ''
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base-study-return'
+      parameters:
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/description'
+        - $ref: '#/components/parameters/authors'
+        - $ref: '#/components/parameters/level'
+        - $ref: '#/components/parameters/data_type'
+        - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/publication'
+        - $ref: '#/components/parameters/pmid'
+        - $ref: '#/components/parameters/doi'
+      security:
+        - JSON-Web-Token: []
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base-study-list'
+      security:
+        - JSON-Web-Token: []
+        - {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/base-study'
+  '/base-studies/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base-study-return'
+    put:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base-study-return'
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/base-study'
 components:
   schemas:
     studyset-return:
@@ -1551,6 +1629,90 @@ components:
           enum:
             - group
             - meta
+    base-study:
+      title: base-study
+      x-stoplight:
+        id: dk84wnkoshpxb
+      type: object
+      properties:
+        metadata:
+          type: object
+          x-stoplight:
+            id: at2s31cv9gfg5
+        versions:
+          x-stoplight:
+            id: rqz03bl5z81y4
+          oneOf:
+            - items:
+                x-stoplight:
+                  id: nesbtmu3fl2yy
+                type: string
+                minItems: 1
+              type: array
+            - x-stoplight:
+                id: vdove859ce553
+              items:
+                $ref: '#/components/schemas/study-return'
+              type: array
+        name:
+          type: string
+          x-stoplight:
+            id: zl1wex53acatp
+          nullable: true
+        description:
+          type: string
+          x-stoplight:
+            id: thag7ji2rhr83
+          nullable: true
+        publication:
+          type: string
+          x-stoplight:
+            id: ph412w2el6ebi
+          nullable: true
+        doi:
+          type: string
+          x-stoplight:
+            id: pstkzdb6m745f
+          nullable: true
+        pmid:
+          type: string
+          x-stoplight:
+            id: 0m392ko74gh43
+          nullable: true
+        authors:
+          type: string
+          x-stoplight:
+            id: 6tz6016l564pj
+          nullable: true
+        year:
+          type: string
+          x-stoplight:
+            id: gdrb1hjvs1m68
+          nullable: true
+        level:
+          type: string
+          x-stoplight:
+            id: voxamooj7ob5l
+          nullable: true
+    base-study-return:
+      title: base-study-return
+      x-stoplight:
+        id: wjlatdng999oq
+      allOf:
+        - $ref: '#/components/schemas/base-study'
+        - $ref: '#/components/schemas/resource-attributes'
+    base-study-list:
+      title: base-study-list
+      x-stoplight:
+        id: mhmsku38rqcfq
+      type: object
+      properties:
+        results:
+          type: array
+          x-stoplight:
+            id: 8txl0ha4pe7y0
+          items:
+            $ref: '#/components/schemas/base-study-return'
   responses:
     '404':
       description: Example response
@@ -1767,6 +1929,27 @@ components:
           - meta
         default: group
       description: select between studies with group results or meta results
+    publication:
+      name: publication
+      in: query
+      required: false
+      schema:
+        type: string
+      description: search for papers from a particular journal
+    pmid:
+      name: pmid
+      in: query
+      required: false
+      schema:
+        type: string
+      description: search for particular pmid
+    doi:
+      name: doi
+      in: query
+      required: false
+      schema:
+        type: string
+      description: search for study with specific doi
   securitySchemes:
     JSON-Web-Token:
       type: http
