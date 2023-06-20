@@ -825,6 +825,7 @@ paths:
         - $ref: '#/components/parameters/doi'
       security:
         - JSON-Web-Token: []
+        - {}
     post:
       summary: ''
       responses:
