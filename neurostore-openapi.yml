@@ -153,6 +153,8 @@ paths:
         - $ref: '#/components/parameters/data_type'
         - $ref: '#/components/parameters/studyset_owner'
         - $ref: '#/components/parameters/level'
+        - $ref: '#/components/parameters/pmid'
+        - $ref: '#/components/parameters/doi'
       security:
         - JSON-Web-Token: []
         - {}
