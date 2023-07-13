@@ -155,6 +155,7 @@ paths:
         - $ref: '#/components/parameters/level'
         - $ref: '#/components/parameters/pmid'
         - $ref: '#/components/parameters/doi'
+        - $ref: '#/components/parameters/flat'
       security:
         - JSON-Web-Token: []
         - {}
