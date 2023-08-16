@@ -1659,11 +1659,12 @@ components:
                   id: nesbtmu3fl2yy
                 type: string
                 minItems: 1
+              type: array
             - x-stoplight:
                 id: vdove859ce553
               items:
                 $ref: '#/components/schemas/study-return'
-          type: array
+              type: array
         name:
           type: string
           x-stoplight:
