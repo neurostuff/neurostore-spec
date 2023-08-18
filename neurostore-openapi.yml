@@ -811,7 +811,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/base-study-return'
+                $ref: '#/components/schemas/base-study-list'
       parameters:
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
@@ -1724,6 +1724,8 @@ components:
             id: 8txl0ha4pe7y0
           items:
             $ref: '#/components/schemas/base-study-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
   responses:
     '404':
       description: Example response
