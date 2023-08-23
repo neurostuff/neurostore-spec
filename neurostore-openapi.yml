@@ -1967,9 +1967,6 @@ components:
       required: false
       schema:
         type: boolean
-        enum:
-          - 'true'
-          - 'false'
       description: 'do not return any embedded relationships. When set, it is incompatible with nested. '
     info:
       name: info
