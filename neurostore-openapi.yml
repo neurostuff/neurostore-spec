@@ -823,7 +823,6 @@ paths:
         - $ref: '#/components/parameters/authors'
         - $ref: '#/components/parameters/level'
         - $ref: '#/components/parameters/data_type'
-        - $ref: '#/components/parameters/source'
         - $ref: '#/components/parameters/publication'
         - $ref: '#/components/parameters/pmid'
         - $ref: '#/components/parameters/doi'
@@ -840,7 +839,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/base-study-list'
+                $ref: '#/components/schemas/base-study-return'
       security:
         - JSON-Web-Token: []
         - {}
@@ -1696,7 +1695,7 @@ components:
             id: 6tz6016l564pj
           nullable: true
         year:
-          type: string
+          type: integer
           x-stoplight:
             id: gdrb1hjvs1m68
           nullable: true
@@ -1968,17 +1967,14 @@ components:
       in: query
       required: false
       schema:
-        type: string
-        enum:
-          - 'true'
-          - 'false'
+        type: boolean
       description: 'do not return any embedded relationships. When set, it is incompatible with nested. '
     info:
       name: info
       in: query
       required: false
       schema:
-        type: string
+        type: boolean
       description: show additional for endpoint-object relationships without being fully nested. Incompatible with nested
   securitySchemes:
     JSON-Web-Token:
