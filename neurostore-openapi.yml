@@ -823,7 +823,6 @@ paths:
         - $ref: '#/components/parameters/authors'
         - $ref: '#/components/parameters/level'
         - $ref: '#/components/parameters/data_type'
-        - $ref: '#/components/parameters/source'
         - $ref: '#/components/parameters/publication'
         - $ref: '#/components/parameters/pmid'
         - $ref: '#/components/parameters/doi'
@@ -1978,7 +1977,7 @@ components:
       in: query
       required: false
       schema:
-        type: string
+        type: boolean
       description: show additional for endpoint-object relationships without being fully nested. Incompatible with nested
   securitySchemes:
     JSON-Web-Token:
