@@ -847,7 +847,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/base-study'
+              oneOf:
+                - $ref: '#/components/schemas/base-study'
+                - type: array
+                  x-stoplight:
+                    id: ufcpin3lhrdgq
+                  items:
+                    $ref: '#/components/schemas/base-study'
   '/base-studies/{id}':
     parameters:
       - schema:
