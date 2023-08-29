@@ -1523,6 +1523,12 @@ components:
           description: who owns the resource
           nullable: true
           readOnly: true
+        username:
+          type: string
+          x-stoplight:
+            id: xatmqtz3yy1eg
+          description: human readable username
+          nullable: true
     readable-resource-attributes:
       title: readable-resource-attributes
       type: object
