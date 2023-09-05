@@ -975,10 +975,20 @@ components:
                 properties:
                   name:
                     type: string
+                    nullable: true
                   id:
                     type: string
                   description:
                     type: string
+                    nullable: true
+            has_coordinates:
+              type: boolean
+              x-stoplight:
+                id: z0t5y3n3t9w6p
+            has_images:
+              type: boolean
+              x-stoplight:
+                id: 5awd3fw7bz8sw
       x-tags:
         - study
     study-request:
