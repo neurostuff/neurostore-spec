@@ -839,7 +839,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/base-study-return'
+                oneOf:
+                  - $ref: '#/components/schemas/base-study-return'
+                  - $ref: '#/components/schemas/study-return'
       security:
         - JSON-Web-Token: []
         - {}
