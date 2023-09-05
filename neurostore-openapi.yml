@@ -843,7 +843,7 @@ paths:
                   - $ref: '#/components/schemas/base-study-return'
                   - type: array
                     items:
-                      $ref: '#/components/schemas/study-return'
+                      $ref: '#/components/schemas/base-study-return'
       security:
         - JSON-Web-Token: []
         - {}
