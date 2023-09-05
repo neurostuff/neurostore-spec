@@ -841,7 +841,9 @@ paths:
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/base-study-return'
-                  - $ref: '#/components/schemas/study-return'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/study-return'
       security:
         - JSON-Web-Token: []
         - {}
