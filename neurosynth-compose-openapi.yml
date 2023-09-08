@@ -1118,6 +1118,12 @@ components:
           type: string
           description: Who owns the resource.
           nullable: true
+        username:
+          type: string
+          x-stoplight:
+            id: ouvs9x75ist5w
+          nullable: true
+          readOnly: true
     specification-return:
       title: specification-return
       allOf:
