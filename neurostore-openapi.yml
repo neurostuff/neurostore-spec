@@ -839,7 +839,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/base-study-return'
+                oneOf:
+                  - $ref: '#/components/schemas/base-study-return'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/base-study-return'
       security:
         - JSON-Web-Token: []
         - {}
@@ -847,7 +851,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/base-study'
+              oneOf:
+                - $ref: '#/components/schemas/base-study'
+                - type: array
+                  x-stoplight:
+                    id: ufcpin3lhrdgq
+                  items:
+                    $ref: '#/components/schemas/base-study'
   '/base-studies/{id}':
     parameters:
       - schema:
@@ -961,14 +971,29 @@ components:
             studysets:
               type: array
               items:
-                type: object
-                properties:
-                  name:
-                    type: string
-                  id:
-                    type: string
-                  description:
-                    type: string
+                oneOf:
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        nullable: true
+                      id:
+                        type: string
+                      description:
+                        type: string
+                        nullable: true
+                  - type: string
+                    x-stoplight:
+                      id: 4ny274ofy8y83
+                    nullable: true
+            has_coordinates:
+              type: boolean
+              x-stoplight:
+                id: z0t5y3n3t9w6p
+            has_images:
+              type: boolean
+              x-stoplight:
+                id: 5awd3fw7bz8sw
       x-tags:
         - study
     study-request:
