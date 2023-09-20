@@ -877,6 +877,41 @@ paths:
       security:
         - JSON-Web-Token: []
       x-internal: true
+  /studyset-references:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/studyset-reference-list'
+      x-stoplight:
+        id: kzl4p104nysct
+      description: ''
+      requestBody:
+        content: {}
+  '/studyset-references/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/studyset-reference-return'
+      x-stoplight:
+        id: beely5hhaisxm
 components:
   schemas:
     specification:
@@ -1632,6 +1667,45 @@ components:
           type: string
           x-stoplight:
             id: jl2m62skyazrg
+    studyset-reference:
+      title: studyset-reference
+      x-stoplight:
+        id: 4ck154dc5tklb
+      type: object
+      properties:
+        snapshots:
+          type: array
+          x-stoplight:
+            id: h20wq8miy4mdl
+          items:
+            x-stoplight:
+              id: dwig8g1opu989
+            oneOf:
+              - type: string
+                x-stoplight:
+                  id: mjq9g1kygu2z1
+              - $ref: '#/components/schemas/studyset'
+    studyset-reference-return:
+      title: studyset-reference-return
+      x-stoplight:
+        id: 0i6hurlz2rpts
+      allOf:
+        - $ref: '#/components/schemas/studyset-reference'
+        - $ref: '#/components/schemas/read-only'
+    studyset-reference-list:
+      title: studyset-reference-list
+      x-stoplight:
+        id: okhi8rg7azb97
+      type: object
+      properties:
+        results:
+          type: array
+          x-stoplight:
+            id: aavkrqap4jrz6
+          items:
+            $ref: '#/components/schemas/studyset-reference-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
   securitySchemes:
     JSON-Web-Token:
       type: http
