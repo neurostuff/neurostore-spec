@@ -891,8 +891,6 @@ paths:
       x-stoplight:
         id: kzl4p104nysct
       description: ''
-      requestBody:
-        content: {}
   '/studyset-references/{id}':
     parameters:
       - schema:
