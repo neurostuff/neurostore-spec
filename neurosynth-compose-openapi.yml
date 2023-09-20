@@ -1120,6 +1120,12 @@ components:
           x-stoplight:
             id: n2e040pj1uxc0
           readOnly: true
+        version:
+          type: string
+          x-stoplight:
+            id: l2eu18324q6ye
+          description: A string representing a labeled version of this particular studyset.
+          nullable: true
     user:
       title: user
       type: object
