@@ -897,7 +897,7 @@ components:
           nullable: true
         contrast:
           type: string
-          description: 'underspecified selection of columns to contrast (TODO, make better).'
+          description: 'selection of categories in the filter column to differentiate groups, or "neurosynth", "neuroquery", or "neurostore" to compare to a database reference group'
           nullable: true
         transformer:
           type: string
@@ -907,7 +907,7 @@ components:
           $ref: '#/components/schemas/corrector'
         filter:
           type: string
-          description: a boolean column from annotations selecting which analyses to include in the meta-analysis
+          description: a column from annotations selecting which analyses to include in the meta-analysis
           nullable: true
     estimator:
       title: estimator
