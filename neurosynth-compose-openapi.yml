@@ -1478,10 +1478,9 @@ components:
             - minItems: 1
               items:
                 $ref: '#/components/schemas/meta-analysis'
-              type: array
             - items:
                 type: string
-              type: array
+          type: array
         name:
           type: string
           nullable: true
@@ -1495,6 +1494,7 @@ components:
           description: whether the project is public or private
         neurostore_study:
           $ref: '#/components/schemas/neurostore-study'
+          nullable: true
         neurostore_url:
           type: string
           x-stoplight:
