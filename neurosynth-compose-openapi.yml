@@ -877,6 +877,39 @@ paths:
       security:
         - JSON-Web-Token: []
       x-internal: true
+  /studyset-references:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/studyset-reference-list'
+      x-stoplight:
+        id: kzl4p104nysct
+      description: ''
+  '/studyset-references/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/studyset-reference-return'
+      x-stoplight:
+        id: beely5hhaisxm
 components:
   schemas:
     specification:
@@ -897,7 +930,7 @@ components:
           nullable: true
         contrast:
           type: string
-          description: 'underspecified selection of columns to contrast (TODO, make better).'
+          description: 'selection of categories in the filter column to differentiate groups, or "neurosynth", "neuroquery", or "neurostore" to compare to a database reference group'
           nullable: true
         transformer:
           type: string
@@ -907,7 +940,7 @@ components:
           $ref: '#/components/schemas/corrector'
         filter:
           type: string
-          description: a boolean column from annotations selecting which analyses to include in the meta-analysis
+          description: a column from annotations selecting which analyses to include in the meta-analysis
           nullable: true
     estimator:
       title: estimator
@@ -1087,6 +1120,12 @@ components:
           x-stoplight:
             id: n2e040pj1uxc0
           readOnly: true
+        version:
+          type: string
+          x-stoplight:
+            id: l2eu18324q6ye
+          description: A string representing a labeled version of this particular studyset.
+          nullable: true
     user:
       title: user
       type: object
@@ -1632,6 +1671,45 @@ components:
           type: string
           x-stoplight:
             id: jl2m62skyazrg
+    studyset-reference:
+      title: studyset-reference
+      x-stoplight:
+        id: 4ck154dc5tklb
+      type: object
+      properties:
+        snapshots:
+          type: array
+          x-stoplight:
+            id: h20wq8miy4mdl
+          items:
+            x-stoplight:
+              id: dwig8g1opu989
+            oneOf:
+              - type: string
+                x-stoplight:
+                  id: mjq9g1kygu2z1
+              - $ref: '#/components/schemas/studyset'
+    studyset-reference-return:
+      title: studyset-reference-return
+      x-stoplight:
+        id: 0i6hurlz2rpts
+      allOf:
+        - $ref: '#/components/schemas/studyset-reference'
+        - $ref: '#/components/schemas/read-only'
+    studyset-reference-list:
+      title: studyset-reference-list
+      x-stoplight:
+        id: okhi8rg7azb97
+      type: object
+      properties:
+        results:
+          type: array
+          x-stoplight:
+            id: aavkrqap4jrz6
+          items:
+            $ref: '#/components/schemas/studyset-reference-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
   securitySchemes:
     JSON-Web-Token:
       type: http
