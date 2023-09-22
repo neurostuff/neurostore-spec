@@ -891,6 +891,8 @@ paths:
       x-stoplight:
         id: kzl4p104nysct
       description: ''
+      parameters:
+        - $ref: '#/components/parameters/nested'
   '/studyset-references/{id}':
     parameters:
       - schema:
@@ -910,6 +912,8 @@ paths:
                 $ref: '#/components/schemas/studyset-reference-return'
       x-stoplight:
         id: beely5hhaisxm
+      parameters:
+        - $ref: '#/components/parameters/nested'
 components:
   schemas:
     specification:
