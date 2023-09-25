@@ -932,10 +932,25 @@ components:
           type: string
           description: a string representing a binary nifti file to select which voxels a user wants to include in the analysis.
           nullable: true
-        contrast:
-          type: string
+        conditions:
+          type: array
           description: 'selection of categories in the filter column to differentiate groups, or "neurosynth", "neuroquery", or "neurostore" to compare to a database reference group'
+          x-stoplight:
+            id: y2wlpp9g6m1ih
           nullable: true
+          items:
+            x-stoplight:
+              id: wiogm5nzrju66
+            type: string
+        weights:
+          type: array
+          x-stoplight:
+            id: w4fpef48gekp2
+          nullable: true
+          items:
+            x-stoplight:
+              id: mtq6rsrjgmn2g
+            type: number
         transformer:
           type: string
           description: 'A transformation applied to column(s) (e.g., binarize based on a threshold). This is likely to become deprecated.'
