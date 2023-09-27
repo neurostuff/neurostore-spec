@@ -941,7 +941,9 @@ components:
           items:
             x-stoplight:
               id: wiogm5nzrju66
-            type: string
+            type:
+              - string
+              - boolean
         weights:
           type: array
           x-stoplight:
