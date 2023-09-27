@@ -933,17 +933,22 @@ components:
           description: a string representing a binary nifti file to select which voxels a user wants to include in the analysis.
           nullable: true
         conditions:
-          type: array
           description: 'selection of categories in the filter column to differentiate groups, or "neurosynth", "neuroquery", or "neurostore" to compare to a database reference group'
           x-stoplight:
             id: y2wlpp9g6m1ih
-          nullable: true
-          items:
-            x-stoplight:
-              id: wiogm5nzrju66
-            type:
-              - string
-              - boolean
+          oneOf:
+            - nullable: true
+              items:
+                x-stoplight:
+                  id: wiogm5nzrju66
+                type: string
+            - x-stoplight:
+                id: cpefbentap20i
+              items:
+                x-stoplight:
+                  id: ihjh738q2qul8
+                type: boolean
+          type: array
         weights:
           type: array
           x-stoplight:
@@ -962,6 +967,12 @@ components:
         filter:
           type: string
           description: a column from annotations selecting which analyses to include in the meta-analysis
+          nullable: true
+        database_studyset:
+          x-stoplight:
+            id: t6l13psq6wvv6
+          example: neurostore
+          type: string
           nullable: true
     estimator:
       title: estimator
