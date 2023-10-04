@@ -994,6 +994,11 @@ components:
               type: boolean
               x-stoplight:
                 id: 5awd3fw7bz8sw
+            base_study:
+              type: string
+              x-stoplight:
+                id: kpfdf217fjdv5
+              nullable: true
       x-tags:
         - study
     study-request:
