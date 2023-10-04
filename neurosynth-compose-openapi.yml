@@ -943,6 +943,7 @@ components:
                   id: wiogm5nzrju66
                 type: string
               type: array
+              minItems: 1
             - x-stoplight:
                 id: cpefbentap20i
               items:
