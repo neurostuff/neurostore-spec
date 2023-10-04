@@ -942,13 +942,14 @@ components:
                 x-stoplight:
                   id: wiogm5nzrju66
                 type: string
+              type: array
             - x-stoplight:
                 id: cpefbentap20i
               items:
                 x-stoplight:
                   id: ihjh738q2qul8
                 type: boolean
-          type: array
+              type: array
         weights:
           type: array
           x-stoplight:
