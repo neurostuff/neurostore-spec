@@ -83,11 +83,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/studyset-return'
               examples: {}
+            application/gzip:
+              schema:
+                type: object
+                properties: {}
         '404':
           $ref: '#/components/responses/404'
       description: Retrieve the information of a studyset with the matching studyset ID.
       parameters:
         - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/gzip'
     put:
       summary: PUT/update a studyset
       responses:
@@ -1513,9 +1518,6 @@ components:
     resource-attributes:
       allOf:
         - $ref: '#/components/schemas/readable-resource-attributes'
-          required:
-            - created_at
-            - updated_at
         - $ref: '#/components/schemas/writeable-resource-attributes'
           requred:
             - id
@@ -1570,7 +1572,7 @@ components:
           readOnly: true
         updated_at:
           type: string
-          description: when was the resource last modified/updated.
+          description: when the resource was last modified/updated.
           nullable: true
           readOnly: true
     writeable-resource-attributes:
@@ -2007,6 +2009,13 @@ components:
       schema:
         type: boolean
       description: show additional for endpoint-object relationships without being fully nested. Incompatible with nested
+    gzip:
+      name: gzip
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: return the content as gzipped content
   securitySchemes:
     JSON-Web-Token:
       type: http
