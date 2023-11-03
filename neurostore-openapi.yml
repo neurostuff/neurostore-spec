@@ -681,6 +681,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/annotation-request'
+    options:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+      x-stoplight:
+        id: ifzfd0r8r807a
   '/annotations/{id}':
     parameters:
       - schema:
