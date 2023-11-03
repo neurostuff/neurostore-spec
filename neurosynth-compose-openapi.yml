@@ -811,6 +811,9 @@ paths:
           description: OK
       security:
         - JSON-Web-Token: []
+      tags:
+        - projects
+        - compose
   /neurostore-studies:
     get:
       summary: Your GET endpoint
