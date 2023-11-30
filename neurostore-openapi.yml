@@ -944,14 +944,15 @@ components:
       type: object
       properties:
         studies:
-          oneOf:
-            - items:
-                $ref: '#/components/schemas/study-request'
-              type: array
-              minItems: 1
-            - items:
-                type: string
-              type: array
+          type: array
+          items: {}
+            # x-stoplight:
+            #   id: 2cea6h24rq5pm
+            # anyOf:
+            #   - $ref: '#/components/schemas/study-request'
+            #   - type: string
+            #    x-stoplight:
+            #       id: pgfn93n9g9h67
     studyset-list:
       title: studyset-get
       type: object
@@ -1014,6 +1015,7 @@ components:
         - $ref: '#/components/schemas/writeable-resource-attributes'
       x-tags:
         - study
+      description: ''
     study-return-relationships:
       title: study-relationships
       x-tags:
