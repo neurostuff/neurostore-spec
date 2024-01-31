@@ -783,7 +783,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/project-return'
-      parameters: []
+      parameters:
+        - $ref: '#/components/parameters/info'
     put:
       summary: ''
       responses:
@@ -1764,6 +1765,13 @@ components:
       schema:
         type: boolean
       description: show nested component instead of id
+    info:
+      name: info
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: display additional information about a nested relationship without displaying fully nested object
   responses:
     bad-request:
       description: form when a request goes wrong
