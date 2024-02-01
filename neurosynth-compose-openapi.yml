@@ -101,6 +101,7 @@ paths:
       description: 'list all runnable specification, studyset, annotation bundles'
       parameters:
         - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/ids'
       tags:
         - meta_analyses
         - get
@@ -1772,6 +1773,15 @@ components:
       schema:
         type: boolean
       description: display additional information about a nested relationship without displaying fully nested object
+    ids:
+      name: ids
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: choose the specific ids you wish to get
   responses:
     bad-request:
       description: form when a request goes wrong
