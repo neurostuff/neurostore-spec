@@ -946,13 +946,6 @@ components:
         studies:
           type: array
           items: {}
-            # x-stoplight:
-            #   id: 2cea6h24rq5pm
-            # anyOf:
-            #   - $ref: '#/components/schemas/study-request'
-            #   - type: string
-            #    x-stoplight:
-            #       id: pgfn93n9g9h67
     studyset-list:
       title: studyset-get
       type: object
@@ -1071,8 +1064,11 @@ components:
             id: 7ou6xrem7bwps
           items:
             $ref: '#/components/schemas/entity'
-            x-stoplight:
-              id: 46bl0p1xing9l
+        analysis:
+          type: integer
+          x-stoplight:
+            id: vo5cd2gerhxve
+          nullable: true
     analysis-return:
       title: analysis-return
       allOf:
