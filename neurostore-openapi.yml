@@ -1064,7 +1064,7 @@ components:
             id: 7ou6xrem7bwps
           items:
             $ref: '#/components/schemas/entity'
-        analysis:
+        order:
           type: integer
           x-stoplight:
             id: vo5cd2gerhxve
