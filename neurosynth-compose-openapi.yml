@@ -198,6 +198,10 @@ paths:
           description: OK
       security:
         - JSON-Web-Token: []
+      tags:
+        - compose
+        - meta_analyses
+        - delete
   /studysets:
     get:
       summary: Get a list of Studysets
@@ -395,51 +399,6 @@ paths:
             schema:
               $ref: '#/components/schemas/annotation-update'
       description: update an existing annotation
-  /specifications:
-    get:
-      summary: Get a list of Specifications
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/specification-list'
-        '400':
-          $ref: '#/components/responses/bad-request'
-      description: list of meta-analysis specifications
-      tags:
-        - specifications
-        - get
-        - compose
-    parameters: []
-    post:
-      summary: Create a Specification
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/specification-return'
-        '400':
-          $ref: '#/components/responses/bad-request'
-        '422':
-          description: Unprocessable Entity (WebDAV)
-        '500':
-          $ref: '#/components/responses/bad-request'
-      security:
-        - JSON-Web-Token: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/specification-post-body'
-      description: create a new meta-analysis specification
-      tags:
-        - specifications
-        - post
-        - compose
   '/specifications/{id}':
     parameters:
       - schema:
@@ -494,6 +453,20 @@ paths:
         - specifications
         - put
         - compose
+    delete:
+      summary: Delete a Specification
+      tags:
+        - compose
+        - specifications
+        - delete
+      responses:
+        '200':
+          description: OK
+      operationId: ''
+      x-stoplight:
+        id: zrfd1zeuselxb
+      security:
+        - JSON-Web-Token: []
   /meta-analysis-results:
     get:
       summary: Your GET endpoint
@@ -632,7 +605,7 @@ paths:
                 $ref: '#/components/schemas/neurovault-collection-return'
       x-internal: true
     put:
-      summary: ''
+      summary: Update Neurovault Collection Reference
       responses:
         '200':
           description: OK
@@ -814,12 +787,16 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
-        - projects
         - compose
+        - projects
+        - delete
   /neurostore-studies:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - compose
+        - neurostore-studies
+        - get
       responses:
         '200':
           description: OK
@@ -846,6 +823,10 @@ paths:
               type: object
               properties: {}
       x-internal: true
+      tags:
+        - compose
+        - neurostore-studies
+        - post
   '/neurostore-studies/{id}':
     parameters:
       - schema:
@@ -855,7 +836,10 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - compose
+        - neurostore-studies
+        - get
       responses:
         '200':
           description: OK
@@ -882,10 +866,17 @@ paths:
       security:
         - JSON-Web-Token: []
       x-internal: true
+      tags:
+        - compose
+        - neurostore-studies
+        - get
   /studyset-references:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - compose
+        - studyset-references
+        - get
       responses:
         '200':
           description: OK
@@ -907,7 +898,10 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - compose
+        - studyset-references
+        - get
       responses:
         '200':
           description: OK

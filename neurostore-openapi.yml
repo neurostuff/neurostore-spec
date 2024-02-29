@@ -40,6 +40,7 @@ paths:
         - $ref: '#/components/parameters/source'
         - $ref: '#/components/parameters/authors'
         - $ref: '#/components/parameters/user_id'
+        - $ref: '#/components/parameters/return_all'
       security:
         - JSON-Web-Token: []
         - {}
@@ -161,6 +162,7 @@ paths:
         - $ref: '#/components/parameters/pmid'
         - $ref: '#/components/parameters/doi'
         - $ref: '#/components/parameters/flat'
+        - $ref: '#/components/parameters/return_all'
       security:
         - JSON-Web-Token: []
         - {}
@@ -833,6 +835,7 @@ paths:
         - $ref: '#/components/parameters/doi'
         - $ref: '#/components/parameters/flat'
         - $ref: '#/components/parameters/info'
+        - $ref: '#/components/parameters/return_all'
       security:
         - JSON-Web-Token: []
         - {}
@@ -2019,6 +2022,13 @@ components:
       schema:
         type: boolean
       description: return the content as gzipped content
+    return_all:
+      name: return_all
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: 'return all results at an endpoint (WARNING: could take a while)'
   securitySchemes:
     JSON-Web-Token:
       type: http
