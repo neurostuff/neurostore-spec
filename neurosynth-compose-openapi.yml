@@ -108,6 +108,7 @@ paths:
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/description'
         - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/desc'
       tags:
         - meta_analyses
         - get
@@ -757,6 +758,7 @@ paths:
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/description'
         - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/desc'
     post:
       summary: ''
       responses:
@@ -1772,6 +1774,13 @@ components:
       in: header
       name: Compose-Upload-Key
   parameters:
+    desc:
+      name: desc
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: sort results by descending order (as opposed to ascending order)
     sort:
       name: sort
       in: query
