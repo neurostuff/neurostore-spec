@@ -1011,9 +1011,17 @@ components:
         - $ref: ./nimads/nimads/studyBase.yaml
         - $ref: '#/components/schemas/study-request-relationships'
         - $ref: '#/components/schemas/writeable-resource-attributes'
+        - type: object
+          x-stoplight:
+            id: w8fkbttl422ip
+          properties:
+            pmcid:
+              type: string
+              x-stoplight:
+                id: 5urg0rcomxc92
+              nullable: true
       x-tags:
         - study
-      description: ''
     study-return-relationships:
       title: study-relationships
       x-tags:
