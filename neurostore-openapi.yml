@@ -998,6 +998,11 @@ components:
               x-stoplight:
                 id: kpfdf217fjdv5
               nullable: true
+            pmcid:
+              type: string
+              x-stoplight:
+                id: n475is2n6hps6
+              nullable: true
       x-tags:
         - study
     study-request:
@@ -1694,12 +1699,11 @@ components:
                   id: nesbtmu3fl2yy
                 type: string
                 minItems: 1
-              type: array
             - x-stoplight:
                 id: vdove859ce553
               items:
                 $ref: '#/components/schemas/study-return'
-              type: array
+          type: array
         name:
           type: string
           x-stoplight:
@@ -1739,6 +1743,11 @@ components:
           type: string
           x-stoplight:
             id: voxamooj7ob5l
+          nullable: true
+        pmcid:
+          type: string
+          x-stoplight:
+            id: s29tro516g5zs
           nullable: true
     base-study-return:
       title: base-study-return
