@@ -998,6 +998,11 @@ components:
               x-stoplight:
                 id: kpfdf217fjdv5
               nullable: true
+            pmcid:
+              type: string
+              x-stoplight:
+                id: n475is2n6hps6
+              nullable: true
       x-tags:
         - study
     study-request:
@@ -1739,6 +1744,11 @@ components:
           type: string
           x-stoplight:
             id: voxamooj7ob5l
+          nullable: true
+        pmcid:
+          type: string
+          x-stoplight:
+            id: s29tro516g5zs
           nullable: true
     base-study-return:
       title: base-study-return
