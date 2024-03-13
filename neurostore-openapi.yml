@@ -923,15 +923,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/note-collection-list'
+        2XX:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/note-collection-list'
       x-stoplight:
         id: fjrufmjjb3y4q
   '/annotation-analyses/{id}':
     parameters:
-      - schema:
-          type: string
-        name: id
-        in: path
-        required: true
       - schema:
           type: string
         name: id
