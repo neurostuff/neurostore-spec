@@ -809,7 +809,9 @@ paths:
   /base-studies/:
     get:
       summary: ''
-      tags: []
+      tags:
+        - studies
+        - store
       responses:
         '200':
           description: OK
@@ -863,6 +865,9 @@ paths:
                     id: ufcpin3lhrdgq
                   items:
                     $ref: '#/components/schemas/base-study'
+      tags:
+        - studies
+        - store
   '/base-studies/{id}':
     parameters:
       - schema:
@@ -872,7 +877,9 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - studies
+        - store
       responses:
         '200':
           description: OK
@@ -899,6 +906,78 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/base-study'
+      tags:
+        - studies
+        - store
+  /annotation-analyses/:
+    get:
+      summary: Get annotation analyses
+      tags:
+        - analyses
+        - annotations
+        - store
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/note-collection-list'
+        2XX:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/note-collection-list'
+      x-stoplight:
+        id: fjrufmjjb3y4q
+  '/annotation-analyses/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags:
+        - analyses
+        - store
+        - annotations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/note-collection-return'
+      x-stoplight:
+        id: 0bluiswi2nwdw
+      security:
+        - {}
+        - JSON-Web-Token: []
+    put:
+      summary: Your PUT endpoint
+      tags:
+        - analyses
+        - annotations
+        - store
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/note-collection-return'
+      x-stoplight:
+        id: 5n36so5kwagsw
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/note-collection-request'
+      security:
+        - JSON-Web-Token: []
 components:
   schemas:
     studyset-return:
@@ -1461,11 +1540,29 @@ components:
               type: string
               nullable: true
               readOnly: true
+            id:
+              type: string
+              x-stoplight:
+                id: kcqkjm938r62j
     note-collection-request:
       title: note-collection-request
       allOf:
         - $ref: ./nimads/nimads/noteCollectionBase.yaml
         - $ref: '#/components/schemas/writeable-resource-attributes'
+    note-collection-list:
+      title: note-collection-list
+      x-stoplight:
+        id: mljd0u645zvaz
+      type: object
+      properties:
+        results:
+          type: array
+          x-stoplight:
+            id: 30s5atr6axd6n
+          items:
+            $ref: '#/components/schemas/note-collection-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
     annotation-export:
       type: object
       title: annotation-export
