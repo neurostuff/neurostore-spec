@@ -946,6 +946,9 @@ paths:
       responses: {}
       x-stoplight:
         id: 0bluiswi2nwdw
+      security:
+        - {}
+        - JSON-Web-Token: []
     put:
       summary: Your PUT endpoint
       tags:
@@ -966,6 +969,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/note-collection-request'
+      security:
+        - JSON-Web-Token: []
 components:
   schemas:
     studyset-return:
