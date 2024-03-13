@@ -809,7 +809,9 @@ paths:
   /base-studies/:
     get:
       summary: ''
-      tags: []
+      tags:
+        - studies
+        - store
       responses:
         '200':
           description: OK
@@ -863,6 +865,9 @@ paths:
                     id: ufcpin3lhrdgq
                   items:
                     $ref: '#/components/schemas/base-study'
+      tags:
+        - studies
+        - store
   '/base-studies/{id}':
     parameters:
       - schema:
@@ -872,7 +877,9 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - studies
+        - store
       responses:
         '200':
           description: OK
@@ -899,10 +906,16 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/base-study'
+      tags:
+        - studies
+        - store
   /annotation-analyses/:
     get:
-      summary: Your GET endpoint
-      tags: []
+      summary: Get annotation analyses
+      tags:
+        - analyses
+        - annotations
+        - store
       responses:
         '200':
           description: OK
@@ -910,7 +923,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/note-collection-list'
-      operationId: ''
       x-stoplight:
         id: fjrufmjjb3y4q
   '/annotation-analyses/{id}':
@@ -920,13 +932,40 @@ paths:
         name: id
         in: path
         required: true
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - analyses
+        - store
+        - annotations
       responses: {}
-      operationId: get-annotation-analyses-id
       x-stoplight:
         id: 0bluiswi2nwdw
+    put:
+      summary: Your PUT endpoint
+      tags:
+        - analyses
+        - annotations
+        - store
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/note-collection-return'
+      x-stoplight:
+        id: 5n36so5kwagsw
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/note-collection-request'
 components:
   schemas:
     studyset-return:
