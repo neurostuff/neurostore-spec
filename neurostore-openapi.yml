@@ -1701,7 +1701,7 @@ components:
           description: short UUID specifying the location of this resource
           example: 38jobTomPDqt
           minLength: 12
-          maxLength: 12
+          maxLength: 30
         public:
           type: boolean
           default: true
