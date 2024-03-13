@@ -944,7 +944,13 @@ paths:
         - analyses
         - store
         - annotations
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/note-collection-return'
       x-stoplight:
         id: 0bluiswi2nwdw
       security:
