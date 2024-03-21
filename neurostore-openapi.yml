@@ -931,6 +931,28 @@ paths:
                 $ref: '#/components/schemas/note-collection-list'
       x-stoplight:
         id: fjrufmjjb3y4q
+    put:
+      summary: Your PUT endpoint
+      tags:
+        - analyses
+        - annotations
+        - store
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/note-collection-return'
+      x-stoplight:
+        id: z1xizns9dcjz5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/note-collection-request'
   '/annotation-analyses/{id}':
     parameters:
       - schema:
