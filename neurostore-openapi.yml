@@ -931,6 +931,36 @@ paths:
                 $ref: '#/components/schemas/note-collection-list'
       x-stoplight:
         id: fjrufmjjb3y4q
+    post:
+      summary: Your POST endpoint
+      tags:
+        - analyses
+        - annotations
+        - store
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/note-collection-return'
+      x-stoplight:
+        id: z1xizns9dcjz5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/note-collection-request'
+      security:
+        - JSON-Web-Token: []
+      description: |-
+        This endpoint does not allow for creation, only modification of existing annotation-analyses.
+        If you wish to create an annotation-analysis, post to the annotations endpoint and/or add the analysis
+        to the appropriate study in the studyset, and the annotation-analysis will be created automatically. 
   '/annotation-analyses/{id}':
     parameters:
       - schema:
