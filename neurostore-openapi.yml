@@ -943,7 +943,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/note-collection-return'
+                type: array
+                items:
+                  $ref: '#/components/schemas/note-collection-return'
       x-stoplight:
         id: z1xizns9dcjz5
       requestBody:
