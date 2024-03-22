@@ -931,8 +931,8 @@ paths:
                 $ref: '#/components/schemas/note-collection-list'
       x-stoplight:
         id: fjrufmjjb3y4q
-    put:
-      summary: Your PUT endpoint
+    post:
+      summary: Your POST endpoint
       tags:
         - analyses
         - annotations
