@@ -953,6 +953,8 @@ paths:
               type: array
               items:
                 $ref: '#/components/schemas/note-collection-request'
+      security:
+        - JSON-Web-Token: []
   '/annotation-analyses/{id}':
     parameters:
       - schema:
