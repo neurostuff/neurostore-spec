@@ -1531,11 +1531,12 @@ components:
         meta_analyses:
           oneOf:
             - minItems: 1
+              type: array
               items:
                 $ref: '#/components/schemas/meta-analysis'
             - items:
                 type: string
-          type: array
+              type: array
         name:
           type: string
           nullable: true
