@@ -759,6 +759,7 @@ paths:
         - $ref: '#/components/parameters/description'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/user_id'
     post:
       summary: ''
       responses:
@@ -1530,9 +1531,9 @@ components:
         meta_analyses:
           oneOf:
             - minItems: 1
+              type: array
               items:
                 $ref: '#/components/schemas/meta-analysis'
-              type: array
             - items:
                 type: string
               type: array
@@ -1855,6 +1856,13 @@ components:
         items:
           type: string
       description: choose the specific ids you wish to get
+    user_id:
+      name: user_id
+      in: query
+      required: false
+      schema:
+        type: string
+      description: user id you want to filter on
   responses:
     bad-request:
       description: form when a request goes wrong
