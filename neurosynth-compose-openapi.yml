@@ -1550,6 +1550,7 @@ components:
           description: whether the project is public or private
         neurostore_study:
           $ref: '#/components/schemas/neurostore-study'
+          nullable: true
         neurostore_url:
           type: string
           x-stoplight:
