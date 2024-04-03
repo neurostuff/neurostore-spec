@@ -759,6 +759,7 @@ paths:
         - $ref: '#/components/parameters/description'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/user_id'
     post:
       summary: ''
       responses:
@@ -1532,10 +1533,9 @@ components:
             - minItems: 1
               items:
                 $ref: '#/components/schemas/meta-analysis'
-              type: array
             - items:
                 type: string
-              type: array
+          type: array
         name:
           type: string
           nullable: true
@@ -1549,7 +1549,6 @@ components:
           description: whether the project is public or private
         neurostore_study:
           $ref: '#/components/schemas/neurostore-study'
-          nullable: true
         neurostore_url:
           type: string
           x-stoplight:
@@ -1855,6 +1854,13 @@ components:
         items:
           type: string
       description: choose the specific ids you wish to get
+    user_id:
+      name: user_id
+      in: query
+      required: false
+      schema:
+        type: string
+      description: user id you want to filter on
   responses:
     bad-request:
       description: form when a request goes wrong
