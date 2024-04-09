@@ -1531,12 +1531,11 @@ components:
         meta_analyses:
           oneOf:
             - minItems: 1
-              type: array
               items:
                 $ref: '#/components/schemas/meta-analysis'
             - items:
                 type: string
-              type: array
+          type: array
         name:
           type: string
           nullable: true
@@ -1550,12 +1549,15 @@ components:
           description: whether the project is public or private
         neurostore_study:
           $ref: '#/components/schemas/neurostore-study'
-          nullable: true
         neurostore_url:
           type: string
           x-stoplight:
             id: mfk6853ojk4kk
           nullable: true
+        draft:
+          type: boolean
+          x-stoplight:
+            id: fxy7tfy8gx1e1
     project-return:
       allOf:
         - $ref: '#/components/schemas/read-only'
