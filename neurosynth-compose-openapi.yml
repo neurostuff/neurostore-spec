@@ -1533,9 +1533,10 @@ components:
             - minItems: 1
               items:
                 $ref: '#/components/schemas/meta-analysis'
+              type: array
             - items:
                 type: string
-          type: array
+              type: array
         name:
           type: string
           nullable: true
@@ -1558,6 +1559,7 @@ components:
           type: boolean
           x-stoplight:
             id: fxy7tfy8gx1e1
+          readOnly: true
     project-return:
       allOf:
         - $ref: '#/components/schemas/read-only'
