@@ -1195,6 +1195,7 @@ components:
           type: object
           x-stoplight:
             id: wibxycovy2j3g
+          nullable: true
     analysis-return:
       title: analysis-return
       allOf:
