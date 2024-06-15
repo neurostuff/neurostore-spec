@@ -2016,6 +2016,7 @@ components:
           - pubmed
           - neurosynth
           - neuroquery
+          - pubget
       description: the source of the resource you would like to filter/copy from
     source_id:
       name: source_id
