@@ -160,112 +160,38 @@ paths:
       responses:
         '204':
           description: No Content
-
-  /pipeline-runs/:
-    get:
-      summary: GET a list of pipeline runs
-      tags:
-        - pipeline-runs
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/pipeline-run-list'
-    post:
-      summary: POST/create a pipeline run
-      tags:
-        - pipeline-runs
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/pipeline-run'
-      responses:
-        '201':
-          description: Created
-  /pipeline-runs/{pipeline_run_id}:
-    get:
-      summary: GET a pipeline run by ID
-      tags:
-        - pipeline-runs
-      parameters:
-        - name: pipeline_run_id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/pipeline-run'
-    put:
-      summary: PUT/update a pipeline run by ID
-      tags:
-        - pipeline-runs
-      parameters:
-        - name: pipeline_run_id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/pipeline-run'
-      responses:
-        '200':
-          description: OK
-    delete:
-      summary: DELETE a pipeline run by ID
-      tags:
-        - pipeline-runs
-      parameters:
-        - name: pipeline_run_id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: No Content
-
-  /pipeline-run-results/:
+    
+  /pipeline-study-results/:
     get:
       summary: GET a list of pipeline run results
       tags:
-        - pipeline-run-results
+        - pipeline-study-results
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/pipeline-run-result-list'
+                $ref: '#/components/schemas/pipeline-study-result-list'
     post:
       summary: POST/create a pipeline run result
       tags:
-        - pipeline-run-results
+        - pipeline-study-results
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/pipeline-run-result'
+              $ref: '#/components/schemas/pipeline-study-result'
       responses:
         '201':
           description: Created
-  /pipeline-run-results/{pipeline_run_result_id}:
+  /pipeline-study-results/{pipeline_study_result_id}:
     get:
       summary: GET a pipeline run result by ID
       tags:
-        - pipeline-run-results
+        - pipeline-study-results
       parameters:
-        - name: pipeline_run_result_id
+        - name: pipeline_study_result_id
           in: path
           required: true
           schema:
@@ -276,13 +202,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/pipeline-run-result'
+                $ref: '#/components/schemas/pipeline-study-result'
     put:
       summary: PUT/update a pipeline run result by ID
       tags:
-        - pipeline-run-results
+        - pipeline-study-results
       parameters:
-        - name: pipeline_run_result_id
+        - name: pipeline_study_result_id
           in: path
           required: true
           schema:
@@ -291,90 +217,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/pipeline-run-result'
+              $ref: '#/components/schemas/pipeline-study-result'
       responses:
         '200':
           description: OK
     delete:
       summary: DELETE a pipeline run result by ID
       tags:
-        - pipeline-run-results
+        - pipeline-study-results
       parameters:
-        - name: pipeline_run_result_id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: No Content
-
-  /pipeline-run-result-votes/:
-    get:
-      summary: GET a list of pipeline run result votes
-      tags:
-        - pipeline-run-result-votes
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/pipeline-run-result-vote-list'
-    post:
-      summary: POST/create a pipeline run result vote
-      tags:
-        - pipeline-run-result-votes
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/pipeline-run-result-vote'
-      responses:
-        '201':
-          description: Created
-  /pipeline-run-result-votes/{pipeline_run_result_vote_id}:
-    get:
-      summary: GET a pipeline run result vote by ID
-      tags:
-        - pipeline-run-result-votes
-      parameters:
-        - name: pipeline_run_result_vote_id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/pipeline-run-result-vote'
-    put:
-      summary: PUT/update a pipeline run result vote by ID
-      tags:
-        - pipeline-run-result-votes
-      parameters:
-        - name: pipeline_run_result_vote_id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/pipeline-run-result-vote'
-      responses:
-        '200':
-          description: OK
-    delete:
-      summary: DELETE a pipeline run result vote by ID
-      tags:
-        - pipeline-run-result-votes
-      parameters:
-        - name: pipeline_run_result_vote_id
+        - name: pipeline_study_result_id
           in: path
           required: true
           schema:
@@ -1189,9 +1041,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/base-study-list'
       parameters:
-        - name: features
+        - name: feature_filter
           in: query
           description: Filter studies by features
+          required: false
+          schema:
+            type: string
+        - name: feature_display
+          in: query
+          description: display features from pipelines
           required: false
           schema:
             type: string
@@ -1429,62 +1287,22 @@ components:
             $ref: '#/components/schemas/pipeline-config'
         metadata:
           $ref: '#/components/schemas/metadata'
-    pipeline-run:
+    pipeline-study-result:
       type: object
       properties:
         id:
           type: string
-        status:
-          type: string
-        started_at:
-          type: string
-        finished_at:
-          type: string
-    pipeline-run-list:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/pipeline-run'
-        metadata:
-          $ref: '#/components/schemas/metadata'
-    pipeline-run-result:
-      type: object
-      properties:
-        id:
-          type: string
-        pipeline_run_id:
+        pipeline_config_id:
           type: string
         data:
           type: object
-    pipeline-run-result-list:
+    pipeline-study-result-list:
       type: object
       properties:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/pipeline-run-result'
-        metadata:
-          $ref: '#/components/schemas/metadata'
-    pipeline-run-result-vote:
-      type: object
-      properties:
-        id:
-          type: string
-        pipeline_run_result_id:
-          type: string
-        user_id:
-          type: string
-        vote:
-          type: integer
-    pipeline-run-result-vote-list:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/pipeline-run-result-vote'
+            $ref: '#/components/schemas/pipeline-study-result'
         metadata:
           $ref: '#/components/schemas/metadata'
     studyset-return:
