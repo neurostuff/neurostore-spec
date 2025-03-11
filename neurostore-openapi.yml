@@ -29,6 +29,8 @@ paths:
       summary: POST/create a pipeline
       tags:
         - pipelines
+      security:
+        - JSON-Web-Token: []
       requestBody:
         content:
           application/json:
@@ -37,6 +39,8 @@ paths:
       responses:
         '201':
           description: Created
+        '401':
+          description: Unauthorized - Authentication required
   /pipelines/{id}:
     get:
       summary: GET a pipeline by ID
@@ -166,6 +170,16 @@ paths:
       summary: GET a list of pipeline run results
       tags:
         - pipeline-study-results
+      parameters:
+        - name: feature_filter
+          in: query
+          description: Filter results by feature content using jsonpath syntax
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'groups.diagnosis=ADHD'
       responses:
         '200':
           description: OK
