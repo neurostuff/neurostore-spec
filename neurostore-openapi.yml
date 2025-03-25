@@ -180,6 +180,14 @@ paths:
             items:
               type: string
               example: 'groups.diagnosis=ADHD'
+        - name: study_id
+          in: query
+          description: Filter results by base study ID
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: OK
