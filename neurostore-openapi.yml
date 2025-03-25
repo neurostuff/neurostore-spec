@@ -1075,6 +1075,11 @@ paths:
           required: false
           schema:
             type: string
+        - name: feature_flatten
+          in: query
+          required: false
+          schema:
+            type: boolean
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/page'
