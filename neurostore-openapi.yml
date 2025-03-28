@@ -1092,10 +1092,34 @@ paths:
       parameters:
         - name: feature_filter
           in: query
-          description: Filter studies by features
+          description: >
+            Filter studies by feature content. Format: "PipelineName[:version]:field_path=value".
+            Examples:
+              - "TestPipeline:1.0.0:predictions.age_mean>20" (specific version)
+              - "TestPipeline:groups.diagnosis=ADHD" (any version)
+            
+            Field path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
           required: false
           schema:
-            type: string
+            type: array
+            items:
+              type: string
+              example: 'TestPipeline:1.0.0:predictions.age_mean>20'
+        - name: feature_config
+          in: query
+          description: >
+            Filter studies by pipeline config content. Format: "PipelineName[:version]:config_path=value".
+            Examples:
+              - "TestPipeline:1.0.0:settings.min_age=20" (specific version)
+              - "TestPipeline:model.type=linear" (any version)
+            
+            Config path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'TestPipeline:1.0.0:settings.min_age=20'
         - name: feature_display
           in: query
           description: display features from pipelines
