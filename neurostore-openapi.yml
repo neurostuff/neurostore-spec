@@ -186,7 +186,7 @@ paths:
             items:
               type: string
               example: 'TestPipeline:1.0.0:groups.diagnosis=ADHD'
-        - name: feature_config
+        - name: pipeline_config
           in: query
           description: >
             Filter results by pipeline config content. Format: "PipelineName[:version]:config_path=value".
@@ -1105,7 +1105,7 @@ paths:
             items:
               type: string
               example: 'TestPipeline:1.0.0:predictions.age_mean>20'
-        - name: feature_config
+        - name: pipeline_config
           in: query
           description: >
             Filter studies by pipeline config content. Format: "PipelineName[:version]:config_path=value".
