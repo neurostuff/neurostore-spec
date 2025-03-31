@@ -177,7 +177,7 @@ paths:
             Filter results by feature content. Format: "PipelineName[:version]:field_path=value".
             Examples:
               - "TestPipeline:1.0.0:groups.diagnosis=ADHD" (specific version)
-              - "TestPipeline:groups.diagnosis=ADHD" (any version)
+              - "TestPipeline:groups.diagnosis=ADHD" (latest version)
             
             Field path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
           required: false
@@ -192,7 +192,7 @@ paths:
             Filter results by pipeline config content. Format: "PipelineName[:version]:config_path=value".
             Examples:
               - "TestPipeline:1.0.0:preprocessing.smoothing=8" (specific version)
-              - "TestPipeline:model.type=linear" (any version)
+              - "TestPipeline:model.type=linear" (latest version)
             
             Config path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
           required: false
@@ -1111,7 +1111,7 @@ paths:
             Filter studies by pipeline config content. Format: "PipelineName[:version]:config_path=value".
             Examples:
               - "TestPipeline:1.0.0:settings.min_age=20" (specific version)
-              - "TestPipeline:model.type=linear" (any version)
+              - "TestPipeline:model.type=linear" (latest version)
             
             Config path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
           required: false
