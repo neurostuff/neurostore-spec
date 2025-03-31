@@ -1096,7 +1096,7 @@ paths:
             Filter studies by feature content. Format: "PipelineName[:version]:field_path=value".
             Examples:
               - "TestPipeline:1.0.0:predictions.age_mean>20" (specific version)
-              - "TestPipeline:groups.diagnosis=ADHD" (any version)
+              - "TestPipeline:groups.diagnosis=ADHD" (latest version)
             
             Field path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
           required: false
