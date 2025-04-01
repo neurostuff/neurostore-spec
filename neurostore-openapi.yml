@@ -1335,6 +1335,7 @@ components:
           type: string
         description:
           type: string
+          nullable: true
         version:
           type: string
         study_dependent:
@@ -1345,6 +1346,7 @@ components:
           type: boolean
         derived_from:
           type: string
+          nullable: true
     pipeline-list:
       type: object
       properties:
