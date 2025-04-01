@@ -96,6 +96,16 @@ paths:
       summary: GET a list of pipeline configs
       tags:
         - pipeline-configs
+      parameters:
+        - name: pipeline
+          in: query
+          description: Filter configs by pipeline name
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'TestPipeline'
       responses:
         '200':
           description: OK
@@ -1335,6 +1345,7 @@ components:
           type: string
         description:
           type: string
+          nullable: true
         version:
           type: string
         study_dependent:
@@ -1345,6 +1356,7 @@ components:
           type: boolean
         derived_from:
           type: string
+          nullable: true
     pipeline-list:
       type: object
       properties:
