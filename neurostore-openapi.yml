@@ -186,6 +186,11 @@ paths:
             items:
               type: string
               example: 'TestPipeline:1.0.0:groups.diagnosis=ADHD'
+        - name: feature_flatten
+          in: query
+          required: false
+          schema:
+            type: boolean
         - name: pipeline_config
           in: query
           description: >
