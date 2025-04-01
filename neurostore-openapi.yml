@@ -96,6 +96,16 @@ paths:
       summary: GET a list of pipeline configs
       tags:
         - pipeline-configs
+      parameters:
+        - name: pipeline
+          in: query
+          description: Filter configs by pipeline name
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'TestPipeline'
       responses:
         '200':
           description: OK
