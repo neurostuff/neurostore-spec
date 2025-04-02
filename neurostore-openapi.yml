@@ -216,6 +216,20 @@ paths:
             items:
               type: string
               example: 'TestPipeline:1.0.0:preprocessing.smoothing=8'
+        - name: feature_display
+          in: query
+          description: >
+            Filter results by pipeline name and optionally version. Format: "pipeline_name[:version]".
+            Examples:
+              - "TestPipeline" (all results from pipeline)
+              - "TestPipeline:1.0.0" (results from specific version)
+            Multiple values can be provided to get results from multiple pipelines/versions.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'TestPipeline:1.0.0'
         - name: study_id
           in: query
           description: Filter results by base study ID
