@@ -18,6 +18,8 @@ paths:
       summary: GET a list of pipelines
       tags:
         - pipelines
+      parameters:
+        - $ref: '#/components/parameters/paginate'
       responses:
         '200':
           description: OK
@@ -106,6 +108,7 @@ paths:
             items:
               type: string
               example: 'TestPipeline'
+        - $ref: '#/components/parameters/paginate'
       responses:
         '200':
           description: OK
@@ -313,36 +316,37 @@ paths:
         '204':
           description: No Content
   /studysets/:
-    get:
-      summary: GET a list of studysets
-      tags:
-        - studysets
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/studyset-list'
-      description: Get a list of studysets.
-      parameters:
-        - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/desc'
-        - $ref: '#/components/parameters/page_size'
-        - $ref: '#/components/parameters/nested'
-        - $ref: '#/components/parameters/name'
-        - $ref: '#/components/parameters/description'
-        - $ref: '#/components/parameters/source_id'
-        - $ref: '#/components/parameters/unique'
-        - $ref: '#/components/parameters/source'
-        - $ref: '#/components/parameters/authors'
-        - $ref: '#/components/parameters/user_id'
-      security:
+   get:
+     summary: GET a list of studysets
+     tags:
+       - studysets
+     responses:
+       '200':
+         description: OK
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/studyset-list'
+     description: Get a list of studysets.
+     parameters:
+       - $ref: '#/components/parameters/search'
+       - $ref: '#/components/parameters/sort'
+       - $ref: '#/components/parameters/page'
+       - $ref: '#/components/parameters/desc'
+       - $ref: '#/components/parameters/page_size'
+       - $ref: '#/components/parameters/paginate'
+       - $ref: '#/components/parameters/nested'
+       - $ref: '#/components/parameters/name'
+       - $ref: '#/components/parameters/description'
+       - $ref: '#/components/parameters/source_id'
+       - $ref: '#/components/parameters/unique'
+       - $ref: '#/components/parameters/source'
+       - $ref: '#/components/parameters/authors'
+       - $ref: '#/components/parameters/user_id'
+     security:
         - JSON-Web-Token: []
         - {}
-    post:
+   post:
       summary: POST/create a studyset
       responses:
         '200':
@@ -446,6 +450,7 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/paginate'
         - $ref: '#/components/parameters/nested'
         - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/description'
@@ -570,6 +575,7 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/paginate'
         - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/description'
         - $ref: '#/components/parameters/nested'
@@ -658,6 +664,8 @@ paths:
       tags:
         - points
         - store
+      parameters:
+        - $ref: '#/components/parameters/paginate'
       responses:
         '200':
           description: OK
@@ -762,6 +770,7 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/paginate'
         - $ref: '#/components/parameters/filename'
         - $ref: '#/components/parameters/analysis_name'
         - $ref: '#/components/parameters/value_type'
@@ -862,6 +871,7 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/paginate'
         - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/description'
     post:
@@ -957,6 +967,7 @@ paths:
       description: get annotations for an available studyset
       parameters:
         - $ref: '#/components/parameters/studyset_id'
+        - $ref: '#/components/parameters/paginate'
     post:
       summary: Post Annotation
       responses:
@@ -1175,6 +1186,7 @@ paths:
         - $ref: '#/components/parameters/doi'
         - $ref: '#/components/parameters/flat'
         - $ref: '#/components/parameters/info'
+        - $ref: '#/components/parameters/paginate'
       security:
         - JSON-Web-Token: []
         - {}
@@ -1269,8 +1281,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/note-collection-list'
-      x-stoplight:
-        id: fjrufmjjb3y4q
+      parameters:
+        - $ref: '#/components/parameters/paginate'
     post:
       summary: Your POST endpoint
       tags:
@@ -1286,8 +1298,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/note-collection-return'
-      x-stoplight:
-        id: z1xizns9dcjz5
       requestBody:
         content:
           application/json:
@@ -1339,8 +1349,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/note-collection-return'
-      x-stoplight:
-        id: 5n36so5kwagsw
       requestBody:
         content:
           application/json:
@@ -2577,6 +2585,14 @@ components:
       schema:
         type: boolean
       description: return the content as gzipped content
+    paginate:
+      name: paginate
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: true
+      description: whether to paginate results (true) or return all results at once (false)
   securitySchemes:
     JSON-Web-Token:
       type: http
