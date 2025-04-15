@@ -1186,6 +1186,7 @@ paths:
         - $ref: '#/components/parameters/doi'
         - $ref: '#/components/parameters/flat'
         - $ref: '#/components/parameters/info'
+        - $ref: '#/components/parameters/paginate'
       security:
         - JSON-Web-Token: []
         - {}
