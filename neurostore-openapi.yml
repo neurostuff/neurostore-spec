@@ -1281,8 +1281,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/note-collection-list'
-      x-stoplight:
-        id: fjrufmjjb3y4q
+      parameters:
+        - $ref: '#/components/parameters/paginate'
     post:
       summary: Your POST endpoint
       tags:
@@ -1298,8 +1298,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/note-collection-return'
-      x-stoplight:
-        id: z1xizns9dcjz5
       requestBody:
         content:
           application/json:
@@ -1351,8 +1349,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/note-collection-return'
-      x-stoplight:
-        id: 5n36so5kwagsw
       requestBody:
         content:
           application/json:
