@@ -343,10 +343,10 @@ paths:
        - $ref: '#/components/parameters/source'
        - $ref: '#/components/parameters/authors'
        - $ref: '#/components/parameters/user_id'
-      security:
+     security:
         - JSON-Web-Token: []
         - {}
-    post:
+   post:
       summary: POST/create a studyset
       responses:
         '200':
