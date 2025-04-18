@@ -184,6 +184,7 @@ paths:
       tags:
         - pipeline-study-results
       parameters:
+        - $ref: '#/components/parameters/paginate'
         - name: feature_filter
           in: query
           description: >
