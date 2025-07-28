@@ -1137,6 +1137,34 @@ paths:
           required: false
           schema:
             type: integer
+        - name: x
+          in: query
+          description: X coordinate for spatial query (requires y, z, and radius)
+          required: false
+          schema:
+            type: number
+            example: 10
+        - name: y
+          in: query
+          description: Y coordinate for spatial query (requires x, z, and radius)
+          required: false
+          schema:
+            type: number
+            example: 20
+        - name: z
+          in: query
+          description: Z coordinate for spatial query (requires x, y, and radius)
+          required: false
+          schema:
+            type: number
+            example: 30
+        - name: radius
+          in: query
+          description: Radius for spatial query (requires x, y, and z)
+          required: false
+          schema:
+            type: number
+            example: 6
             example: 2000
         - name: year_max
           in: query
