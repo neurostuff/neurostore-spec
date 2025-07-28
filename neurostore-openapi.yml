@@ -1726,6 +1726,10 @@ components:
             id: 5klqsds10ziod
           description: whether the reported peak is the max-peak statistic or a sub-maxmimal peak.
           nullable: true
+        deactivation:
+          type: boolean
+          description: wheather the coordinate represents an decrease in activation relative to a baseline
+          nullable: true
         order:
           type: integer
           x-stoplight:
