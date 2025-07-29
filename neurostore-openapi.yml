@@ -2126,10 +2126,10 @@ components:
       allOf:
         - $ref: '#/components/schemas/readable-resource-attributes'
         - $ref: '#/components/schemas/writeable-resource-attributes'
-          requred:
+          required:
             - id
         - $ref: '#/components/schemas/user-resource-attributes'
-          requred:
+          required:
             - user
         - readOnly: true
       description: common attributes for user owned resources
@@ -2140,7 +2140,7 @@ components:
             - created_at
             - updated_at
         - $ref: '#/components/schemas/writeable-resource-attributes'
-          requred:
+          required:
             - id
         - readOnly: true
       description: common resource attributes not tied to a specific user
