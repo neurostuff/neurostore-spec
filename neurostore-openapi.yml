@@ -1454,15 +1454,6 @@ components:
             $ref: '#/components/schemas/pipeline-config'
         metadata:
           $ref: '#/components/schemas/metadata'
-    pipeline-study-result:
-      type: object
-      properties:
-        id:
-          type: string
-        pipeline_config_id:
-          type: string
-        data:
-          type: object
     pipeline-study-result-list:
       type: object
       properties:
