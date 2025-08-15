@@ -263,10 +263,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/pipeline-study-result'
+              $ref: '#/components/schemas/pipeline-study-result-post'
+            # No description here, matching base-studies pattern
       responses:
         '201':
           description: Created
+        '200':
+          description: OK (search results)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pipeline-study-result-list'
   /pipeline-study-results/{pipeline_study_result_id}:
     get:
       summary: GET a pipeline run result by ID
@@ -1465,6 +1472,44 @@ components:
             $ref: '#/components/schemas/pipeline-study-result'
         metadata:
           $ref: '#/components/schemas/metadata'
+    pipeline-study-result-post:
+      oneOf:
+        - $ref: '#/components/schemas/pipeline-study-result-search'
+        - $ref: '#/components/schemas/pipeline-study-result'
+    pipeline-study-result-search:
+      type: object
+      properties:
+        study_ids:
+          type: array
+          items:
+            type: string
+      required:
+        - study_ids
+    pipeline-study-result:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        pipeline_config_id:
+          type: string
+        base_study_id:
+          type: string
+        config_id:
+          type: string
+        date_executed:
+          type: string
+          format: date-time
+        file_inputs:
+          type: object
+        result_data:
+          type: object
+        status:
+          type: string
+        data:
+          type: object
+      required:
+        - id
     studyset-return:
       title: studyset-return
       x-examples: {}
