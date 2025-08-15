@@ -1172,7 +1172,6 @@ paths:
           schema:
             type: number
             example: 6
-            example: 2000
         - name: year_max
           in: query
           description: Maximum publication year (inclusive) for study search
