@@ -259,6 +259,71 @@ paths:
       summary: POST/create a pipeline run result
       tags:
         - pipeline-study-results
+      parameters:
+        - $ref: '#/components/parameters/paginate'
+        - name: feature_filter
+          in: query
+          description: >
+            Filter results by feature content. Format: "PipelineName[:version]:field_path=value".
+            Examples:
+              - "TestPipeline:1.0.0:groups.diagnosis=ADHD" (specific version)
+              - "TestPipeline:groups.diagnosis=ADHD" (latest version)
+            
+            Field path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'TestPipeline:1.0.0:groups.diagnosis=ADHD'
+        - name: feature_flatten
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: pipeline_config
+          in: query
+          description: >
+            Filter results by pipeline config content. Format: "PipelineName[:version]:config_path=value".
+            Examples:
+              - "TestPipeline:1.0.0:preprocessing.smoothing=8" (specific version)
+              - "TestPipeline:model.type=linear" (latest version)
+            
+            Config path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'TestPipeline:1.0.0:preprocessing.smoothing=8'
+        - name: feature_display
+          in: query
+          description: >
+            Filter results by pipeline name and optionally version. Format: "pipeline_name[:version]".
+            Examples:
+              - "TestPipeline" (all results from pipeline)
+              - "TestPipeline:1.0.0" (results from specific version)
+            Multiple values can be provided to get results from multiple pipelines/versions.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'TestPipeline:1.0.0'
+        - name: study_id
+          in: query
+          description: Filter results by base study ID
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: version
+          in: query
+          description: Filter results by pipeline config version
+          required: false
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
