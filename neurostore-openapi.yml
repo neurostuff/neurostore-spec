@@ -1496,8 +1496,6 @@ components:
           type: object
         status:
           type: string
-        data:
-          type: object
       required:
         - id
     studyset-return:
