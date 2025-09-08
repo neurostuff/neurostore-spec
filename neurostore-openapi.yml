@@ -109,6 +109,16 @@ paths:
               type: string
               example: 'TestPipeline'
         - $ref: '#/components/parameters/paginate'
+        - name: has_embeddings
+          in: query
+          description: Filter configs as whether they have embeddings saved.
+          schema:
+            type: boolean
+        - name: embedding_dimensions
+          in: query
+          description: Filter configs by number of dimensions in the embeddings.
+          schema:
+            type: integer
       responses:
         '200':
           description: OK
