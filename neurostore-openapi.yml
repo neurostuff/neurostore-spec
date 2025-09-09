@@ -109,6 +109,16 @@ paths:
               type: string
               example: 'TestPipeline'
         - $ref: '#/components/parameters/paginate'
+        - name: has_embeddings
+          in: query
+          description: Filter configs as whether they have embeddings saved.
+          schema:
+            type: boolean
+        - name: embedding_dimensions
+          in: query
+          description: Filter configs by number of dimensions in the embeddings.
+          schema:
+            type: integer
       responses:
         '200':
           description: OK
@@ -1280,6 +1290,33 @@ paths:
           required: false
           schema:
             type: string
+        - name: semantic_search
+          in: query
+          description: Semantic search query string
+          required: false
+          schema:
+            type: string
+        - name: pipeline_config_id
+          in: query
+          description: Pipeline configuration identifier to filter studies
+          required: false
+          schema:
+            type: string
+        - name: distance_threshold
+          in: query
+          description: Distance threshold for semantic search (default 0.5)
+          required: false
+          schema:
+            type: number
+            format: float
+            example: 0.5
+        - name: overall_cap
+          in: query
+          description: Maximum number of overall results to return (default 3000)
+          required: false
+          schema:
+            type: integer
+            example: 3000
         - name: feature_flatten
           in: query
           required: false
@@ -1470,6 +1507,40 @@ paths:
               $ref: '#/components/schemas/note-collection-request'
       security:
         - JSON-Web-Token: []
+  /pipeline-embeddings/:
+    get:
+      summary: List pipeline embeddings
+      tags:
+        - pipeline-embeddings
+      parameters:
+        - $ref: '#/components/parameters/paginate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pipeline-embedding-list'
+  '/pipeline-embeddings/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get a pipeline embedding by id
+      tags:
+        - pipeline_embeddings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pipeline-embedding'
+        '404':
+          $ref: '#/components/responses/404'
 components:
   schemas:
     pipeline:
@@ -2465,6 +2536,44 @@ components:
             $ref: '#/components/schemas/base-study-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+    pipeline-embedding:
+      allOf:
+        - $ref: '#/components/schemas/readable-resource-attributes'
+        - type: object
+          properties:
+            config_id:
+              type: string
+            base_study_id:
+              type: string
+              nullable: true
+            date_executed:
+              type: string
+              format: date-time
+              nullable: true
+            file_inputs:
+              type: object
+              nullable: true
+            status:
+              type: string
+              description: Current status of the pipeline execution (e.g. SUCCESS, FAILURE, ERROR, UNKNOWN)
+            embedding:
+              type: array
+              items:
+                type: number
+                format: float
+          required:
+            - config_id
+            - status
+            - embedding
+    pipeline-embedding-list:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/pipeline-embedding'
+        metadata:
+          $ref: '#/components/schemas/metadata'
   responses:
     '404':
       description: Example response
@@ -2747,3 +2856,4 @@ tags:
   - name: conditions
   - name: user
   - name: annotations
+  - name: pipeline_embeddings
