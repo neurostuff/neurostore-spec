@@ -1543,6 +1543,72 @@ paths:
           $ref: '#/components/responses/404'
 components:
   schemas:
+    ErrorDetail:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        field:
+          type: string
+          description: Field name that caused the error
+          example: "source"
+        code:
+          type: string
+          description: Machine-readable error code
+          example: "INVALID_VALUE"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "invalid source, choose from: 'neurostore'"
+        context:
+          type: object
+          description: Additional error context
+          additionalProperties: true
+
+    ErrorResponse:
+      type: object
+      required:
+        - status
+        - title
+        - detail
+        - timestamp
+        - request_id
+      properties:
+        status:
+          type: integer
+          description: HTTP status code
+          example: 400
+        title:
+          type: string
+          description: Short, human-readable summary
+          example: "Bad Request"
+        detail:
+          type: string
+          description: Human-readable explanation
+          example: "The request contains invalid parameters"
+        type:
+          type: string
+          description: URI reference for error type
+          default: "about:blank"
+        instance:
+          type: string
+          description: URI reference for specific occurrence
+          example: "/api/studies/123"
+        errors:
+          type: array
+          description: Field-specific validation errors
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp
+        request_id:
+          type: string
+          description: Unique request identifier
+          example: "a1b2c3d4"
+
     pipeline:
       type: object
       properties:
@@ -2576,43 +2642,36 @@ components:
           $ref: '#/components/schemas/metadata'
   responses:
     '404':
-      description: Example response
+      description: Not Found
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: '"The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again."'
-              status:
-                type: integer
-                enum:
-                  - 404
-              title:
-                type: string
-                example: '"Not Found"'
-              type:
-                type: string
-                example: '"about:blank"'
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            notFound:
+              value:
+                status: 404
+                title: "Not Found"
+                detail: "The requested URL was not found on the server."
+                type: "about:blank"
+                timestamp: "2025-01-01T00:00:00Z"
+                request_id: "req-1234"
     '422':
-      description: Example response
+      description: Unprocessable Entity
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: The request was well-formed but was unable to be followed due to semantic errors.
-              status:
-                type: integer
-              title:
-                type: string
-                example: Unprocessable Entity
-              type:
-                type: string
-                example: 'about:blank'
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            unprocessable:
+              value:
+                status: 422
+                title: "Unprocessable Entity"
+                detail: "The request was well-formed but was unable to be followed due to semantic errors."
+                type: "about:blank"
+                timestamp: "2025-01-01T00:00:00Z"
+                request_id: "req-1234"
+                errors: []
   parameters:
     search:
       name: search
