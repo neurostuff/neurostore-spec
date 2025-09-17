@@ -430,25 +430,29 @@ paths:
         - JSON-Web-Token: []
         - {}
    post:
-      summary: POST/create a studyset
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/studyset-return'
-      tags:
-        - store
-        - studysets
-      description: Create a studyset.
-      security:
-        - JSON-Web-Token: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/studyset-request'
+     summary: POST/create a studyset
+     parameters:
+       - $ref: '#/components/parameters/source_id'
+       - $ref: '#/components/parameters/source'
+       - $ref: '#/components/parameters/copy_annotations'
+     responses:
+       '200':
+         description: OK
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/studyset-return'
+     tags:
+       - store
+       - studysets
+     description: Create a studyset. When `source_id` is provided, Neurostore clones an existing studyset owned by any user into a new studyset owned by the caller, copying studies and (by default) annotations.
+     security:
+       - JSON-Web-Token: []
+     requestBody:
+       content:
+         application/json:
+           schema:
+             $ref: '#/components/schemas/studyset-request'
   '/studysets/{id}':
     parameters:
       - schema:
@@ -2747,6 +2751,14 @@ components:
         type: string
         example: 1234567890ab
       description: id of the resource you are either filtering/copying on
+    copy_annotations:
+      name: copy_annotations
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: true
+      description: When cloning a studyset, copy annotations and their notes when true (default).
     name:
       name: name
       in: query
