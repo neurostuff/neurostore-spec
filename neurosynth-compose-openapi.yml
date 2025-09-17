@@ -806,6 +806,9 @@ paths:
               $ref: '#/components/schemas/project'
       security:
         - JSON-Web-Token: []
+      parameters:
+        - $ref: '#/components/parameters/source_id'
+        - $ref: '#/components/parameters/copy_annotations'
       tags:
         - projects
         - post
@@ -1893,6 +1896,20 @@ components:
       schema:
         type: string
       description: user id you want to filter on
+    source_id:
+      name: source_id
+      in: query
+      required: false
+      schema:
+        type: string
+      description: clone an existing project when creating a new project
+    copy_annotations:
+      name: copy_annotations
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: when cloning via `source_id`, also duplicate associated annotations
   responses:
     bad-request:
       description: form when a request goes wrong
