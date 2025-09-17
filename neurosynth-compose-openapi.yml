@@ -222,6 +222,16 @@ paths:
         '400':
           $ref: '#/components/responses/bad-request'
       description: get a list of serialized/referenced studysets
+      parameters:
+        - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/ids'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/user_id'
+        - $ref: '#/components/parameters/info'
     parameters: []
     post:
       summary: Create a new Studyset
@@ -321,6 +331,16 @@ paths:
         '400':
           $ref: '#/components/responses/bad-request'
       description: get a list of serialized/referenced annotations
+      parameters:
+        - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/ids'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/user_id'
+        - $ref: '#/components/parameters/info'
     post:
       summary: Create a new Annotation
       responses:
@@ -419,6 +439,16 @@ paths:
         - specifications
         - get
         - compose
+      parameters:
+        - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/ids'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/user_id'
+        - $ref: '#/components/parameters/info'
     parameters: []
     post:
       summary: Create a Specification
@@ -1674,36 +1704,32 @@ components:
       type: object
       properties:
         statistical_maps:
-          type: array
-          x-stoplight:
-            id: lkxyrr8tetdd0
-          format: byte
-          items:
-            x-stoplight:
-              id: 863sfmz4qo0tw
-            type: string
-            format: byte
-            writeOnly: true
+          oneOf:
+            - type: string
+              format: binary
+            - type: array
+              items:
+                type: string
+                format: binary
+          writeOnly: true
         cluster_tables:
-          type: array
-          x-stoplight:
-            id: f9w2vqez2fskv
-          items:
-            x-stoplight:
-              id: ufm97m0f563yj
-            type: string
-            format: byte
-            writeOnly: true
+          oneOf:
+            - type: string
+              format: binary
+            - type: array
+              items:
+                type: string
+                format: binary
+          writeOnly: true
         diagnostic_tables:
-          type: array
-          x-stoplight:
-            id: tzdedwx8qdj37
-          items:
-            x-stoplight:
-              id: 5uiu0p99l9s05
-            type: string
-            format: byte
-            writeOnly: true
+          oneOf:
+            - type: string
+              format: binary
+            - type: array
+              items:
+                type: string
+                format: binary
+          writeOnly: true
         method_description:
           type: string
           x-stoplight:
