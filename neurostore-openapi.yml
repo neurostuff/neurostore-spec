@@ -109,6 +109,16 @@ paths:
               type: string
               example: 'TestPipeline'
         - $ref: '#/components/parameters/paginate'
+        - name: has_embeddings
+          in: query
+          description: Filter configs as whether they have embeddings saved.
+          schema:
+            type: boolean
+        - name: embedding_dimensions
+          in: query
+          description: Filter configs by number of dimensions in the embeddings.
+          schema:
+            type: integer
       responses:
         '200':
           description: OK
@@ -259,14 +269,86 @@ paths:
       summary: POST/create a pipeline run result
       tags:
         - pipeline-study-results
+      parameters:
+        - $ref: '#/components/parameters/paginate'
+        - name: feature_filter
+          in: query
+          description: >
+            Filter results by feature content. Format: "PipelineName[:version]:field_path=value".
+            Examples:
+              - "TestPipeline:1.0.0:groups.diagnosis=ADHD" (specific version)
+              - "TestPipeline:groups.diagnosis=ADHD" (latest version)
+            
+            Field path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'TestPipeline:1.0.0:groups.diagnosis=ADHD'
+        - name: feature_flatten
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: pipeline_config
+          in: query
+          description: >
+            Filter results by pipeline config content. Format: "PipelineName[:version]:config_path=value".
+            Examples:
+              - "TestPipeline:1.0.0:preprocessing.smoothing=8" (specific version)
+              - "TestPipeline:model.type=linear" (latest version)
+            
+            Config path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'TestPipeline:1.0.0:preprocessing.smoothing=8'
+        - name: feature_display
+          in: query
+          description: >
+            Filter results by pipeline name and optionally version. Format: "pipeline_name[:version]".
+            Examples:
+              - "TestPipeline" (all results from pipeline)
+              - "TestPipeline:1.0.0" (results from specific version)
+            Multiple values can be provided to get results from multiple pipelines/versions.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'TestPipeline:1.0.0'
+        - name: study_id
+          in: query
+          description: Filter results by base study ID
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: version
+          in: query
+          description: Filter results by pipeline config version
+          required: false
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/pipeline-study-result'
+              $ref: '#/components/schemas/pipeline-study-result-post'
+            # No description here, matching base-studies pattern
       responses:
         '201':
           description: Created
+        '200':
+          description: OK (search results)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pipeline-study-result-list'
   /pipeline-study-results/{pipeline_study_result_id}:
     get:
       summary: GET a pipeline run result by ID
@@ -1131,6 +1213,47 @@ paths:
               schema:
                 $ref: '#/components/schemas/base-study-list'
       parameters:
+        - name: year_min
+          in: query
+          description: Minimum publication year (inclusive) for study search
+          required: false
+          schema:
+            type: integer
+        - name: x
+          in: query
+          description: X coordinate for spatial query (requires y, z, and radius)
+          required: false
+          schema:
+            type: number
+            example: 10
+        - name: y
+          in: query
+          description: Y coordinate for spatial query (requires x, z, and radius)
+          required: false
+          schema:
+            type: number
+            example: 20
+        - name: z
+          in: query
+          description: Z coordinate for spatial query (requires x, y, and radius)
+          required: false
+          schema:
+            type: number
+            example: 30
+        - name: radius
+          in: query
+          description: Radius for spatial query (requires x, y, and z)
+          required: false
+          schema:
+            type: number
+            example: 6
+        - name: year_max
+          in: query
+          description: Maximum publication year (inclusive) for study search
+          required: false
+          schema:
+            type: integer
+            example: 2020
         - name: feature_filter
           in: query
           description: >
@@ -1167,6 +1290,33 @@ paths:
           required: false
           schema:
             type: string
+        - name: semantic_search
+          in: query
+          description: Semantic search query string
+          required: false
+          schema:
+            type: string
+        - name: pipeline_config_id
+          in: query
+          description: Pipeline configuration identifier to filter studies
+          required: false
+          schema:
+            type: string
+        - name: distance_threshold
+          in: query
+          description: Distance threshold for semantic search (default 0.5)
+          required: false
+          schema:
+            type: number
+            format: float
+            example: 0.5
+        - name: overall_cap
+          in: query
+          description: Maximum number of overall results to return (default 3000)
+          required: false
+          schema:
+            type: integer
+            example: 3000
         - name: feature_flatten
           in: query
           required: false
@@ -1357,8 +1507,108 @@ paths:
               $ref: '#/components/schemas/note-collection-request'
       security:
         - JSON-Web-Token: []
+  /pipeline-embeddings/:
+    get:
+      summary: List pipeline embeddings
+      tags:
+        - pipeline-embeddings
+      parameters:
+        - $ref: '#/components/parameters/paginate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pipeline-embedding-list'
+  '/pipeline-embeddings/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get a pipeline embedding by id
+      tags:
+        - pipeline_embeddings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pipeline-embedding'
+        '404':
+          $ref: '#/components/responses/404'
 components:
   schemas:
+    ErrorDetail:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        field:
+          type: string
+          description: Field name that caused the error
+          example: "source"
+        code:
+          type: string
+          description: Machine-readable error code
+          example: "INVALID_VALUE"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "invalid source, choose from: 'neurostore'"
+        context:
+          type: object
+          description: Additional error context
+          additionalProperties: true
+
+    ErrorResponse:
+      type: object
+      required:
+        - status
+        - title
+        - detail
+        - timestamp
+        - request_id
+      properties:
+        status:
+          type: integer
+          description: HTTP status code
+          example: 400
+        title:
+          type: string
+          description: Short, human-readable summary
+          example: "Bad Request"
+        detail:
+          type: string
+          description: Human-readable explanation
+          example: "The request contains invalid parameters"
+        type:
+          type: string
+          description: URI reference for error type
+          default: "about:blank"
+        instance:
+          type: string
+          description: URI reference for specific occurrence
+          example: "/api/studies/123"
+        errors:
+          type: array
+          description: Field-specific validation errors
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp
+        request_id:
+          type: string
+          description: Unique request identifier
+          example: "a1b2c3d4"
+
     pipeline:
       type: object
       properties:
@@ -1405,15 +1655,6 @@ components:
             $ref: '#/components/schemas/pipeline-config'
         metadata:
           $ref: '#/components/schemas/metadata'
-    pipeline-study-result:
-      type: object
-      properties:
-        id:
-          type: string
-        pipeline_config_id:
-          type: string
-        data:
-          type: object
     pipeline-study-result-list:
       type: object
       properties:
@@ -1423,6 +1664,42 @@ components:
             $ref: '#/components/schemas/pipeline-study-result'
         metadata:
           $ref: '#/components/schemas/metadata'
+    pipeline-study-result-post:
+      oneOf:
+        - $ref: '#/components/schemas/pipeline-study-result-search'
+        - $ref: '#/components/schemas/pipeline-study-result'
+    pipeline-study-result-search:
+      type: object
+      properties:
+        study_ids:
+          type: array
+          items:
+            type: string
+      required:
+        - study_ids
+    pipeline-study-result:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        pipeline_config_id:
+          type: string
+        base_study_id:
+          type: string
+        config_id:
+          type: string
+        date_executed:
+          type: string
+          format: date-time
+        file_inputs:
+          type: object
+        result_data:
+          type: object
+        status:
+          type: string
+      required:
+        - id
     studyset-return:
       title: studyset-return
       x-examples: {}
@@ -1725,6 +2002,10 @@ components:
           x-stoplight:
             id: 5klqsds10ziod
           description: whether the reported peak is the max-peak statistic or a sub-maxmimal peak.
+          nullable: true
+        deactivation:
+          type: boolean
+          description: wheather the coordinate represents an decrease in activation relative to a baseline
           nullable: true
         order:
           type: integer
@@ -2080,11 +2361,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/readable-resource-attributes'
         - $ref: '#/components/schemas/writeable-resource-attributes'
-          requred:
-            - id
         - $ref: '#/components/schemas/user-resource-attributes'
-          requred:
-            - user
         - readOnly: true
       description: common attributes for user owned resources
     userless-resource-attributes:
@@ -2094,8 +2371,6 @@ components:
             - created_at
             - updated_at
         - $ref: '#/components/schemas/writeable-resource-attributes'
-          requred:
-            - id
         - readOnly: true
       description: common resource attributes not tied to a specific user
     user-resource-attributes:
@@ -2327,45 +2602,76 @@ components:
             $ref: '#/components/schemas/base-study-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+    pipeline-embedding:
+      allOf:
+        - $ref: '#/components/schemas/readable-resource-attributes'
+        - type: object
+          properties:
+            config_id:
+              type: string
+            base_study_id:
+              type: string
+              nullable: true
+            date_executed:
+              type: string
+              format: date-time
+              nullable: true
+            file_inputs:
+              type: object
+              nullable: true
+            status:
+              type: string
+              description: Current status of the pipeline execution (e.g. SUCCESS, FAILURE, ERROR, UNKNOWN)
+            embedding:
+              type: array
+              items:
+                type: number
+                format: float
+          required:
+            - config_id
+            - status
+            - embedding
+    pipeline-embedding-list:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/pipeline-embedding'
+        metadata:
+          $ref: '#/components/schemas/metadata'
   responses:
     '404':
-      description: Example response
+      description: Not Found
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: '"The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again."'
-              status:
-                type: integer
-                enum:
-                  - 404
-              title:
-                type: string
-                example: '"Not Found"'
-              type:
-                type: string
-                example: '"about:blank"'
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            notFound:
+              value:
+                status: 404
+                title: "Not Found"
+                detail: "The requested URL was not found on the server."
+                type: "about:blank"
+                timestamp: "2025-01-01T00:00:00Z"
+                request_id: "req-1234"
     '422':
-      description: Example response
+      description: Unprocessable Entity
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: The request was well-formed but was unable to be followed due to semantic errors.
-              status:
-                type: integer
-              title:
-                type: string
-                example: Unprocessable Entity
-              type:
-                type: string
-                example: 'about:blank'
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            unprocessable:
+              value:
+                status: 422
+                title: "Unprocessable Entity"
+                detail: "The request was well-formed but was unable to be followed due to semantic errors."
+                type: "about:blank"
+                timestamp: "2025-01-01T00:00:00Z"
+                request_id: "req-1234"
+                errors: []
   parameters:
     search:
       name: search
@@ -2609,3 +2915,4 @@ tags:
   - name: conditions
   - name: user
   - name: annotations
+  - name: pipeline_embeddings
