@@ -573,6 +573,90 @@ paths:
         - post
         - compose
     parameters: []
+  /meta-analysis-jobs:
+    post:
+      operationId: neurosynth_compose.resources.meta_analysis_jobs.MetaAnalysisJobsResource.post
+      summary: Submit a meta-analysis job
+      responses:
+        '202':
+          description: Job accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/meta-analysis-job-response'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '403':
+          $ref: '#/components/responses/bad-request'
+        '422':
+          $ref: '#/components/responses/bad-request'
+        '502':
+          $ref: '#/components/responses/bad-request'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/meta-analysis-job-request'
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - meta_analyses
+        - post
+        - compose
+      description: Submit a meta-analysis to the compose runner service.
+    parameters: []
+    get:
+      operationId: neurosynth_compose.resources.meta_analysis_jobs.MetaAnalysisJobsResource.get
+      summary: List meta-analysis jobs for the current user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/meta-analysis-job-list'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '502':
+          $ref: '#/components/responses/bad-request'
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - meta_analyses
+        - get
+        - compose
+      description: Return cached job submissions associated with the authenticated user.
+  '/meta-analysis-jobs/{job_id}':
+    parameters:
+      - schema:
+          type: string
+        name: job_id
+        in: path
+        required: true
+    get:
+      operationId: neurosynth_compose.resources.meta_analysis_jobs.MetaAnalysisJobResource.get
+      summary: Get status and logs for a meta-analysis job
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/meta-analysis-job-response'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
+        '502':
+          $ref: '#/components/responses/bad-request'
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - meta_analyses
+        - get
+        - compose
+      description: Retrieve the most recent status information and logs for a submitted job.
   '/meta-analysis-results/{id}':
     parameters:
       - schema:
@@ -1397,6 +1481,102 @@ components:
             - specification
       x-tags:
         - meta_analyses
+    meta-analysis-job-request:
+      title: meta-analysis-job-request
+      type: object
+      x-tags:
+        - meta_analyses
+      required:
+        - meta_analysis_id
+      properties:
+        meta_analysis_id:
+          type: string
+          description: Identifier of the meta-analysis to submit.
+        no_upload:
+          type: boolean
+          description: Skip upload of results to Neurostore/Neurovault.
+          default: false
+    meta-analysis-job-log:
+      title: meta-analysis-job-log
+      type: object
+      x-tags:
+        - meta_analyses
+      properties:
+        timestamp:
+          type: number
+          description: Epoch timestamp returned by the compose runner.
+        message:
+          type: string
+          description: Log message emitted by the compose runner.
+    meta-analysis-job-response:
+      title: meta-analysis-job-response
+      type: object
+      x-tags:
+        - meta_analyses
+      properties:
+        job_id:
+          type: string
+          description: Identifier returned by the compose runner service.
+        meta_analysis_id:
+          type: string
+          description: Identifier of the meta-analysis that was submitted.
+        artifact_prefix:
+          type: string
+          description: Artifact key prefix for logs and outputs.
+        status:
+          type: string
+          description: Latest known status reported by the compose runner.
+        status_url:
+          type: string
+          nullable: true
+          description: Convenience URL for polling job status.
+        environment:
+          type: string
+          description: Deployment environment the job was submitted to.
+        no_upload:
+          type: boolean
+          description: Indicates whether the upload step was skipped.
+        start_time:
+          type: string
+          format: date-time
+          nullable: true
+          description: Start time reported by the compose runner status endpoint.
+        output:
+          type: object
+          nullable: true
+          additionalProperties: true
+          description: Raw output payload returned by the compose runner.
+        logs:
+          type: array
+          items:
+            $ref: '#/components/schemas/meta-analysis-job-log'
+          description: Aggregated log events returned by the compose runner.
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Timestamp when the job entry was cached.
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Timestamp when the job entry was last refreshed.
+    meta-analysis-job-list:
+      title: meta-analysis-job-list
+      type: object
+      x-tags:
+        - meta_analyses
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/meta-analysis-job-response'
+        metadata:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of jobs in the response.
     result:
       title: result
       type: object
