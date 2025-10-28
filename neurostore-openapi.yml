@@ -2191,6 +2191,7 @@ components:
             - {}
         - allOf:
             - $ref: ./nimads/nimads/annotationBase.yaml
+            - $ref: '#/components/schemas/annotation-pipeline-extension'
             - $ref: '#/components/schemas/annotation-request-relationships'
             - $ref: '#/components/schemas/writeable-resource-attributes'
             - $ref: '#/components/schemas/annotation-common'
@@ -2226,6 +2227,40 @@ components:
             - items:
                 type: string
               type: array
+    annotation-pipeline-extension:
+      title: annotation-pipeline-extension
+      type: object
+      properties:
+        pipelines:
+          type: array
+          writeOnly: true
+          description: >
+            Optional pipeline descriptors used to populate annotation notes with
+            feature columns. Each entry should include the pipeline name and the
+            list of columns to import, along with optional version and config id.
+          items:
+            type: object
+            required:
+              - name
+              - columns
+            properties:
+              name:
+                type: string
+                description: Pipeline extractor name.
+              version:
+                type: string
+                nullable: true
+                description: Optional pipeline version to use; latest is selected when omitted.
+              config_id:
+                type: string
+                nullable: true
+                description: Optional specific pipeline config identifier to use.
+              columns:
+                type: array
+                minItems: 1
+                items:
+                  type: string
+                description: Feature columns to add to each annotation note.
     annotation-list:
       title: annotation-list
       type: object
