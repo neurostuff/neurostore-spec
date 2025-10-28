@@ -2187,14 +2187,14 @@ components:
       title: annotation-request
       oneOf:
         - allOf:
-            - $ref: '#/components/schemas/annotation-export'
-            - {}
-        - allOf:
             - $ref: ./nimads/nimads/annotationBase.yaml
             - $ref: '#/components/schemas/annotation-pipeline-extension'
             - $ref: '#/components/schemas/annotation-request-relationships'
             - $ref: '#/components/schemas/writeable-resource-attributes'
             - $ref: '#/components/schemas/annotation-common'
+        - allOf:
+            - $ref: '#/components/schemas/annotation-export'
+            - {}
       x-tags:
         - annotation
     annotation-return-relationships:
