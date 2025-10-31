@@ -1336,6 +1336,7 @@ paths:
         - $ref: '#/components/parameters/authors'
         - $ref: '#/components/parameters/level'
         - $ref: '#/components/parameters/data_type'
+        - $ref: '#/components/parameters/is_oa'
         - $ref: '#/components/parameters/publication'
         - $ref: '#/components/parameters/pmid'
         - $ref: '#/components/parameters/doi'
@@ -2560,18 +2561,13 @@ components:
         versions:
           x-stoplight:
             id: rqz03bl5z81y4
-          oneOf:
-            - items:
+          type: array
+          items:
+            oneOf:
+              - type: string
                 x-stoplight:
                   id: nesbtmu3fl2yy
-                type: string
-                minItems: 1
-              type: array
-            - x-stoplight:
-                id: vdove859ce553
-              items:
-                $ref: '#/components/schemas/study-return'
-              type: array
+              - $ref: '#/components/schemas/study-return'
         name:
           type: string
           x-stoplight:
@@ -2611,6 +2607,9 @@ components:
           type: string
           x-stoplight:
             id: voxamooj7ob5l
+          nullable: true
+        is_oa:
+          type: boolean
           nullable: true
         pmcid:
           type: string
@@ -2918,6 +2917,12 @@ components:
       schema:
         type: string
       description: search for study with specific doi
+    is_oa:
+      name: is_oa
+      in: query
+      required: false
+      schema:
+        type: boolean
     flat:
       name: flat
       in: query
