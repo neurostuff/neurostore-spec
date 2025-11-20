@@ -663,8 +663,13 @@ paths:
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/paginate'
+        - name: study
+          in: query
+          required: false
+          description: Filter tables by study id
+          schema:
+            type: string
         - $ref: '#/components/parameters/name'
-        - $ref: '#/components/parameters/description'
         - $ref: '#/components/parameters/nested'
     parameters: []
     post:
@@ -744,6 +749,109 @@ paths:
         - JSON-Web-Token: []
       tags:
         - analyses
+        - store
+  /tables/:
+    get:
+      summary: GET list of tables
+      tags:
+        - tables
+        - store
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/table-list'
+      description: List all tables across studies.
+      parameters:
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/paginate'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/description'
+        - $ref: '#/components/parameters/nested'
+    post:
+      summary: POST/create a table
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/table-return'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/table-request'
+      tags:
+        - tables
+        - store
+      description: create a table
+      parameters: []
+      security:
+        - JSON-Web-Token: []
+  '/tables/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: GET a table
+      tags:
+        - tables
+        - store
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/table-return'
+        '404':
+          $ref: '#/components/responses/404'
+      description: Information about a specific table.
+      parameters:
+        - $ref: '#/components/parameters/nested'
+    put:
+      summary: PUT/update a table
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/table-return'
+        '422':
+          $ref: '#/components/responses/422'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/table-request'
+      tags:
+        - tables
+        - store
+      description: update a table
+      parameters: []
+      security:
+        - JSON-Web-Token: []
+    delete:
+      summary: DELETE a table
+      responses:
+        '200':
+          description: OK
+      description: delete a table
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - tables
         - store
   /points/:
     get:
@@ -1841,6 +1949,10 @@ components:
             - items:
                 type: string
               type: array
+        tables:
+          type: array
+          items:
+            type: string
     study-request-relationships:
       title: study-relationships
       x-tags:
@@ -1875,6 +1987,9 @@ components:
       properties:
         study:
           type: string
+        table_id:
+          type: string
+          nullable: true
         entities:
           type: array
           x-stoplight:
@@ -2170,6 +2285,75 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - condition
+    table-return:
+      title: table-return
+      allOf:
+        - $ref: '#/components/schemas/resource-attributes'
+        - $ref: '#/components/schemas/table-common'
+        - $ref: '#/components/schemas/table-return-relationships'
+      x-tags:
+        - table
+    table-request:
+      title: table-request
+      allOf:
+        - $ref: '#/components/schemas/writeable-resource-attributes'
+        - $ref: '#/components/schemas/table-common'
+        - $ref: '#/components/schemas/table-request-relationships'
+      x-tags:
+        - table
+    table-common:
+      title: table-common
+      type: object
+      properties:
+        t_id:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        footer:
+          type: string
+          nullable: true
+        caption:
+          type: string
+          nullable: true
+    table-return-relationships:
+      title: table-relationships
+      x-tags:
+        - table
+      type: object
+      properties:
+        study:
+          type: string
+        analyses:
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/analysis-return'
+              minItems: 1
+              type: array
+            - items:
+                type: string
+              type: array
+    table-request-relationships:
+      title: table-relationships
+      x-tags:
+        - table
+      type: object
+      properties:
+        study:
+          type: string
+    table-list:
+      title: table-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/table-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+      x-tags:
+        - table
     annotation-return:
       title: annotation-return
       oneOf:
