@@ -1325,6 +1325,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/base-study-list'
       parameters:
+        - $ref: '#/components/parameters/nested'
         - name: year_min
           in: query
           description: Minimum publication year (inclusive) for study search
@@ -1506,6 +1507,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/flat'
         - $ref: '#/components/parameters/info'
+        - $ref: '#/components/parameters/nested'
     put:
       summary: ''
       responses:
