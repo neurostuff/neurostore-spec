@@ -1859,7 +1859,22 @@ components:
       properties:
         studies:
           type: array
-          items: {}
+          description: >
+            Accepts study IDs or objects containing an ID and an optional curation
+            stub UUID used to keep curation/extraction alignment.
+          items:
+            oneOf:
+              - type: string
+              - type: object
+                properties:
+                  id:
+                    type: string
+                  curation_stub_uuid:
+                    type: string
+                    format: uuid
+                    writeOnly: true
+                required:
+                  - id
     studyset-list:
       title: studyset-get
       type: object
