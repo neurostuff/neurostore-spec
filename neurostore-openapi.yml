@@ -1844,6 +1844,18 @@ components:
       title: studyset-relationships
       type: object
       properties:
+        studyset_studies:
+          type: array
+          description: Association records for studies in this studyset (includes stub UUIDs for mapping).
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              curation_stub_uuid:
+                type: string
+                format: uuid
+                nullable: true
         studies:
           oneOf:
             - items:
