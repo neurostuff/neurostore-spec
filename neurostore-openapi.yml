@@ -1863,7 +1863,7 @@ components:
             Accepts study IDs or objects containing an ID and an optional curation
             stub UUID used to keep curation/extraction alignment.
           items:
-            oneOf:
+            anyOf:
               - type: string
               - type: object
                 properties:
@@ -1875,6 +1875,7 @@ components:
                     writeOnly: true
                 required:
                   - id
+              - $ref: '#/components/schemas/study-request'
     studyset-list:
       title: studyset-get
       type: object
