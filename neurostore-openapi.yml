@@ -1888,6 +1888,14 @@ components:
                 required:
                   - id
               - $ref: '#/components/schemas/study-request'
+        curation_stub_map:
+          type: object
+          description: >
+            Accepts a map of each study ID to the curation stub UUID used to keep
+            curation/extraction alignment.
+          additionalProperties:
+            type: string
+            format: uuid
     studyset-list:
       title: studyset-get
       type: object
