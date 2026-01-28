@@ -1015,6 +1015,76 @@ paths:
       security:
         - JSON-Web-Token: []
       x-internal: true
+  /tags:
+    get:
+      summary: Get a list of Tags
+      tags:
+        - tags
+        - get
+        - compose
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tag-list'
+      security:
+        - JSON-Web-Token: []
+        - {}
+      parameters:
+        - $ref: '#/components/parameters/ids'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/description'
+        - $ref: '#/components/parameters/group'
+        - $ref: '#/components/parameters/official'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/user_id'
+    post:
+      summary: Create a new Tag
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tag-return'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tag'
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - tags
+        - post
+        - compose
+  '/tags/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get information about a Tag
+      tags:
+        - tags
+        - get
+        - compose
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tag-return'
   /studyset-references:
     get:
       summary: Your GET endpoint
@@ -1175,6 +1245,17 @@ components:
           type: string
           description: Long form description of the meta-analysis.
           nullable: true
+        tags:
+          description: Tags associated with this meta-analysis (use tag names or tag IDs).
+          oneOf:
+            - minItems: 1
+              items:
+                $ref: '#/components/schemas/tag'
+              type: array
+            - items:
+                type: string
+                description: Tag name or tag ID
+              type: array
         cached_studyset_id:
           type: string
           description: The id of the studyset on neurosynth-compose (as opposed to the id of the studyset on neurostore). Multiple snapshots of the studyset can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
@@ -1732,6 +1813,47 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - neurovault
+    tag:
+      title: tag
+      type: object
+      x-tags:
+        - tags
+      description: A user-scoped or global label that can be attached to multiple resources. Tag groups are free-form categories (e.g., "visibility", "topic") used to segment tags across different resource types.
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Case-insensitive unique name within the tag scope (user or global).
+        group:
+          type: string
+          nullable: true
+          description: Optional grouping key to categorize tags (case-insensitive exact match in queries).
+        description:
+          type: string
+          nullable: true
+        official:
+          type: boolean
+          nullable: true
+    tag-return:
+      title: tag-return
+      allOf:
+        - $ref: '#/components/schemas/tag'
+        - $ref: '#/components/schemas/read-only'
+      x-tags:
+        - tags
+    tag-list:
+      title: tag-list
+      type: object
+      x-tags:
+        - tags
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/tag-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
     project:
       title: project
       x-tags:
@@ -1988,6 +2110,27 @@ components:
       in: header
       name: Compose-Upload-Key
   parameters:
+    group:
+      name: group
+      in: query
+      required: false
+      schema:
+        type: string
+      description: filter tags by group
+    filter:
+      name: filter
+      in: query
+      required: false
+      schema:
+        type: string
+      description: alias for search when filtering tags
+    official:
+      name: official
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: filter tags by official flag
     desc:
       name: desc
       in: query
@@ -2117,4 +2260,5 @@ tags:
   - name: put
   - name: specifications
   - name: studysets
+  - name: tags
   - name: users
