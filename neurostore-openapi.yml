@@ -1449,6 +1449,7 @@ paths:
         - $ref: '#/components/parameters/publication'
         - $ref: '#/components/parameters/pmid'
         - $ref: '#/components/parameters/doi'
+        - $ref: '#/components/parameters/neurovault_id'
         - $ref: '#/components/parameters/flat'
         - $ref: '#/components/parameters/info'
         - $ref: '#/components/parameters/paginate'
@@ -2830,6 +2831,11 @@ components:
           x-stoplight:
             id: s29tro516g5zs
           nullable: true
+        neurovault_id:
+          oneOf:
+            - type: string
+            - type: integer
+          nullable: true
     base-study-return:
       title: base-study-return
       x-stoplight:
@@ -3131,6 +3137,13 @@ components:
       schema:
         type: string
       description: search for study with specific doi
+    neurovault_id:
+      name: neurovault_id
+      in: query
+      required: false
+      schema:
+        type: string
+      description: search for study with specific neurovault id
     is_oa:
       name: is_oa
       in: query
