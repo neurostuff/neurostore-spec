@@ -2831,11 +2831,6 @@ components:
           x-stoplight:
             id: s29tro516g5zs
           nullable: true
-        neurovault_id:
-          oneOf:
-            - type: string
-            - type: integer
-          nullable: true
     base-study-return:
       title: base-study-return
       x-stoplight:
