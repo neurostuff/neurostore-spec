@@ -547,6 +547,7 @@ paths:
         - $ref: '#/components/parameters/authors'
         - $ref: '#/components/parameters/user_id'
         - $ref: '#/components/parameters/data_type'
+        - $ref: '#/components/parameters/map_type'
         - $ref: '#/components/parameters/studyset_owner'
         - $ref: '#/components/parameters/level'
         - $ref: '#/components/parameters/pmid'
@@ -1445,6 +1446,7 @@ paths:
         - $ref: '#/components/parameters/authors'
         - $ref: '#/components/parameters/level'
         - $ref: '#/components/parameters/data_type'
+        - $ref: '#/components/parameters/map_type'
         - $ref: '#/components/parameters/is_oa'
         - $ref: '#/components/parameters/publication'
         - $ref: '#/components/parameters/pmid'
@@ -1936,6 +1938,12 @@ components:
               type: boolean
               x-stoplight:
                 id: 5awd3fw7bz8sw
+            has_z_maps:
+              type: boolean
+            has_t_maps:
+              type: boolean
+            has_beta_and_variance_maps:
+              type: boolean
             base_study:
               type: string
               x-stoplight:
@@ -2044,6 +2052,18 @@ components:
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/analysis-return-relationships'
         - $ref: '#/components/schemas/analysis-common'
+        - type: object
+          properties:
+            has_coordinates:
+              type: boolean
+            has_images:
+              type: boolean
+            has_z_maps:
+              type: boolean
+            has_t_maps:
+              type: boolean
+            has_beta_and_variance_maps:
+              type: boolean
       x-tags:
         - analysis
     analysis-request:
@@ -2839,6 +2859,16 @@ components:
         - $ref: '#/components/schemas/base-study'
         - $ref: '#/components/schemas/resource-attributes'
       properties:
+        has_coordinates:
+          type: boolean
+        has_images:
+          type: boolean
+        has_z_maps:
+          type: boolean
+        has_t_maps:
+          type: boolean
+        has_beta_and_variance_maps:
+          type: boolean
         features:
           type: object
     base-study-list:
@@ -3094,6 +3124,18 @@ components:
           - image
           - both
       description: 'whether searching for studies that contain coordinates, images, or both'
+    map_type:
+      name: map_type
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - z
+          - t
+          - beta_variance
+          - any
+      description: filter by stored map-type flags
     studyset_owner:
       name: studyset_owner
       in: query
