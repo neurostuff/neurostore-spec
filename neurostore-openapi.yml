@@ -482,6 +482,7 @@ paths:
       description: Retrieve the information of a studyset with the matching studyset ID.
       parameters:
         - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/summary'
         - $ref: '#/components/parameters/gzip'
     put:
       summary: PUT/update a studyset
@@ -3007,6 +3008,13 @@ components:
       schema:
         type: boolean
       description: whether to show the URI to a resource (false) or to embed the object in the response (true)
+    summary:
+      name: summary
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: return a lightweight summary payload with study metadata and per-analysis coordinate counts; incompatible with nested
     source:
       name: source
       in: query
