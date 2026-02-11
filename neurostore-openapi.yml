@@ -2055,6 +2055,10 @@ components:
         - $ref: '#/components/schemas/analysis-common'
         - type: object
           properties:
+            point_count:
+              type: integer
+              nullable: true
+              description: Number of point coordinates linked to this analysis.
             has_coordinates:
               type: boolean
             has_images:
