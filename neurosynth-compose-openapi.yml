@@ -935,6 +935,8 @@ paths:
               $ref: '#/components/schemas/project'
       security:
         - JSON-Web-Token: []
+      parameters:
+        - $ref: '#/components/parameters/sync_meta_analyses_public'
       tags:
         - projects
         - put
@@ -1245,6 +1247,9 @@ components:
           type: string
           description: Long form description of the meta-analysis.
           nullable: true
+        public:
+          type: boolean
+          description: whether the meta-analysis is public or private
         tags:
           description: Tags associated with this meta-analysis (use tag names or tag IDs).
           oneOf:
@@ -2233,6 +2238,13 @@ components:
       schema:
         type: boolean
       description: when cloning via `source_id`, also duplicate associated annotations
+    sync_meta_analyses_public:
+      name: sync_meta_analyses_public
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: when updating a project's public flag, also set each child meta-analysis to the same public value
   responses:
     bad-request:
       description: form when a request goes wrong
