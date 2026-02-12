@@ -2183,6 +2183,10 @@ components:
           type: boolean
           description: wheather the coordinate represents an decrease in activation relative to a baseline
           nullable: true
+        is_seed:
+          type: boolean
+          description: whether the coordinate is marked as a seed location
+          nullable: true
         order:
           type: integer
           x-stoplight:
