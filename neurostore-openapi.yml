@@ -2234,12 +2234,15 @@ components:
             id: 7ywg6qu86o7yy
         x:
           type: number
+          nullable: true
           writeOnly: true
         'y':
           type: number
+          nullable: true
           writeOnly: true
         z:
           type: number
+          nullable: true
           writeOnly: true
         entities:
           type: array
