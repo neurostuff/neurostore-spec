@@ -1742,14 +1742,11 @@ components:
           nullable: true
           readOnly: true
         files:
-          oneOf:
-            - minItems: 1
-              items:
-                $ref: '#/components/schemas/neurovault-file'
-              type: array
-            - items:
-                type: string
-              type: array
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/neurovault-file'
+              - type: string
         url:
           type: string
           x-stoplight:
