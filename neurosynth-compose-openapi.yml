@@ -89,6 +89,9 @@ paths:
   /meta-analyses:
     get:
       summary: GET a list of meta-analyses
+      security:
+        - JSON-Web-Token: []
+        - {}
       responses:
         '200':
           description: OK
