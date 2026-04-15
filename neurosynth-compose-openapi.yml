@@ -1229,12 +1229,12 @@ components:
             - type: string
               nullable: true
             - $ref: '#/components/schemas/specification'
-        studyset:
+        neurostore_studyset:
           oneOf:
             - type: string
               nullable: true
             - $ref: '#/components/schemas/studyset'
-        annotation:
+        neurostore_annotation:
           oneOf:
             - type: string
               nullable: true
@@ -1338,7 +1338,7 @@ components:
           type: object
           description: the snapshot taken of the annotation pending a successful run of the meta-analytic algorithm
           nullable: true
-        studyset:
+        snapshot_studyset:
           type: string
           description: The related cached studyset to this annotation.
           readOnly: true
