@@ -1261,18 +1261,6 @@ components:
                 type: string
                 description: Tag name or tag ID
               type: array
-        cached_studyset_id:
-          type: string
-          description: The id of the studyset on neurosynth-compose (as opposed to the id of the studyset on neurostore). Multiple snapshots of the studyset can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
-          x-stoplight:
-            id: 5umhos11daq87
-          writeOnly: true
-        cached_annotation_id:
-          type: string
-          description: The id of the annotation on neurosynth-compose (as opposed to the id of the annotation on neurostore). Multiple snapshots of the annotation can be stored on neurosynth-compose so knowing which snapshot is being referenced is necessary.
-          x-stoplight:
-            id: vsgca0e0vmu2n
-          writeOnly: true
         results:
           description: 'array of neurostore ids representing the results of this meta-analysis (nominally all results should be the same, but machine architecture differences/algorithm stochastic-ness may lead to slightly different outcomes for each result.'
           oneOf:
@@ -1330,18 +1318,6 @@ components:
           x-stoplight:
             id: sdiexwaai5l1g
           nullable: true
-        cached_studyset:
-          type: string
-          x-stoplight:
-            id: hg5kvvz31sw5j
-          nullable: true
-          readOnly: true
-        cached_annotation:
-          type: string
-          x-stoplight:
-            id: 262rx5ainvdaa
-          nullable: true
-          readOnly: true
         neurostore_url:
           type: string
           x-stoplight:
@@ -1541,7 +1517,6 @@ components:
               type: string
               x-stoplight:
                 id: o1xgfte8bodzp
-              writeOnly: true
         - $ref: '#/components/schemas/annotation'
       x-tags:
         - annotations
@@ -1556,8 +1531,6 @@ components:
       title: annotation-post-body
       allOf:
         - $ref: '#/components/schemas/annotation-update'
-        - required:
-            - cached_studyset_id
       x-tags:
         - annotations
     studyset-post-body:
@@ -1573,8 +1546,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/meta-analysis'
         - required:
-            - cached_annotation_id
-            - cached_studyset_id
             - specification
       x-tags:
         - meta_analyses
@@ -1715,19 +1686,21 @@ components:
           x-stoplight:
             id: ojkan45ot796m
           nullable: true
-        studyset_snapshot:
-          type: object
-          description: JSON payload accepted for snapshot updates via PUT.
-          writeOnly: true
-        annotation_snapshot:
-          type: object
-          description: JSON payload accepted for snapshot updates via PUT.
-          writeOnly: true
     result-return:
       title: result-return
       allOf:
         - $ref: '#/components/schemas/result'
         - $ref: '#/components/schemas/read-only'
+        - type: object
+          properties:
+            cached_studyset_id:
+              type: string
+              nullable: true
+              readOnly: true
+            cached_annotation_id:
+              type: string
+              nullable: true
+              readOnly: true
       x-tags:
         - meta_analyses
     result-list:
@@ -2062,11 +2035,11 @@ components:
           x-stoplight:
             id: vaj7hv8uacxth
           writeOnly: true
-        studyset_snapshot:
+        cached_studyset:
           type: string
           description: JSON-encoded studyset snapshot payload, optionally provided in multipart form.
           writeOnly: true
-        annotation_snapshot:
+        cached_annotation:
           type: string
           description: JSON-encoded annotation snapshot payload, optionally provided in multipart form.
           writeOnly: true
@@ -2080,14 +2053,20 @@ components:
           type: string
           x-stoplight:
             id: jbludrenxdfdl
-        studyset_snapshot:
+        cached_studyset:
           type: object
           x-stoplight:
             id: 034jmd5z1k2pm
-        annotation_snapshot:
+        cached_annotation:
           type: object
           x-stoplight:
             id: 2ybs3z7bw47p1
+        cached_studyset_id:
+          type: string
+          description: ID of an existing cached studyset snapshot to link to this result.
+        cached_annotation_id:
+          type: string
+          description: ID of an existing cached annotation snapshot to link to this result.
         cli_version:
           type: string
           x-stoplight:
