@@ -208,7 +208,7 @@ paths:
           description: No Content
       security:
         - JSON-Web-Token: []
-  /studysets:
+  /snapshot-studysets:
     get:
       summary: Get a list of Studysets
       tags:
@@ -263,7 +263,7 @@ paths:
             schema:
               $ref: '#/components/schemas/studyset-post-body'
       description: create a new serialized/referenced studyset
-  '/studysets/{id}':
+  '/snapshot-studysets/{id}':
     parameters:
       - schema:
           type: string
@@ -317,7 +317,7 @@ paths:
             schema:
               $ref: '#/components/schemas/studyset'
       description: update an existing serialized/referenced studyset
-  /annotations:
+  /snapshot-annotations:
     get:
       summary: GET a list of annotations
       tags:
@@ -371,7 +371,7 @@ paths:
       security:
         - JSON-Web-Token: []
       description: create a new serialized/referenced annotation
-  '/annotations/{id}':
+  '/snapshot-annotations/{id}':
     parameters:
       - schema:
           type: string
@@ -1087,7 +1087,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tag-return'
-  /studyset-references:
+  /neurostore-studysets:
     get:
       summary: Your GET endpoint
       tags: []
@@ -1103,7 +1103,7 @@ paths:
       description: ''
       parameters:
         - $ref: '#/components/parameters/nested'
-  '/studyset-references/{id}':
+  '/neurostore-studysets/{id}':
     parameters:
       - schema:
           type: string
@@ -1513,7 +1513,7 @@ components:
       allOf:
         - type: object
           properties:
-            cached_studyset_id:
+            snapshot_studyset_id:
               type: string
               x-stoplight:
                 id: o1xgfte8bodzp
@@ -1693,11 +1693,11 @@ components:
         - $ref: '#/components/schemas/read-only'
         - type: object
           properties:
-            cached_studyset_id:
+            snapshot_studyset_id:
               type: string
               nullable: true
               readOnly: true
-            cached_annotation_id:
+            snapshot_annotation_id:
               type: string
               nullable: true
               readOnly: true
@@ -1872,6 +1872,14 @@ components:
         description:
           type: string
           nullable: true
+        neurostore_studyset_id:
+          type: string
+          nullable: true
+          description: ID of the project’s linked Neurostore studyset reference.
+        neurostore_annotation_id:
+          type: string
+          nullable: true
+          description: ID of the project’s linked Neurostore annotation reference.
         public:
           type: boolean
           x-stoplight:
@@ -2035,11 +2043,11 @@ components:
           x-stoplight:
             id: vaj7hv8uacxth
           writeOnly: true
-        cached_studyset:
+        snapshot_studyset:
           type: string
           description: JSON-encoded studyset snapshot payload, optionally provided in multipart form.
           writeOnly: true
-        cached_annotation:
+        snapshot_annotation:
           type: string
           description: JSON-encoded annotation snapshot payload, optionally provided in multipart form.
           writeOnly: true
@@ -2053,18 +2061,18 @@ components:
           type: string
           x-stoplight:
             id: jbludrenxdfdl
-        cached_studyset:
+        snapshot_studyset:
           type: object
           x-stoplight:
             id: 034jmd5z1k2pm
-        cached_annotation:
+        snapshot_annotation:
           type: object
           x-stoplight:
             id: 2ybs3z7bw47p1
-        cached_studyset_id:
+        snapshot_studyset_id:
           type: string
           description: ID of an existing cached studyset snapshot to link to this result.
-        cached_annotation_id:
+        snapshot_annotation_id:
           type: string
           description: ID of an existing cached annotation snapshot to link to this result.
         cli_version:
