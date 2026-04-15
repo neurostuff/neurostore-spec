@@ -1299,6 +1299,17 @@ components:
           description: |
             a special key used to upload the results of this meta analysis. Can be used as an alternative to using your auth token from login.
           readOnly: true
+        snapshots:
+          type: array
+          nullable: true
+          readOnly: true
+          description: >
+            Ordered history of (studyset, annotation) snapshot pairs recorded
+            each time a MetaAnalysisResult is created. Each entry contains
+            studyset_id, studyset_md5, annotation_id, annotation_md5,
+            result_id, and created_at.
+          items:
+            type: object
         neurostore_analysis:
           $ref: '#/components/schemas/neurostore-analysis'
           nullable: true
