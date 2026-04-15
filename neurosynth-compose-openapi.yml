@@ -536,7 +536,7 @@ paths:
         - compose
   /meta-analysis-results:
     get:
-      summary: Your GET endpoint
+      summary: List meta-analysis results
       tags:
         - meta_analyses
         - get
@@ -555,7 +555,7 @@ paths:
           name: meta_analysis_id
           description: search for results with this meta-analysis id
     post:
-      summary: ''
+      summary: Create a new meta-analysis result
       responses:
         '200':
           description: OK
@@ -578,7 +578,6 @@ paths:
     parameters: []
   /meta-analysis-jobs:
     post:
-      operationId: neurosynth_compose.resources.meta_analysis_jobs.MetaAnalysisJobsResource.post
       summary: Submit a meta-analysis job
       responses:
         '202':
@@ -610,7 +609,6 @@ paths:
       description: Submit a meta-analysis to the compose runner service.
     parameters: []
     get:
-      operationId: neurosynth_compose.resources.meta_analysis_jobs.MetaAnalysisJobsResource.get
       summary: List meta-analysis jobs for the current user
       responses:
         '200':
@@ -638,7 +636,6 @@ paths:
         in: path
         required: true
     get:
-      operationId: neurosynth_compose.resources.meta_analysis_jobs.MetaAnalysisJobResource.get
       summary: Get status and logs for a meta-analysis job
       responses:
         '200':
@@ -668,7 +665,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get a meta-analysis result by ID
       tags:
         - meta_analyses
         - get
@@ -681,7 +678,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/result-return'
     put:
-      summary: ''
+      summary: Update a meta-analysis result with files or snapshots
       responses:
         '200':
           description: OK
@@ -1718,6 +1715,14 @@ components:
           x-stoplight:
             id: ojkan45ot796m
           nullable: true
+        studyset_snapshot:
+          type: object
+          description: JSON payload accepted for snapshot updates via PUT.
+          writeOnly: true
+        annotation_snapshot:
+          type: object
+          description: JSON payload accepted for snapshot updates via PUT.
+          writeOnly: true
     result-return:
       title: result-return
       allOf:
@@ -2056,6 +2061,14 @@ components:
           type: string
           x-stoplight:
             id: vaj7hv8uacxth
+          writeOnly: true
+        studyset_snapshot:
+          type: string
+          description: JSON-encoded studyset snapshot payload, optionally provided in multipart form.
+          writeOnly: true
+        annotation_snapshot:
+          type: string
+          description: JSON-encoded annotation snapshot payload, optionally provided in multipart form.
           writeOnly: true
     result-init:
       title: result-init
