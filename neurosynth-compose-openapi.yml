@@ -1089,7 +1089,7 @@ paths:
                 $ref: '#/components/schemas/tag-return'
   /neurostore-studysets:
     get:
-      summary: Your GET endpoint
+      summary: List Neurostore studyset references
       tags: []
       responses:
         '200':
@@ -1100,7 +1100,7 @@ paths:
                 $ref: '#/components/schemas/studyset-reference-list'
       x-stoplight:
         id: kzl4p104nysct
-      description: ''
+      description: List reference rows keyed by the actual Neurostore studyset ID.
       parameters:
         - $ref: '#/components/parameters/nested'
   '/neurostore-studysets/{id}':
@@ -1111,7 +1111,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get a Neurostore studyset reference by Neurostore ID
       tags: []
       responses:
         '200':
@@ -1122,8 +1122,29 @@ paths:
                 $ref: '#/components/schemas/studyset-reference-return'
       x-stoplight:
         id: beely5hhaisxm
+      description: Resolve a Neurostore studyset reference using the same ID exposed by the Neurostore API. By default, this returns each linked snapshot with its compose snapshot ID and md5.
       parameters:
         - $ref: '#/components/parameters/nested'
+  '/neurostore-annotations/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get a Neurostore annotation reference by Neurostore ID
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/annotation-reference-return'
+      description: Resolve a Neurostore annotation reference using the same ID exposed by the Neurostore API.
+      x-stoplight:
+        id: 7f6pld5tq7b3s
 components:
   schemas:
     specification:
@@ -2085,18 +2106,15 @@ components:
         id: 4ck154dc5tklb
       type: object
       properties:
-        snapshots:
+        studysets:
           type: array
           x-stoplight:
             id: h20wq8miy4mdl
           items:
-            x-stoplight:
-              id: dwig8g1opu989
             oneOf:
               - type: string
-                x-stoplight:
-                  id: mjq9g1kygu2z1
-              - $ref: '#/components/schemas/studyset'
+                description: Compose snapshot studyset identifier.
+              - $ref: '#/components/schemas/studyset-snapshot-summary'
     studyset-reference-return:
       title: studyset-reference-return
       x-stoplight:
@@ -2104,6 +2122,19 @@ components:
       allOf:
         - $ref: '#/components/schemas/studyset-reference'
         - $ref: '#/components/schemas/read-only'
+    studyset-snapshot-summary:
+      title: studyset-snapshot-summary
+      x-stoplight:
+        id: d9b5e1zhrx941
+      type: object
+      properties:
+        id:
+          type: string
+          description: Compose snapshot studyset identifier.
+        md5:
+          type: string
+          nullable: true
+          description: Canonical md5 hash of the snapshot payload.
     studyset-reference-list:
       title: studyset-reference-list
       x-stoplight:
@@ -2118,6 +2149,20 @@ components:
             $ref: '#/components/schemas/studyset-reference-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+    annotation-reference:
+      title: annotation-reference
+      x-stoplight:
+        id: ofq4h6hwsb6m3
+      type: object
+      description: A lightweight reference keyed by the Neurostore annotation ID.
+      properties: {}
+    annotation-reference-return:
+      title: annotation-reference-return
+      x-stoplight:
+        id: 1pwa45bjsiyho
+      allOf:
+        - $ref: '#/components/schemas/annotation-reference'
+        - $ref: '#/components/schemas/read-only'
   securitySchemes:
     JSON-Web-Token:
       type: http
