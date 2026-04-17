@@ -1397,11 +1397,6 @@ components:
             id: l2eu18324q6ye
           description: A string representing a labeled version of this particular studyset.
           nullable: true
-        annotations:
-          type: array
-          description: Snapshot annotations paired with this studyset snapshot.
-          items:
-            $ref: '#/components/schemas/annotation-snapshot-summary'
     user:
       title: user
       type: object
