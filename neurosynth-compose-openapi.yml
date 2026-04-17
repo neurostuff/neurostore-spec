@@ -1360,8 +1360,8 @@ components:
           description: the snapshot taken of the annotation pending a successful run of the meta-analytic algorithm
           nullable: true
         snapshot_studyset:
-          type: string
-          description: The related cached studyset to this annotation.
+          $ref: '#/components/schemas/studyset-snapshot-summary'
+          description: The paired cached studyset snapshot for this annotation.
           readOnly: true
         neurostore_url:
           type: string
@@ -1381,6 +1381,11 @@ components:
           type: object
           description: The snapshot of the studyset pending a successful run of the meta-analysis.
           nullable: true
+        annotations:
+          type: array
+          description: Compact summaries of cached annotations paired with this studyset snapshot.
+          items:
+            $ref: '#/components/schemas/annotation-snapshot-summary'
         neurostore_url:
           type: string
           x-stoplight:
@@ -1392,6 +1397,11 @@ components:
             id: l2eu18324q6ye
           description: A string representing a labeled version of this particular studyset.
           nullable: true
+        annotations:
+          type: array
+          description: Snapshot annotations paired with this studyset snapshot.
+          items:
+            $ref: '#/components/schemas/annotation-snapshot-summary'
     user:
       title: user
       type: object
