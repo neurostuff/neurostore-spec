@@ -208,7 +208,7 @@ paths:
           description: No Content
       security:
         - JSON-Web-Token: []
-  /studysets:
+  /snapshot-studysets:
     get:
       summary: Get a list of Studysets
       tags:
@@ -263,7 +263,7 @@ paths:
             schema:
               $ref: '#/components/schemas/studyset-post-body'
       description: create a new serialized/referenced studyset
-  '/studysets/{id}':
+  '/snapshot-studysets/{id}':
     parameters:
       - schema:
           type: string
@@ -317,7 +317,7 @@ paths:
             schema:
               $ref: '#/components/schemas/studyset'
       description: update an existing serialized/referenced studyset
-  /annotations:
+  /snapshot-annotations:
     get:
       summary: GET a list of annotations
       tags:
@@ -371,7 +371,7 @@ paths:
       security:
         - JSON-Web-Token: []
       description: create a new serialized/referenced annotation
-  '/annotations/{id}':
+  '/snapshot-annotations/{id}':
     parameters:
       - schema:
           type: string
@@ -1087,9 +1087,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tag-return'
-  /studyset-references:
+  /neurostore-studysets:
     get:
-      summary: Your GET endpoint
+      summary: List Neurostore studyset references
       tags: []
       responses:
         '200':
@@ -1100,10 +1100,10 @@ paths:
                 $ref: '#/components/schemas/studyset-reference-list'
       x-stoplight:
         id: kzl4p104nysct
-      description: ''
+      description: List reference rows keyed by the actual Neurostore studyset ID, including compact snapshot summaries.
       parameters:
         - $ref: '#/components/parameters/nested'
-  '/studyset-references/{id}':
+  '/neurostore-studysets/{id}':
     parameters:
       - schema:
           type: string
@@ -1111,7 +1111,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get a Neurostore studyset reference by Neurostore ID
       tags: []
       responses:
         '200':
@@ -1122,8 +1122,29 @@ paths:
                 $ref: '#/components/schemas/studyset-reference-return'
       x-stoplight:
         id: beely5hhaisxm
+      description: Resolve a Neurostore studyset reference using the same ID exposed by the Neurostore API, including each linked snapshot's compose ID and md5.
       parameters:
         - $ref: '#/components/parameters/nested'
+  '/neurostore-annotations/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get a Neurostore annotation reference by Neurostore ID
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/annotation-reference-return'
+      description: Resolve a Neurostore annotation reference using the same ID exposed by the Neurostore API, including each linked snapshot's compose ID and md5.
+      x-stoplight:
+        id: 7f6pld5tq7b3s
 components:
   schemas:
     specification:
@@ -1229,12 +1250,12 @@ components:
             - type: string
               nullable: true
             - $ref: '#/components/schemas/specification'
-        studyset:
+        neurostore_studyset:
           oneOf:
             - type: string
               nullable: true
             - $ref: '#/components/schemas/studyset'
-        annotation:
+        neurostore_annotation:
           oneOf:
             - type: string
               nullable: true
@@ -1338,9 +1359,9 @@ components:
           type: object
           description: the snapshot taken of the annotation pending a successful run of the meta-analytic algorithm
           nullable: true
-        studyset:
-          type: string
-          description: The related cached studyset to this annotation.
+        snapshot_studyset:
+          $ref: '#/components/schemas/studyset-snapshot-summary'
+          description: The paired cached studyset snapshot for this annotation.
           readOnly: true
         neurostore_url:
           type: string
@@ -1360,6 +1381,11 @@ components:
           type: object
           description: The snapshot of the studyset pending a successful run of the meta-analysis.
           nullable: true
+        annotations:
+          type: array
+          description: Compact summaries of cached annotations paired with this studyset snapshot.
+          items:
+            $ref: '#/components/schemas/annotation-snapshot-summary'
         neurostore_url:
           type: string
           x-stoplight:
@@ -1513,7 +1539,7 @@ components:
       allOf:
         - type: object
           properties:
-            cached_studyset_id:
+            snapshot_studyset_id:
               type: string
               x-stoplight:
                 id: o1xgfte8bodzp
@@ -1693,11 +1719,11 @@ components:
         - $ref: '#/components/schemas/read-only'
         - type: object
           properties:
-            cached_studyset_id:
+            snapshot_studyset_id:
               type: string
               nullable: true
               readOnly: true
-            cached_annotation_id:
+            snapshot_annotation_id:
               type: string
               nullable: true
               readOnly: true
@@ -1872,6 +1898,14 @@ components:
         description:
           type: string
           nullable: true
+        neurostore_studyset_id:
+          type: string
+          nullable: true
+          description: ID of the project’s linked Neurostore studyset reference.
+        neurostore_annotation_id:
+          type: string
+          nullable: true
+          description: ID of the project’s linked Neurostore annotation reference.
         public:
           type: boolean
           x-stoplight:
@@ -2035,11 +2069,11 @@ components:
           x-stoplight:
             id: vaj7hv8uacxth
           writeOnly: true
-        cached_studyset:
+        snapshot_studyset:
           type: string
           description: JSON-encoded studyset snapshot payload, optionally provided in multipart form.
           writeOnly: true
-        cached_annotation:
+        snapshot_annotation:
           type: string
           description: JSON-encoded annotation snapshot payload, optionally provided in multipart form.
           writeOnly: true
@@ -2053,18 +2087,18 @@ components:
           type: string
           x-stoplight:
             id: jbludrenxdfdl
-        cached_studyset:
+        snapshot_studyset:
           type: object
           x-stoplight:
             id: 034jmd5z1k2pm
-        cached_annotation:
+        snapshot_annotation:
           type: object
           x-stoplight:
             id: 2ybs3z7bw47p1
-        cached_studyset_id:
+        snapshot_studyset_id:
           type: string
           description: ID of an existing cached studyset snapshot to link to this result.
-        cached_annotation_id:
+        snapshot_annotation_id:
           type: string
           description: ID of an existing cached annotation snapshot to link to this result.
         cli_version:
@@ -2077,18 +2111,12 @@ components:
         id: 4ck154dc5tklb
       type: object
       properties:
-        snapshots:
+        studysets:
           type: array
           x-stoplight:
             id: h20wq8miy4mdl
           items:
-            x-stoplight:
-              id: dwig8g1opu989
-            oneOf:
-              - type: string
-                x-stoplight:
-                  id: mjq9g1kygu2z1
-              - $ref: '#/components/schemas/studyset'
+            $ref: '#/components/schemas/studyset-snapshot-summary'
     studyset-reference-return:
       title: studyset-reference-return
       x-stoplight:
@@ -2096,6 +2124,19 @@ components:
       allOf:
         - $ref: '#/components/schemas/studyset-reference'
         - $ref: '#/components/schemas/read-only'
+    studyset-snapshot-summary:
+      title: studyset-snapshot-summary
+      x-stoplight:
+        id: d9b5e1zhrx941
+      type: object
+      properties:
+        id:
+          type: string
+          description: Compose snapshot studyset identifier.
+        md5:
+          type: string
+          nullable: true
+          description: Canonical md5 hash of the snapshot payload.
     studyset-reference-list:
       title: studyset-reference-list
       x-stoplight:
@@ -2110,6 +2151,37 @@ components:
             $ref: '#/components/schemas/studyset-reference-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+    annotation-reference:
+      title: annotation-reference
+      x-stoplight:
+        id: ofq4h6hwsb6m3
+      type: object
+      description: A lightweight reference keyed by the Neurostore annotation ID.
+      properties:
+        annotations:
+          type: array
+          items:
+            $ref: '#/components/schemas/annotation-snapshot-summary'
+    annotation-reference-return:
+      title: annotation-reference-return
+      x-stoplight:
+        id: 1pwa45bjsiyho
+      allOf:
+        - $ref: '#/components/schemas/annotation-reference'
+        - $ref: '#/components/schemas/read-only'
+    annotation-snapshot-summary:
+      title: annotation-snapshot-summary
+      x-stoplight:
+        id: pygj76le35r4m
+      type: object
+      properties:
+        id:
+          type: string
+          description: Compose snapshot annotation identifier.
+        md5:
+          type: string
+          nullable: true
+          description: Canonical md5 hash of the snapshot payload.
   securitySchemes:
     JSON-Web-Token:
       type: http
