@@ -874,6 +874,7 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/user_id'
+        - $ref: '#/components/parameters/include_provenance'
     post:
       summary: ''
       responses:
@@ -919,6 +920,7 @@ paths:
                 $ref: '#/components/schemas/project-return'
       parameters:
         - $ref: '#/components/parameters/info'
+        - $ref: '#/components/parameters/include_provenance'
     put:
       summary: ''
       responses:
@@ -2284,6 +2286,14 @@ components:
       schema:
         type: boolean
       description: display additional information about a nested relationship without displaying fully nested object
+    include_provenance:
+      name: include_provenance
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: true
+      description: include the project provenance payload in project responses
     ids:
       name: ids
       in: query
