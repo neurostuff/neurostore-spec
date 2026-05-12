@@ -25,6 +25,7 @@ paths:
     get:
       summary: Get User Info by User ID
       tags:
+        - compose
         - users
       description: Retrieve the information of the user with the matching user ID.
       responses:
@@ -44,6 +45,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/user-return'
       tags:
+        - compose
         - users
       description: update information about a user
       security:
@@ -66,6 +68,7 @@ paths:
                 $ref: '#/components/schemas/user-list'
       description: List all users
       tags:
+        - compose
         - users
     post:
       summary: Create A New User
@@ -79,6 +82,7 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
+        - compose
         - users
       description: create a single user
       requestBody:
@@ -113,9 +117,9 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/desc'
       tags:
+        - compose
         - meta_analyses
         - get
-        - compose
     parameters: []
     post:
       summary: Create a new meta-analysis
@@ -141,9 +145,9 @@ paths:
               $ref: '#/components/schemas/meta-analysis-post-body'
       description: 'create a new specification, studyset, annotation bundle'
       tags:
+        - compose
         - meta_analyses
         - post
-        - compose
   '/meta-analyses/{id}':
     parameters:
       - schema:
@@ -168,9 +172,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/nested'
       tags:
+        - compose
         - meta_analyses
         - get
-        - compose
     put:
       summary: Update a meta-analysis
       responses:
@@ -198,9 +202,9 @@ paths:
         description: ''
       description: update an existing meta-analysis (that has not yet been run)
       tags:
+        - compose
         - meta_analyses
         - put
-        - compose
     delete:
       summary: ''
       responses:
@@ -212,9 +216,9 @@ paths:
     get:
       summary: Get a list of Studysets
       tags:
+        - compose
         - studysets
         - get
-        - compose
       responses:
         '200':
           description: OK
@@ -252,9 +256,9 @@ paths:
         '500':
           $ref: '#/components/responses/bad-request'
       tags:
+        - compose
         - studysets
         - post
-        - compose
       security:
         - JSON-Web-Token: []
       requestBody:
@@ -273,9 +277,9 @@ paths:
     get:
       summary: Get information about a Studyset
       tags:
+        - compose
         - studysets
         - get
-        - compose
       responses:
         '200':
           description: OK
@@ -306,9 +310,9 @@ paths:
         '422':
           $ref: '#/components/responses/bad-request'
       tags:
+        - compose
         - studysets
         - put
-        - compose
       security:
         - JSON-Web-Token: []
       requestBody:
@@ -321,9 +325,9 @@ paths:
     get:
       summary: GET a list of annotations
       tags:
+        - compose
         - annotations
         - get
-        - compose
       responses:
         '200':
           description: OK
@@ -360,9 +364,9 @@ paths:
         '500':
           $ref: '#/components/responses/bad-request'
       tags:
+        - compose
         - annotations
         - post
-        - compose
       requestBody:
         content:
           application/json:
@@ -381,9 +385,9 @@ paths:
     get:
       summary: GET information about an annotation
       tags:
+        - compose
         - annotations
         - get
-        - compose
       responses:
         '200':
           description: OK
@@ -414,9 +418,9 @@ paths:
         '422':
           $ref: '#/components/responses/bad-request'
       tags:
+        - compose
         - annotations
         - put
-        - compose
       security:
         - JSON-Web-Token: []
       requestBody:
@@ -439,9 +443,9 @@ paths:
           $ref: '#/components/responses/bad-request'
       description: list of meta-analysis specifications
       tags:
+        - compose
         - specifications
         - get
-        - compose
       parameters:
         - $ref: '#/components/parameters/nested'
         - $ref: '#/components/parameters/ids'
@@ -477,9 +481,9 @@ paths:
               $ref: '#/components/schemas/specification-post-body'
       description: create a new meta-analysis specification
       tags:
+        - compose
         - specifications
         - post
-        - compose
   '/specifications/{id}':
     parameters:
       - schema:
@@ -502,9 +506,9 @@ paths:
           $ref: '#/components/responses/bad-request'
       description: get a meta-analysis specification
       tags:
+        - compose
         - specifications
         - get
-        - compose
     put:
       summary: Update Meta-Analysis specification
       responses:
@@ -531,16 +535,16 @@ paths:
               $ref: '#/components/schemas/specification'
       description: update an existing meta analysis specification
       tags:
+        - compose
         - specifications
         - put
-        - compose
   /meta-analysis-results:
     get:
       summary: List meta-analysis results
       tags:
+        - compose
         - meta_analyses
         - get
-        - compose
       responses:
         '200':
           description: OK
@@ -572,9 +576,9 @@ paths:
         - JSON-Web-Token: []
         - upload_key: []
       tags:
+        - compose
         - meta_analyses
         - post
-        - compose
     parameters: []
   /meta-analysis-jobs:
     post:
@@ -603,9 +607,9 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
+        - compose
         - meta_analyses
         - post
-        - compose
       description: Submit a meta-analysis to the compose runner service.
     parameters: []
     get:
@@ -624,9 +628,9 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
+        - compose
         - meta_analyses
         - get
-        - compose
       description: Return cached job submissions associated with the authenticated user.
   '/meta-analysis-jobs/{job_id}':
     parameters:
@@ -653,9 +657,9 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
+        - compose
         - meta_analyses
         - get
-        - compose
       description: Retrieve the most recent status information and logs for a submitted job.
   '/meta-analysis-results/{id}':
     parameters:
@@ -667,9 +671,9 @@ paths:
     get:
       summary: Get a meta-analysis result by ID
       tags:
+        - compose
         - meta_analyses
         - get
-        - compose
       responses:
         '200':
           description: OK
@@ -695,9 +699,9 @@ paths:
             schema:
               $ref: '#/components/schemas/result-upload'
       tags:
+        - compose
         - meta_analyses
         - put
-        - compose
       security:
         - JSON-Web-Token: []
         - upload_key: []
@@ -705,9 +709,9 @@ paths:
     get:
       summary: Get neurovault collections
       tags:
+        - compose
         - neurovault
         - get
-        - compose
       responses:
         '200':
           description: OK
@@ -721,9 +725,9 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
+        - compose
         - neurovault
         - post
-        - compose
       requestBody:
         content:
           application/json:
@@ -741,9 +745,9 @@ paths:
     get:
       summary: Your GET endpoint
       tags:
+        - compose
         - neurovault
         - get
-        - compose
       responses:
         '200':
           description: OK
@@ -764,17 +768,17 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
+        - compose
         - neurovault
         - put
-        - compose
       x-internal: true
   /neurovault-files:
     get:
       summary: Your GET endpoint
       tags:
+        - compose
         - neurovault
         - get
-        - compose
       responses:
         '200':
           description: OK
@@ -801,9 +805,9 @@ paths:
               $ref: '#/components/schemas/neurovault-file'
         description: ''
       tags:
+        - compose
         - neurovault
         - post
-        - compose
       x-internal: true
     parameters: []
   '/neurovault-files/{id}':
@@ -816,9 +820,9 @@ paths:
     get:
       summary: Your GET endpoint
       tags:
+        - compose
         - neurovault
         - get
-        - compose
       responses:
         '200':
           description: OK
@@ -844,17 +848,17 @@ paths:
             schema:
               $ref: '#/components/schemas/neurovault-file'
       tags:
+        - compose
         - neurovault
         - put
-        - compose
       x-internal: true
   /projects:
     get:
       summary: Your GET endpoint
       tags:
+        - compose
         - projects
         - get
-        - compose
       responses:
         '200':
           description: OK
@@ -895,9 +899,9 @@ paths:
         - $ref: '#/components/parameters/source_id'
         - $ref: '#/components/parameters/copy_annotations'
       tags:
+        - compose
         - projects
         - post
-        - compose
   '/projects/{id}':
     parameters:
       - schema:
@@ -908,9 +912,9 @@ paths:
     get:
       summary: Your GET endpoint
       tags:
+        - compose
         - projects
         - get
-        - compose
       responses:
         '200':
           description: OK
@@ -940,9 +944,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/sync_meta_analyses_public'
       tags:
+        - compose
         - projects
         - put
-        - compose
     delete:
       summary: ''
       responses:
@@ -951,12 +955,13 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
-        - projects
         - compose
+        - projects
   /neurostore-studies:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - compose
       responses:
         '200':
           description: OK
@@ -992,7 +997,8 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - compose
       responses:
         '200':
           description: OK
@@ -1023,9 +1029,9 @@ paths:
     get:
       summary: Get a list of Tags
       tags:
+        - compose
         - tags
         - get
-        - compose
       responses:
         '200':
           description: OK
@@ -1066,9 +1072,9 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
+        - compose
         - tags
         - post
-        - compose
   '/tags/{id}':
     parameters:
       - schema:
@@ -1079,9 +1085,9 @@ paths:
     get:
       summary: Get information about a Tag
       tags:
+        - compose
         - tags
         - get
-        - compose
       responses:
         '200':
           description: OK
@@ -1092,7 +1098,8 @@ paths:
   /neurostore-studysets:
     get:
       summary: List Neurostore studyset references
-      tags: []
+      tags:
+        - compose
       responses:
         '200':
           description: OK
@@ -1114,7 +1121,8 @@ paths:
         required: true
     get:
       summary: Get a Neurostore studyset reference by Neurostore ID
-      tags: []
+      tags:
+        - compose
       responses:
         '200':
           description: OK
@@ -1136,7 +1144,8 @@ paths:
         required: true
     get:
       summary: Get a Neurostore annotation reference by Neurostore ID
-      tags: []
+      tags:
+        - compose
       responses:
         '200':
           description: OK
