@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Analysis Specification for Meta-analysis
-  version: '1.0'
+  version: '1.1'
   description: api to create a meta-analysis specification
   contact:
     name: James D Kent
@@ -692,12 +692,12 @@ paths:
                 $ref: '#/components/schemas/result-return'
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/result'
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/result-upload'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/result'
       tags:
         - compose
         - meta_analyses
@@ -1806,6 +1806,10 @@ components:
           x-stoplight:
             id: dnswh7xk0mlu9
           nullable: true
+        file:
+          type: string
+          format: binary
+          writeOnly: true
     neurovault-collection-return:
       title: neurovault-collection-return
       allOf:
