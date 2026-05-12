@@ -985,6 +985,7 @@ paths:
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/paginate'
         - $ref: '#/components/parameters/filename'
+        - $ref: '#/components/parameters/study'
         - $ref: '#/components/parameters/analysis_name'
         - $ref: '#/components/parameters/value_type'
         - $ref: '#/components/parameters/space'
@@ -2301,6 +2302,10 @@ components:
       properties:
         analysis:
           type: string
+          nullable: true
+        study:
+          type: string
+          nullable: true
     image-return:
       allOf:
         - $ref: ./nimads/nimads/imageBase.yaml
@@ -2324,6 +2329,10 @@ components:
       properties:
         analysis:
           type: string
+          nullable: true
+        study:
+          type: string
+          nullable: true
         entities:
           type: array
           items:
@@ -3100,6 +3109,13 @@ components:
       schema:
         type: string
       description: search filename field
+    study:
+      name: study
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Filter images by study id
     space:
       name: space
       in: query
