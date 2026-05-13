@@ -15,7 +15,6 @@ servers:
 paths:
   /neurostore-studyset-releases/:
     get:
-      operationId: neurostore.resources.neurostore_studyset_releases.search
       summary: GET NeuroStore studyset release list
       tags:
         - neurostore-studyset-releases
@@ -45,7 +44,6 @@ paths:
           type: string
         description: nightly, latest, or a monthly release in YYYY-MM format.
     get:
-      operationId: neurostore.resources.neurostore_studyset_releases.get
       summary: GET NeuroStore studyset release manifest
       tags:
         - neurostore-studyset-releases
@@ -67,7 +65,6 @@ paths:
           type: string
         description: nightly, latest, or a monthly release in YYYY-MM format.
     get:
-      operationId: neurostore.resources.neurostore_studyset_releases.download
       summary: Download NeuroStore studyset release tarball
       tags:
         - neurostore-studyset-releases
