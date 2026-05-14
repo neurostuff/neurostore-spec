@@ -17,6 +17,7 @@ paths:
     get:
       summary: GET NeuroStore studyset release list
       tags:
+        - store
         - neurostore-studyset-releases
       responses:
         '200':
@@ -46,6 +47,7 @@ paths:
     get:
       summary: GET NeuroStore studyset release manifest
       tags:
+        - store
         - neurostore-studyset-releases
       responses:
         '200':
@@ -67,6 +69,7 @@ paths:
     get:
       summary: Download NeuroStore studyset release tarball
       tags:
+        - store
         - neurostore-studyset-releases
       responses:
         '200':
