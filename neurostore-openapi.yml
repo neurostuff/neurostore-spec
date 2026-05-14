@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: neurostore api
-  version: '1.1'
+  version: '1.2'
   description: Create studysets for meta-analysis
   contact:
     name: James D Kent
@@ -13,6 +13,74 @@ servers:
   - url: 'http://localhost:80/api'
     description: testing
 paths:
+  /neurostore-studyset-releases/:
+    get:
+      summary: GET NeuroStore studyset release list
+      tags:
+        - store
+        - neurostore-studyset-releases
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    type: object
+                    properties:
+                      total_count:
+                        type: integer
+                  results:
+                    type: array
+                    items:
+                      type: object
+  /neurostore-studyset-releases/{version}:
+    parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+        description: nightly, latest, or a monthly release in YYYY-MM format.
+    get:
+      summary: GET NeuroStore studyset release manifest
+      tags:
+        - store
+        - neurostore-studyset-releases
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          $ref: '#/components/responses/404'
+  /neurostore-studyset-releases/{version}/download:
+    parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+        description: nightly, latest, or a monthly release in YYYY-MM format.
+    get:
+      summary: Download NeuroStore studyset release tarball
+      tags:
+        - store
+        - neurostore-studyset-releases
+      responses:
+        '200':
+          description: OK
+          content:
+            application/gzip:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/404'
   /pipelines/:
     get:
       summary: GET a list of pipelines
@@ -3279,6 +3347,7 @@ components:
       scheme: bearer
       description: authentication method
 tags:
+  - name: neurostore-studyset-releases
   - name: analyses
   - name: studysets
   - name: images
