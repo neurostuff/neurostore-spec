@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: neurostore api
-  version: '1.0'
+  version: '1.2'
   description: Create studysets for meta-analysis
   contact:
     name: James D Kent
@@ -13,10 +13,79 @@ servers:
   - url: 'http://localhost:80/api'
     description: testing
 paths:
+  /neurostore-studyset-releases/:
+    get:
+      summary: GET NeuroStore studyset release list
+      tags:
+        - store
+        - neurostore-studyset-releases
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    type: object
+                    properties:
+                      total_count:
+                        type: integer
+                  results:
+                    type: array
+                    items:
+                      type: object
+  /neurostore-studyset-releases/{version}:
+    parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+        description: nightly, latest, or a monthly release in YYYY-MM format.
+    get:
+      summary: GET NeuroStore studyset release manifest
+      tags:
+        - store
+        - neurostore-studyset-releases
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          $ref: '#/components/responses/404'
+  /neurostore-studyset-releases/{version}/download:
+    parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+        description: nightly, latest, or a monthly release in YYYY-MM format.
+    get:
+      summary: Download NeuroStore studyset release tarball
+      tags:
+        - store
+        - neurostore-studyset-releases
+      responses:
+        '200':
+          description: OK
+          content:
+            application/gzip:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/404'
   /pipelines/:
     get:
       summary: GET a list of pipelines
       tags:
+        - store
         - pipelines
       parameters:
         - $ref: '#/components/parameters/paginate'
@@ -30,6 +99,7 @@ paths:
     post:
       summary: POST/create a pipeline
       tags:
+        - store
         - pipelines
       security:
         - JSON-Web-Token: []
@@ -47,6 +117,7 @@ paths:
     get:
       summary: GET a pipeline by ID
       tags:
+        - store
         - pipelines
       parameters:
         - name: id
@@ -64,6 +135,7 @@ paths:
     put:
       summary: PUT/update a pipeline by ID
       tags:
+        - store
         - pipelines
       parameters:
         - name: id
@@ -82,6 +154,7 @@ paths:
     delete:
       summary: DELETE a pipeline by ID
       tags:
+        - store
         - pipelines
       parameters:
         - name: id
@@ -97,6 +170,7 @@ paths:
     get:
       summary: GET a list of pipeline configs
       tags:
+        - store
         - pipeline-configs
       parameters:
         - name: pipeline
@@ -129,6 +203,7 @@ paths:
     post:
       summary: POST/create a pipeline config
       tags:
+        - store
         - pipeline-configs
       requestBody:
         content:
@@ -142,6 +217,7 @@ paths:
     get:
       summary: GET a pipeline config by ID
       tags:
+        - store
         - pipeline-configs
       parameters:
         - name: id
@@ -159,6 +235,7 @@ paths:
     put:
       summary: PUT/update a pipeline config by ID
       tags:
+        - store
         - pipeline-configs
       parameters:
         - name: id
@@ -177,6 +254,7 @@ paths:
     delete:
       summary: DELETE a pipeline config by ID
       tags:
+        - store
         - pipeline-configs
       parameters:
         - name: id
@@ -187,11 +265,12 @@ paths:
       responses:
         '204':
           description: No Content
-    
+
   /pipeline-study-results/:
     get:
       summary: GET a list of pipeline run results
       tags:
+        - store
         - pipeline-study-results
       parameters:
         - $ref: '#/components/parameters/paginate'
@@ -202,7 +281,7 @@ paths:
             Examples:
               - "TestPipeline:1.0.0:groups.diagnosis=ADHD" (specific version)
               - "TestPipeline:groups.diagnosis=ADHD" (latest version)
-            
+
             Field path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
           required: false
           schema:
@@ -222,7 +301,7 @@ paths:
             Examples:
               - "TestPipeline:1.0.0:preprocessing.smoothing=8" (specific version)
               - "TestPipeline:model.type=linear" (latest version)
-            
+
             Config path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
           required: false
           schema:
@@ -268,6 +347,7 @@ paths:
     post:
       summary: POST/create a pipeline run result
       tags:
+        - store
         - pipeline-study-results
       parameters:
         - $ref: '#/components/parameters/paginate'
@@ -278,7 +358,7 @@ paths:
             Examples:
               - "TestPipeline:1.0.0:groups.diagnosis=ADHD" (specific version)
               - "TestPipeline:groups.diagnosis=ADHD" (latest version)
-            
+
             Field path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
           required: false
           schema:
@@ -298,7 +378,7 @@ paths:
             Examples:
               - "TestPipeline:1.0.0:preprocessing.smoothing=8" (specific version)
               - "TestPipeline:model.type=linear" (latest version)
-            
+
             Config path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
           required: false
           schema:
@@ -353,6 +433,7 @@ paths:
     get:
       summary: GET a pipeline run result by ID
       tags:
+        - store
         - pipeline-study-results
       parameters:
         - name: pipeline_study_result_id
@@ -370,6 +451,7 @@ paths:
     put:
       summary: PUT/update a pipeline run result by ID
       tags:
+        - store
         - pipeline-study-results
       parameters:
         - name: pipeline_study_result_id
@@ -388,6 +470,7 @@ paths:
     delete:
       summary: DELETE a pipeline run result by ID
       tags:
+        - store
         - pipeline-study-results
       parameters:
         - name: pipeline_study_result_id
@@ -399,60 +482,61 @@ paths:
         '204':
           description: No Content
   /studysets/:
-   get:
-     summary: GET a list of studysets
-     tags:
-       - studysets
-     responses:
-       '200':
-         description: OK
-         content:
-           application/json:
-             schema:
-               $ref: '#/components/schemas/studyset-list'
-     description: Get a list of studysets.
-     parameters:
-       - $ref: '#/components/parameters/search'
-       - $ref: '#/components/parameters/sort'
-       - $ref: '#/components/parameters/page'
-       - $ref: '#/components/parameters/desc'
-       - $ref: '#/components/parameters/page_size'
-       - $ref: '#/components/parameters/paginate'
-       - $ref: '#/components/parameters/nested'
-       - $ref: '#/components/parameters/name'
-       - $ref: '#/components/parameters/description'
-       - $ref: '#/components/parameters/source_id'
-       - $ref: '#/components/parameters/unique'
-       - $ref: '#/components/parameters/source'
-       - $ref: '#/components/parameters/authors'
-       - $ref: '#/components/parameters/user_id'
-     security:
+    get:
+      summary: GET a list of studysets
+      tags:
+        - store
+        - studysets
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/studyset-list'
+      description: Get a list of studysets.
+      parameters:
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/paginate'
+        - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/description'
+        - $ref: '#/components/parameters/source_id'
+        - $ref: '#/components/parameters/unique'
+        - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/authors'
+        - $ref: '#/components/parameters/user_id'
+      security:
         - JSON-Web-Token: []
         - {}
-   post:
-     summary: POST/create a studyset
-     parameters:
-       - $ref: '#/components/parameters/source_id'
-       - $ref: '#/components/parameters/source'
-       - $ref: '#/components/parameters/copy_annotations'
-     responses:
-       '200':
-         description: OK
-         content:
-           application/json:
-             schema:
-               $ref: '#/components/schemas/studyset-return'
-     tags:
-       - store
-       - studysets
-     description: Create a studyset. When `source_id` is provided, Neurostore clones an existing studyset owned by any user into a new studyset owned by the caller, copying studies and (by default) annotations.
-     security:
-       - JSON-Web-Token: []
-     requestBody:
-       content:
-         application/json:
-           schema:
-             $ref: '#/components/schemas/studyset-request'
+    post:
+      summary: POST/create a studyset
+      parameters:
+        - $ref: '#/components/parameters/source_id'
+        - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/copy_annotations'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/studyset-return'
+      tags:
+        - store
+        - studysets
+      description: Create a studyset. When `source_id` is provided, Neurostore clones an existing studyset owned by any user into a new studyset owned by the caller, copying studies and (by default) annotations.
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/studyset-request'
   '/studysets/{id}':
     parameters:
       - schema:
@@ -647,8 +731,8 @@ paths:
     get:
       summary: GET list of analyses
       tags:
-        - analyses
         - store
+        - analyses
       responses:
         '200':
           description: OK
@@ -689,8 +773,8 @@ paths:
             schema:
               $ref: '#/components/schemas/analysis-request'
       tags:
-        - analyses
         - store
+        - analyses
       description: create an analysis
       parameters: []
       security:
@@ -705,8 +789,8 @@ paths:
     get:
       summary: GET an analysis
       tags:
-        - analyses
         - store
+        - analyses
       responses:
         '200':
           description: OK
@@ -736,8 +820,8 @@ paths:
             schema:
               $ref: '#/components/schemas/analysis-request'
       tags:
-        - analyses
         - store
+        - analyses
       description: Update an existing analysis.
       security:
         - JSON-Web-Token: []
@@ -750,14 +834,14 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
-        - analyses
         - store
+        - analyses
   /tables/:
     get:
       summary: GET list of tables
       tags:
-        - tables
         - store
+        - tables
       responses:
         '200':
           description: OK
@@ -791,8 +875,8 @@ paths:
             schema:
               $ref: '#/components/schemas/table-request'
       tags:
-        - tables
         - store
+        - tables
       description: create a table
       parameters: []
       security:
@@ -807,8 +891,8 @@ paths:
     get:
       summary: GET a table
       tags:
-        - tables
         - store
+        - tables
       responses:
         '200':
           description: OK
@@ -838,8 +922,8 @@ paths:
             schema:
               $ref: '#/components/schemas/table-request'
       tags:
-        - tables
         - store
+        - tables
       description: update a table
       parameters: []
       security:
@@ -853,14 +937,14 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
-        - tables
         - store
+        - tables
   /points/:
     get:
       summary: Get Points
       tags:
-        - points
         - store
+        - points
       parameters:
         - $ref: '#/components/parameters/paginate'
       responses:
@@ -881,8 +965,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/point-return'
       tags:
-        - points
         - store
+        - points
       description: add a point to an analysis
       security:
         - JSON-Web-Token: []
@@ -901,8 +985,8 @@ paths:
     get:
       summary: GET a point
       tags:
-        - points
         - store
+        - points
       responses:
         '200':
           description: OK
@@ -931,8 +1015,8 @@ paths:
             schema:
               $ref: '#/components/schemas/point-request'
       tags:
-        - points
         - store
+        - points
       description: Update a particular MRI coordinate.
       security:
         - JSON-Web-Token: []
@@ -945,14 +1029,14 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
-        - points
         - store
+        - points
   /images/:
     get:
       summary: GET a list of images
       tags:
-        - images
         - store
+        - images
       responses:
         '200':
           description: OK
@@ -969,6 +1053,7 @@ paths:
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/paginate'
         - $ref: '#/components/parameters/filename'
+        - $ref: '#/components/parameters/study'
         - $ref: '#/components/parameters/analysis_name'
         - $ref: '#/components/parameters/value_type'
         - $ref: '#/components/parameters/space'
@@ -987,8 +1072,8 @@ paths:
             schema:
               $ref: '#/components/schemas/image-request'
       tags:
-        - images
         - store
+        - images
       description: Create an image
       security:
         - JSON-Web-Token: []
@@ -1002,8 +1087,8 @@ paths:
     get:
       summary: GET an image
       tags:
-        - images
         - store
+        - images
       responses:
         '200':
           description: OK
@@ -1032,8 +1117,8 @@ paths:
               $ref: '#/components/schemas/image-request'
         description: ''
       tags:
-        - images
         - store
+        - images
       description: Update a specific image.
       security:
         - JSON-Web-Token: []
@@ -1046,14 +1131,14 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
-        - images
         - store
+        - images
   /conditions/:
     get:
       summary: GET Conditions
       tags:
-        - conditions
         - store
+        - conditions
       responses:
         '200':
           description: OK
@@ -1084,8 +1169,8 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
-        - conditions
         - store
+        - conditions
       requestBody:
         content:
           application/json:
@@ -1101,8 +1186,8 @@ paths:
     get:
       summary: GET a condition
       tags:
-        - conditions
         - store
+        - conditions
       responses:
         '200':
           description: OK
@@ -1131,8 +1216,8 @@ paths:
               $ref: '#/components/schemas/condition-request'
         description: ''
       tags:
-        - conditions
         - store
+        - conditions
       description: update a condition
       security:
         - JSON-Web-Token: []
@@ -1145,15 +1230,15 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
-        - conditions
         - store
+        - conditions
   /annotations/:
     parameters: []
     get:
       summary: Your GET endpoint
       tags:
-        - annotations
         - store
+        - annotations
       responses:
         '200':
           description: OK
@@ -1178,8 +1263,8 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
-        - annotations
         - store
+        - annotations
       parameters:
         - $ref: '#/components/parameters/source'
         - $ref: '#/components/parameters/source_id'
@@ -1198,8 +1283,8 @@ paths:
     get:
       summary: Your GET endpoint
       tags:
-        - annotations
         - store
+        - annotations
       responses:
         '200':
           description: OK
@@ -1221,8 +1306,8 @@ paths:
                 $ref: '#/components/schemas/annotation-return'
       description: edit an existing annotation
       tags:
-        - annotations
         - store
+        - annotations
       security:
         - JSON-Web-Token: []
       requestBody:
@@ -1239,12 +1324,13 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
-        - annotations
         - store
+        - annotations
   /users/:
     get:
       summary: Your GET endpoint
       tags:
+        - store
         - user
       responses:
         '200':
@@ -1274,6 +1360,7 @@ paths:
             schema:
               $ref: '#/components/schemas/user'
       tags:
+        - store
         - user
   '/users/{id}':
     parameters:
@@ -1285,6 +1372,7 @@ paths:
     get:
       summary: Individual User Profile
       tags:
+        - store
         - user
       responses:
         '200':
@@ -1312,13 +1400,14 @@ paths:
       security:
         - JSON-Web-Token: []
       tags:
+        - store
         - user
   /base-studies/:
     get:
       summary: ''
       tags:
-        - studies
         - store
+        - studies
       responses:
         '200':
           description: OK
@@ -1376,7 +1465,7 @@ paths:
             Examples:
               - "TestPipeline:1.0.0:predictions.age_mean>20" (specific version)
               - "TestPipeline:groups.diagnosis=ADHD" (latest version)
-            
+
             Field path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
           required: false
           schema:
@@ -1391,7 +1480,7 @@ paths:
             Examples:
               - "TestPipeline:1.0.0:settings.min_age=20" (specific version)
               - "TestPipeline:model.type=linear" (latest version)
-            
+
             Config path supports array notation with [], regex search with ~, and comparisons with =, >, <, >=, <=.
           required: false
           schema:
@@ -1487,8 +1576,8 @@ paths:
                   items:
                     $ref: '#/components/schemas/base-study'
       tags:
-        - studies
         - store
+        - studies
   '/base-studies/{id}':
     parameters:
       - schema:
@@ -1499,8 +1588,8 @@ paths:
     get:
       summary: Your GET endpoint
       tags:
-        - studies
         - store
+        - studies
       responses:
         '200':
           description: OK
@@ -1529,15 +1618,15 @@ paths:
             schema:
               $ref: '#/components/schemas/base-study'
       tags:
-        - studies
         - store
+        - studies
   /annotation-analyses/:
     get:
       summary: Get annotation analyses
       tags:
+        - store
         - analyses
         - annotations
-        - store
       responses:
         '200':
           description: OK
@@ -1556,9 +1645,9 @@ paths:
     post:
       summary: Your POST endpoint
       tags:
+        - store
         - analyses
         - annotations
-        - store
       responses:
         '200':
           description: OK
@@ -1591,8 +1680,8 @@ paths:
     get:
       summary: Your GET endpoint
       tags:
-        - analyses
         - store
+        - analyses
         - annotations
       responses:
         '200':
@@ -1609,9 +1698,9 @@ paths:
     put:
       summary: Your PUT endpoint
       tags:
+        - store
         - analyses
         - annotations
-        - store
       responses:
         '200':
           description: OK
@@ -1630,6 +1719,7 @@ paths:
     get:
       summary: List pipeline embeddings
       tags:
+        - store
         - pipeline-embeddings
       parameters:
         - $ref: '#/components/parameters/paginate'
@@ -1650,6 +1740,7 @@ paths:
     get:
       summary: Get a pipeline embedding by id
       tags:
+        - store
         - pipeline_embeddings
       responses:
         '200':
@@ -2279,6 +2370,10 @@ components:
       properties:
         analysis:
           type: string
+          nullable: true
+        study:
+          type: string
+          nullable: true
     image-return:
       allOf:
         - $ref: ./nimads/nimads/imageBase.yaml
@@ -2302,6 +2397,10 @@ components:
       properties:
         analysis:
           type: string
+          nullable: true
+        study:
+          type: string
+          nullable: true
         entities:
           type: array
           items:
@@ -3078,6 +3177,13 @@ components:
       schema:
         type: string
       description: search filename field
+    study:
+      name: study
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Filter images by study id
     space:
       name: space
       in: query
@@ -3241,6 +3347,7 @@ components:
       scheme: bearer
       description: authentication method
 tags:
+  - name: neurostore-studyset-releases
   - name: analyses
   - name: studysets
   - name: images
