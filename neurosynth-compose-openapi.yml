@@ -1913,6 +1913,11 @@ components:
         description:
           type: string
           nullable: true
+        type:
+          type: string
+          enum:
+            - CBMA
+            - IBMA
         neurostore_studyset_id:
           type: string
           nullable: true
