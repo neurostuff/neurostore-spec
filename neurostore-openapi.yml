@@ -2379,6 +2379,10 @@ components:
         study:
           type: string
           nullable: true
+        order:
+          type: integer
+          description: determines the position to display the image within its analysis (or study, when the image has no analysis)
+          nullable: true
     image-return:
       allOf:
         - $ref: ./nimads/nimads/imageBase.yaml
