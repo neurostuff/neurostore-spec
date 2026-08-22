@@ -638,6 +638,8 @@ paths:
         - $ref: '#/components/parameters/pmid'
         - $ref: '#/components/parameters/doi'
         - $ref: '#/components/parameters/flat'
+        - $ref: '#/components/parameters/image_metadata'
+        - $ref: '#/components/parameters/image_value_summary'
       security:
         - JSON-Web-Token: []
         - {}
@@ -693,6 +695,8 @@ paths:
         - $ref: '#/components/parameters/nested'
         - $ref: '#/components/parameters/studyset_owner'
         - $ref: '#/components/parameters/flat'
+        - $ref: '#/components/parameters/image_metadata'
+        - $ref: '#/components/parameters/image_value_summary'
     put:
       summary: PUT/update a study
       responses:
@@ -757,6 +761,8 @@ paths:
             type: string
         - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/image_metadata'
+        - $ref: '#/components/parameters/image_value_summary'
     parameters: []
     post:
       summary: POST/create an analysis
@@ -803,6 +809,8 @@ paths:
       description: Information pertaining to a particular analysis within a study.
       parameters:
         - $ref: '#/components/parameters/nested'
+        - $ref: '#/components/parameters/image_metadata'
+        - $ref: '#/components/parameters/image_value_summary'
     put:
       summary: PUT/update an analysis
       responses:
@@ -1057,6 +1065,8 @@ paths:
         - $ref: '#/components/parameters/analysis_name'
         - $ref: '#/components/parameters/value_type'
         - $ref: '#/components/parameters/space'
+        - $ref: '#/components/parameters/image_metadata'
+        - $ref: '#/components/parameters/image_value_summary'
     post:
       summary: POST/create an image
       responses:
@@ -1099,6 +1109,9 @@ paths:
         '404':
           $ref: '#/components/responses/404'
       description: Retrieve information about a particular image from an analysis.
+      parameters:
+        - $ref: '#/components/parameters/image_metadata'
+        - $ref: '#/components/parameters/image_value_summary'
     put:
       summary: PUT/update an image
       responses:
@@ -2389,8 +2402,125 @@ components:
         - $ref: '#/components/schemas/image-relationships'
         - $ref: '#/components/schemas/resource-attributes'
         - $ref: '#/components/schemas/image-common'
+        - $ref: '#/components/schemas/image-detail'
       x-tags:
         - image
+    image-detail:
+      title: image-detail
+      x-tags:
+        - image
+      type: object
+      description: Read-only image fields that are withheld unless a request asks for them by name.
+      properties:
+        value_summary:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/image-value-summary'
+    image-value-summary:
+      title: image-value-summary
+      x-tags:
+        - image
+      type: object
+      description: >-
+        Distribution statistics for the image's voxel values, computed once and stored.
+        Present only when image_value_summary=true is requested, and null when the image
+        has never been summarized. Counts cover every voxel in the file; the distribution
+        fields (min/max/mean/std, percentiles, histogram) cover only the finite, non-zero
+        voxels, because neuroimaging maps store their background as zero or nan.
+      properties:
+        status:
+          type: string
+          description: SUCCESS when the numbers below are populated, FAILURE when the image could not be read.
+          nullable: true
+        error:
+          type: string
+          description: Why the last attempt failed, when status is not SUCCESS.
+          nullable: true
+        summarizer_version:
+          type: integer
+          description: Which version of the summarizer produced these numbers.
+          nullable: true
+        computed_at:
+          type: string
+          format: date-time
+          nullable: true
+        source_sha256:
+          type: string
+          description: SHA-256 of the file that was summarized, so a client can tell whether the numbers still describe the file at url.
+          nullable: true
+        source_bytes:
+          type: integer
+          format: int64
+          nullable: true
+        n_voxels:
+          type: integer
+          format: int64
+          description: Total voxels in the file; the denominator for fraction_nan and fraction_zero.
+          nullable: true
+        n_values:
+          type: integer
+          format: int64
+          description: Finite, non-zero voxels; the n behind the distribution fields and the denominator for fraction_negative.
+          nullable: true
+        fraction_nan:
+          type: number
+          description: Non-finite (nan or inf) voxels over n_voxels.
+          nullable: true
+        fraction_zero:
+          type: number
+          description: Exactly-zero voxels over n_voxels.
+          nullable: true
+        fraction_negative:
+          type: number
+          description: Negative voxels over n_values. A z or t map with a fraction near zero here is either one-sided or mislabelled.
+          nullable: true
+        min:
+          type: number
+          nullable: true
+        max:
+          type: number
+          nullable: true
+        mean:
+          type: number
+          nullable: true
+        std:
+          type: number
+          nullable: true
+        percentiles:
+          type: object
+          description: 'Percentile value keyed by probe, e.g. {"0.1": -5.2, "1": -3.1, ... "99.9": 5.8}.'
+          additionalProperties:
+            type: number
+            nullable: true
+          nullable: true
+        histogram:
+          type: object
+          description: Equal-width bins over [min, max]. Bin edges are implied by the bounds and the length of counts.
+          nullable: true
+          properties:
+            min:
+              type: number
+              nullable: true
+            max:
+              type: number
+              nullable: true
+            bin_width:
+              type: number
+              nullable: true
+            counts:
+              type: array
+              items:
+                type: integer
+            underflow:
+              type: integer
+              format: int64
+              description: Values below min, clipped out of the binned range.
+              nullable: true
+            overflow:
+              type: integer
+              format: int64
+              description: Values above max, clipped out of the binned range.
+              nullable: true
     image-request:
       allOf:
         - $ref: ./nimads/nimads/imageBase.yaml
@@ -3321,6 +3451,22 @@ components:
       required: false
       schema:
         type: boolean
+    image_metadata:
+      name: image_metadata
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: false
+      description: 'include each image''s source metadata (the payload it was ingested from). Withheld by default because it is large and unused by most clients; never present in studyset payloads.'
+    image_value_summary:
+      name: image_value_summary
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: false
+      description: 'include each image''s stored value summary (percentiles, spread, histogram, nan/zero/negative counts). Withheld by default; never present in studyset payloads.'
     flat:
       name: flat
       in: query
