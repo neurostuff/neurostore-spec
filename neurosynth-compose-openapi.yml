@@ -1699,11 +1699,16 @@ components:
           nullable: true
         neurovault_collection:
           $ref: '#/components/schemas/neurovault-collection-return'
-        methods_description:
+        method_description:
           type: string
           x-stoplight:
             id: gyyfasu3c7qgj
           description: the description of the methods applied to create this result.
+          nullable: true
+        method_references:
+          type: string
+          description: |
+            BibTeX-formatted references cited by method_description.
           nullable: true
         diagnostic_table:
           type: string
@@ -2088,6 +2093,12 @@ components:
           type: string
           x-stoplight:
             id: vaj7hv8uacxth
+          description: the description of the methods applied to create this result.
+          writeOnly: true
+        method_references:
+          type: string
+          description: |
+            BibTeX-formatted references cited by method_description.
           writeOnly: true
         snapshot_studyset:
           type: string
