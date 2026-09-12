@@ -2402,9 +2402,22 @@ components:
       schema:
         type: boolean
       description: when updating a project's public flag, also set each child meta-analysis to the same public value
+  headers:
+    RequestId:
+      description: >-
+        Correlation id for this request, returned on every response. Echoed from
+        an inbound X-Request-ID when one is supplied, otherwise generated.
+        Matches the `request_id` in an error body and the id in the server's
+        error log.
+      schema:
+        type: string
+        example: "9e5898042dbe4148"
   responses:
     bad-request:
       description: form when a request goes wrong
+      headers:
+        X-Request-ID:
+          $ref: '#/components/headers/RequestId'
       content:
         application/problem+json:
           schema:
@@ -2418,6 +2431,16 @@ components:
                 type: string
               type:
                 type: string
+              request_id:
+                type: string
+                description: >-
+                  Correlation id for the failing request. Matches the
+                  X-Request-ID response header and the server's error log.
+                example: "9e5898042dbe4148"
+              timestamp:
+                type: string
+                format: date-time
+                description: When the error was produced, ISO 8601.
 tags:
   - name: annotations
   - name: compose
