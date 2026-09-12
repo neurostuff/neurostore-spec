@@ -3177,9 +3177,21 @@ components:
             $ref: '#/components/schemas/pipeline-embedding'
         metadata:
           $ref: '#/components/schemas/metadata'
+  headers:
+    RequestId:
+      description: >-
+        Correlation id for this request. Echoed from an inbound X-Request-ID
+        when one is supplied, otherwise generated. Matches the `request_id` in
+        an error body and the id in the server's error log.
+      schema:
+        type: string
+        example: "a1b2c3d4e5f6a7b8"
   responses:
     '404':
       description: Not Found
+      headers:
+        X-Request-ID:
+          $ref: '#/components/headers/RequestId'
       content:
         application/json:
           schema:
@@ -3195,6 +3207,9 @@ components:
                 request_id: "req-1234"
     '422':
       description: Unprocessable Entity
+      headers:
+        X-Request-ID:
+          $ref: '#/components/headers/RequestId'
       content:
         application/json:
           schema:
