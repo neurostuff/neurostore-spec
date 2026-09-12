@@ -879,6 +879,8 @@ paths:
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/user_id'
         - $ref: '#/components/parameters/include_provenance'
+        - $ref: '#/components/parameters/tag'
+        - $ref: '#/components/parameters/exclude_tag'
     post:
       summary: ''
       responses:
@@ -1931,6 +1933,20 @@ components:
           type: string
           nullable: true
           description: ID of the project’s linked Neurostore annotation reference.
+        tags:
+          description: >-
+            Tags associated with this project (use tag names or tag IDs). A name
+            that does not match an existing tag creates a private tag owned by
+            the caller.
+          oneOf:
+            - minItems: 1
+              items:
+                $ref: '#/components/schemas/tag'
+              type: array
+            - items:
+                type: string
+                description: Tag name or tag ID
+              type: array
         public:
           type: boolean
           x-stoplight:
@@ -2323,6 +2339,32 @@ components:
         type: boolean
         default: true
       description: include the project provenance payload in project responses
+    tag:
+      name: tag
+      in: query
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: >-
+        only return projects carrying every one of these tag names
+        (case-insensitive)
+    exclude_tag:
+      name: exclude_tag
+      in: query
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: >-
+        drop projects carrying any of these tag names (case-insensitive); use
+        this to hide projects a user has tagged away
     ids:
       name: ids
       in: query
