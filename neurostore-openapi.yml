@@ -1833,6 +1833,13 @@ components:
         base_study_id:
           type: string
           description: The base study; otherwise found by the parse header's identifiers.
+        run_id:
+          type: string
+          description: >
+            The caller's id for the pipeline run, stored on each result the upload
+            writes. Re-uploading the same documents with the same run_id returns the
+            same results and adds none; a run_id that already stored a different
+            document for the paper is refused (422).
         pipeline:
           type: object
           description: The pipeline run that produced the record.
@@ -1855,6 +1862,10 @@ components:
           description: The pipeline-study-result that stores the document.
         config_id:
           type: string
+        run_id:
+          type: string
+          nullable: true
+          description: The caller's run id the result was uploaded with.
         pipeline:
           type: string
         version:
