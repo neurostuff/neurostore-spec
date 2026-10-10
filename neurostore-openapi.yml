@@ -266,6 +266,66 @@ paths:
         '204':
           description: No Content
 
+  /study-schema-uploads/:
+    post:
+      summary: Store a coordinate parse, a revision, an extraction record, or a parse with its record
+      description: >
+        Takes study_schema's CoordinateParse (alone, or as a
+        revision with revision_of set) and/or an extraction record that read it. Analyses
+        are keyed by the parse's cell keys and stored as Analysis.source_id; a new version
+        keeps the analyses it drops as non-public history; a revision's split and merge
+        verdicts copy claims to the replacements (carried_from). The documents
+        are validated against study_schema's JSON Schema by the service, not here.
+        Admin only.
+        This is a transaction rather than a resource: one upload is atomic across the
+        study, its analyses and points, the claims and the history version it writes, so
+        it either lands whole or not at all, which separate resource calls could not
+        guarantee. The response's provenance names the stored run behind each part.
+      tags:
+        - store
+        - pipeline-study-results
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/study-schema-upload'
+      responses:
+        '200':
+          description: What the upload changed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/study-schema-upload-summary'
+        '400':
+          description: >
+            The body names no document, or cannot locate its base study. Field error codes:
+            MISSING (parse_id for a record uploaded alone; base_study_id for a record
+            without a parse), MISMATCH (parse_id differs from the uploaded parse's), and an
+            error on coordinate_parse/header/identifiers when a new paper has no doi, pmid
+            or pmcid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          description: >
+            Unprocessable. Field error codes: SCHEMA (a document fails study_schema's JSON
+            Schema), KEY_MISMATCH (an analysis key is not its cells' key), DUPLICATE_KEY,
+            NOT_CURRENT (a stored parse that is no longer current, or a revision of one),
+            UNKNOWN_PARSE (a record's parse_id or a revision's revision_of is not stored
+            for the paper), MISSING / UNKNOWN_KEY (a revision's verdicts leave a key out,
+            or name a replacement it does not hold), RUN_ID_REUSED (the run_id already
+            stored a different document for the paper).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /pipeline-study-results/:
     get:
       summary: GET a list of pipeline run results
@@ -1766,6 +1826,229 @@ paths:
           $ref: '#/components/responses/404'
 components:
   schemas:
+    study-schema-upload:
+      type: object
+      additionalProperties: false
+      properties:
+        coordinate_parse:
+          type: object
+          description: A study_schema CoordinateParse (neuroimaging-paper-parse); a revision when revision_of is set.
+          additionalProperties: true
+        record:
+          type: object
+          description: A study_schema extraction record (neuroimaging-study-extraction).
+          additionalProperties: true
+        parsed_paper:
+          type: object
+          description: The ParsedPaper the parse read, for table captions and the bibliography.
+          additionalProperties: true
+        parse_id:
+          type: string
+          description: For a record uploaded alone, the parse_id of the stored parse it read.
+        base_study_id:
+          type: string
+          description: The base study; otherwise found by the parse header's identifiers.
+        run_id:
+          type: string
+          description: >
+            The caller's id for the pipeline run, stored on each result the upload
+            writes. Re-uploading the same documents with the same run_id returns the
+            same results and adds none; a run_id that already stored a different
+            document for the paper is refused (422).
+        pipeline:
+          type: object
+          description: The pipeline run that produced the record.
+          additionalProperties: false
+          properties:
+            name:
+              type: string
+              description: Default pondie.
+            version:
+              type: string
+              description: Default the record's extraction_metadata.extractor_version.
+            commit:
+              type: string
+              description: The commit of the code that produced the record. Two commits of one version are different configs.
+    study-schema-upload-summary:
+      type: object
+      description: What one upload changed. Keys appear for the parts uploaded.
+      properties:
+        kind:
+          type: string
+          enum: [parse, parse_and_record, record, revision]
+        base_study_id:
+          type: string
+        study_id:
+          type: string
+          description: The paper's pipeline-owned study.
+        parse_id:
+          type: string
+        skeleton:
+          type: object
+          description: For a parse, what it did to the study's analyses.
+          properties:
+            created:
+              type: integer
+            updated:
+              type: integer
+            superseded:
+              type: integer
+              description: Analyses moved to the history study because this version dropped their key.
+            not_uploaded:
+              type: array
+              description: Keys of analyses whose role is not uploaded.
+              items:
+                type: string
+            aliased:
+              type: array
+              description: >
+                Analyses an original re-parse reads from other cells (same table and name,
+                new key), one pair each; their entities keep the old hash as an alias.
+              items:
+                type: object
+                properties:
+                  from:
+                    type: string
+                  to:
+                    type: string
+        carried:
+          $ref: '#/components/schemas/study-schema-carried'
+        set_aside_resolved:
+          type: array
+          description: >
+            For a parse: stored records whose set-aside keys (no earlier parse held them)
+            this parse holds, re-ingested onto the new entities.
+          items:
+            type: object
+            properties:
+              config_id:
+                type: string
+              keys:
+                type: array
+                items:
+                  type: string
+        record:
+          type: object
+          description: For a record, how its analyses and claims resolved.
+          properties:
+            config_id:
+              type: string
+            analyses:
+              type: object
+              properties:
+                resolved:
+                  type: integer
+                unresolved:
+                  type: array
+                  description: Keys (or local_ids) that resolve to no analysis; stored as FAILURE rows.
+                  items:
+                    type: string
+                parked:
+                  type: array
+                  description: Set-aside positional keys, held until a record names them by content.
+                  items:
+                    $ref: '#/components/schemas/study-schema-set-aside'
+                superseded:
+                  type: array
+                  description: Keys that resolve to history because a revision since split, merged or dropped them.
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      replaced_by:
+                        type: array
+                        items:
+                          type: string
+                      reason:
+                        type: string
+            claims:
+              type: object
+              properties:
+                created:
+                  type: integer
+                matched:
+                  type: integer
+                rejected_paths:
+                  type: array
+                  items:
+                    type: string
+                unkeyed_entities:
+                  type: array
+                  description: Record entities with no key to identify them by.
+                  items:
+                    type: string
+                parked_entities:
+                  type: array
+                  description: >
+                    Set-aside entities: positional keys, or keys no stored parse holds
+                    (resolved later by a parse that holds them; see set_aside_resolved).
+                  items:
+                    $ref: '#/components/schemas/study-schema-set-aside'
+            carried:
+              $ref: '#/components/schemas/study-schema-carried'
+        provenance:
+          type: object
+          description: The stored run behind each part of the upload, keyed parse and record.
+          additionalProperties:
+            $ref: '#/components/schemas/pipeline-run-provenance'
+    study-schema-carried:
+      type: object
+      description: Claims copied to the replacements of split or merged keys.
+      properties:
+        claims:
+          type: integer
+    study-schema-set-aside:
+      type: object
+      properties:
+        entity:
+          type: string
+          description: Class[key] for an entity, or absent for an analysis row.
+        key:
+          type: string
+        reason:
+          type: string
+    pipeline-run-provenance:
+      type: object
+      properties:
+        result_id:
+          type: string
+          description: The pipeline-study-result that stores the document.
+        config_id:
+          type: string
+        run_id:
+          type: string
+          nullable: true
+          description: The caller's run id the result was uploaded with.
+        pipeline:
+          type: string
+        version:
+          type: string
+        commit:
+          type: string
+          nullable: true
+        schema:
+          type: object
+          description: The study_schema schema the document follows (name, version).
+          properties:
+            name:
+              type: string
+            version:
+              type: string
+        parse_version:
+          type: object
+          description: The parse's producer (name, version, stage, model, prompt_version).
+          additionalProperties: true
+        date_executed:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
     ErrorDetail:
       type: object
       required:
