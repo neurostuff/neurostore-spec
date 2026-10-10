@@ -270,13 +270,17 @@ paths:
     post:
       summary: Store a coordinate parse, a revision, an extraction record, or a parse with its record
       description: >
-        The pipeline's one writer. Takes study_schema's CoordinateParse (alone, or as a
+        Takes study_schema's CoordinateParse (alone, or as a
         revision with revision_of set) and/or an extraction record that read it. Analyses
         are keyed by the parse's cell keys and stored as Analysis.source_id; a new version
         keeps the analyses it drops as non-public history; a revision's split and merge
-        verdicts copy claims and votes to the replacements (carried_from). The documents
+        verdicts copy claims to the replacements (carried_from). The documents
         are validated against study_schema's JSON Schema by the service, not here.
         Admin only.
+        This is a transaction rather than a resource: one upload is atomic across the
+        study, its analyses and points, the claims and the history version it writes, so
+        it either lands whole or not at all, which separate resource calls could not
+        guarantee. The response's provenance names the stored run behind each part.
       tags:
         - store
         - pipeline-study-results
@@ -295,6 +299,12 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
+                properties:
+                  provenance:
+                    type: object
+                    description: The stored run behind each part of the upload, keyed parse and record.
+                    additionalProperties:
+                      $ref: '#/components/schemas/pipeline-run-provenance'
         '403':
           description: Forbidden
         '404':
@@ -1825,10 +1835,55 @@ components:
           description: The base study; otherwise found by the parse header's identifiers.
         pipeline:
           type: object
-          description: The pipeline that produced the record (name; default pondie).
+          description: The pipeline run that produced the record.
+          additionalProperties: false
           properties:
             name:
               type: string
+              description: Default pondie.
+            version:
+              type: string
+              description: Default the record's extraction_metadata.extractor_version.
+            commit:
+              type: string
+              description: The commit of the code that produced the record. Two commits of one version are different configs.
+    pipeline-run-provenance:
+      type: object
+      properties:
+        result_id:
+          type: string
+          description: The pipeline-study-result that stores the document.
+        config_id:
+          type: string
+        pipeline:
+          type: string
+        version:
+          type: string
+        commit:
+          type: string
+          nullable: true
+        schema:
+          type: object
+          description: The study_schema schema the document follows (name, version).
+          properties:
+            name:
+              type: string
+            version:
+              type: string
+        parse_version:
+          type: object
+          description: The parse's producer (name, version, stage, model, prompt_version).
+          additionalProperties: true
+        date_executed:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
     ErrorDetail:
       type: object
       required:
