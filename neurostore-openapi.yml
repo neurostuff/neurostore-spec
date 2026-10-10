@@ -266,6 +266,41 @@ paths:
         '204':
           description: No Content
 
+  /study-schema-uploads/:
+    post:
+      summary: Store a coordinate parse, a revision, an extraction record, or a parse with its record
+      description: >
+        The pipeline's one writer. Takes study_schema's CoordinateParse (alone, or as a
+        revision with revision_of set) and/or an extraction record that read it. Analyses
+        are keyed by the parse's cell keys and stored as Analysis.source_id; a new version
+        keeps the analyses it drops as non-public history; a revision's split and merge
+        verdicts copy claims and votes to the replacements (carried_from). The documents
+        are validated against study_schema's JSON Schema by the service, not here.
+        Admin only.
+      tags:
+        - store
+        - pipeline-study-results
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/study-schema-upload'
+      responses:
+        '200':
+          description: What the upload changed
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '403':
+          description: Forbidden
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          $ref: '#/components/responses/422'
   /pipeline-study-results/:
     get:
       summary: GET a list of pipeline run results
@@ -1766,6 +1801,34 @@ paths:
           $ref: '#/components/responses/404'
 components:
   schemas:
+    study-schema-upload:
+      type: object
+      additionalProperties: false
+      properties:
+        coordinate_parse:
+          type: object
+          description: A study_schema CoordinateParse (neuroimaging-paper-parse); a revision when revision_of is set.
+          additionalProperties: true
+        record:
+          type: object
+          description: A study_schema extraction record (neuroimaging-study-extraction).
+          additionalProperties: true
+        parsed_paper:
+          type: object
+          description: The ParsedPaper the parse read, for table captions and the bibliography.
+          additionalProperties: true
+        parse_id:
+          type: string
+          description: For a record uploaded alone, the parse_id of the stored parse it read.
+        base_study_id:
+          type: string
+          description: The base study; otherwise found by the parse header's identifiers.
+        pipeline:
+          type: object
+          description: The pipeline that produced the record (name; default pondie).
+          properties:
+            name:
+              type: string
     ErrorDetail:
       type: object
       required:
