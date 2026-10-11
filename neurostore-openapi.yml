@@ -321,7 +321,12 @@ paths:
             UNKNOWN_PARSE (a record's parse_id or a revision's revision_of is not stored
             for the paper), MISSING / UNKNOWN_KEY (a revision's verdicts leave a key out,
             or name a replacement it does not hold), RUN_ID_REUSED (the run_id already
-            stored a different document for the paper).
+            stored a different document for the paper), and STALE_ENTITY_HASHES (on
+            base_study_id: the paper's stored entities are hashed under an older entity
+            hash version, so the upload is refused until they are rehashed), and
+            VERDICT_KEY_NOT_IN_REVISION (on coordinate_parse/verdicts/<i>/key: an accept or
+            relabel verdict names a key the revision lacks; distinct from MISSING and
+            UNKNOWN_KEY).
           content:
             application/json:
               schema:
@@ -1894,11 +1899,11 @@ components:
             superseded:
               type: integer
               description: Analyses moved to the history study because this version dropped their key.
-            not_uploaded:
-              type: array
-              description: Keys of analyses whose role is not uploaded.
-              items:
-                type: string
+            omitted_analyses:
+              type: integer
+              description: >
+                How many text or figure analyses the parse lists as read and left out. Their
+                reasons are kept in the study's metadata, not returned here.
             aliased:
               type: array
               description: >
@@ -1911,6 +1916,62 @@ components:
                     type: string
                   to:
                     type: string
+            alias_conflicts:
+              type: array
+              description: >
+                Re-read analyses whose new hash already belongs to another entity; nothing
+                is re-hashed for that entity class and its claims stay where they are.
+                Present for an original parse, absent for a revision.
+              items:
+                type: object
+                properties:
+                  class:
+                    type: string
+                  from:
+                    type: string
+                  to:
+                    type: string
+                  entity_id:
+                    type: string
+                  holder_id:
+                    type: string
+                    description: The entity that already holds the new hash.
+            rename_candidates:
+              type: array
+              description: >
+                Analyses read from the same place under a new name. Each old entity is linked
+                to a candidate entity for the new name as renamed_by_extractor; no claims
+                move. Present for an original parse, absent for a revision.
+              items:
+                $ref: '#/components/schemas/study-schema-rename-candidate'
+            orphaned_claims:
+              type: array
+              description: >
+                Entities that hold claims and stayed on a superseded (history) analysis:
+                not re-hashed onto a successor, not linked as a rename candidate, and not
+                copied by a split or merge verdict. Always present; empty when none.
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    description: The superseded analysis's key.
+                  class:
+                    type: string
+                    description: The entity class.
+                  entity_id:
+                    type: string
+                  claims:
+                    type: integer
+                    description: How many claims the entity holds.
+                  reason:
+                    type: string
+                    enum: [no_successor, alias_conflict, not_carried]
+                    description: >
+                      Why the claims stayed. not_carried: the upload is a revision and the
+                      analysis is neither linked nor split or merged. alias_conflict: an
+                      original parse, and the key is in alias_conflicts. no_successor:
+                      an original parse with no successor.
         carried:
           $ref: '#/components/schemas/study-schema-carried'
         set_aside_resolved:
@@ -1962,6 +2023,37 @@ components:
                           type: string
                       reason:
                         type: string
+            condition_conflicts:
+              type: array
+              description: >
+                Record analyses whose effect cells set no conditions (the analysis gets none)
+                because the cells contradict each other. One entry per record entry, keyed
+                by its key, or its local_id when it has none.
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  cells:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        term:
+                          type: string
+                        level:
+                          type: string
+                          description: The cell's level, or its label when it has no level.
+                        reason:
+                          type: string
+                          enum: [both_directions, shared_name]
+                          description: >
+                            both_directions: a level is given both positive and negative; one
+                            conflict per level, even when it appears under two labels.
+                            shared_name: two cells would name the same condition.
+                        name:
+                          type: string
+                          description: The condition name the cells share. Only for shared_name.
             claims:
               type: object
               properties:
@@ -1973,9 +2065,40 @@ components:
                   type: array
                   items:
                     type: string
-                unkeyed_entities:
+                entities:
+                  type: object
+                  description: The record's entities that were created or matched to stored ones.
+                  properties:
+                    created:
+                      type: integer
+                    matched:
+                      type: integer
+                unlocated:
                   type: array
-                  description: Record entities with no key to identify them by.
+                  description: Paths of analysis or coordinate-set items with no cells or spans to locate them by; they are not stored as entities.
+                  items:
+                    type: string
+                unidentified:
+                  type: array
+                  description: Paths of entity lists that are not lists, and of their items that are not objects; not stored as entities.
+                  items:
+                    type: string
+                duplicates:
+                  type: array
+                  description: Paths of items whose hash an earlier item of the record already has (one analysis read twice from the same cells under the same name); not stored.
+                  items:
+                    type: string
+                rename_candidates:
+                  type: array
+                  description: >
+                    Entities the record names differently from a stored entity in the same
+                    place. They are linked as renamed_by_extractor candidates; claims stay on
+                    the old entity until a curator links them.
+                  items:
+                    $ref: '#/components/schemas/study-schema-rename-candidate'
+                released_aliases:
+                  type: array
+                  description: Paths of new items whose hash was an alias of another entity; the alias is dropped.
                   items:
                     type: string
                 parked_entities:
@@ -1992,6 +2115,23 @@ components:
           description: The stored run behind each part of the upload, keyed parse and record.
           additionalProperties:
             $ref: '#/components/schemas/pipeline-run-provenance'
+    study-schema-rename-candidate:
+      type: object
+      properties:
+        class:
+          type: string
+        from:
+          type: string
+          description: The old name or key.
+        to:
+          type: string
+          description: The new name or key.
+        entity_id:
+          type: string
+          description: The old entity.
+        candidate_id:
+          type: string
+          description: The entity for the new name.
     study-schema-carried:
       type: object
       description: Claims copied to the replacements of split or merged keys.
