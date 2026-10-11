@@ -2575,6 +2575,36 @@ components:
           x-stoplight:
             id: wibxycovy2j3g
           nullable: true
+        role:
+          type: string
+          nullable: true
+          description: >-
+            What the coordinates are for (study_schema CoordinateRole): `result`,
+            `anchor`, `localization`, `reference` or `other`; an open vocabulary, so the
+            source's own wording may appear. Only a result is released in a studyset.
+            Null on an analysis from before roles, which is read as a result, except on
+            a set the study_schema ingester wrote, which is unclassified.
+        role_source:
+          type: string
+          nullable: true
+          description: >-
+            The parse_id of the reviewed revision whose relabel verdict set `role`; a
+            later parse does not replace a relabelled role. Null while the role is the
+            classifier's.
+        outcome:
+          type: string
+          nullable: true
+          enum:
+            - significant_effect
+            - no_significant_effect
+            - null
+          description: >-
+            Whether anything survived the analysis's threshold (study_schema
+            AnalysisOutcome), from the extraction record. Set only on results.
+        from_prior_study:
+          type: boolean
+          nullable: true
+          description: The coordinates are quoted from an earlier study, not this one's.
     analysis-return:
       title: analysis-return
       allOf:
@@ -3836,9 +3866,9 @@ components:
       description: >-
         Only analyses with this coordinate role (study_schema CoordinateRole); on the
         studies list, only studies with such an analysis. `result` also matches an
-        analysis with no role outside the study_schema pipeline's versions (one from
-        before roles); a pipeline analysis with no role matches no value. Without
-        `role`, analyses of every role are listed.
+        analysis with no role (one from before roles, or one added through the API),
+        except a set the study_schema ingester wrote to the pipeline's versions with no
+        role, which matches no value. Without `role`, analyses of every role are listed.
     data_type:
       name: data_type
       in: query
