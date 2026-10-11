@@ -697,6 +697,7 @@ paths:
         - $ref: '#/components/parameters/authors'
         - $ref: '#/components/parameters/user_id'
         - $ref: '#/components/parameters/data_type'
+        - $ref: '#/components/parameters/role'
         - $ref: '#/components/parameters/map_type'
         - $ref: '#/components/parameters/studyset_owner'
         - $ref: '#/components/parameters/level'
@@ -824,6 +825,7 @@ paths:
           description: Filter tables by study id
           schema:
             type: string
+        - $ref: '#/components/parameters/role'
         - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/nested'
         - $ref: '#/components/parameters/image_metadata'
@@ -3819,6 +3821,24 @@ components:
       schema:
         type: boolean
       description: return endpoint data in consumable/readable format
+    role:
+      name: role
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - result
+          - anchor
+          - localization
+          - reference
+          - other
+      description: >-
+        Only analyses with this coordinate role (study_schema CoordinateRole); on the
+        studies list, only studies with such an analysis. `result` also matches an
+        analysis with no role outside the study_schema pipeline's versions (one from
+        before roles); a pipeline analysis with no role matches no value. Without
+        `role`, analyses of every role are listed.
     data_type:
       name: data_type
       in: query
