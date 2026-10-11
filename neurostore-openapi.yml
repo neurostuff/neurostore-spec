@@ -2584,13 +2584,14 @@ components:
             source's own wording may appear. Only a result is released in a studyset.
             Null on an analysis from before roles, which is read as a result, except on
             a set the study_schema ingester wrote, which is unclassified.
-        role_source:
+        relabelled_by:
           type: string
           nullable: true
           description: >-
             The parse_id of the reviewed revision whose relabel verdict set `role`; a
             later parse does not replace a relabelled role. Null while the role is the
-            classifier's.
+            classifier's, whose name and version are in `metadata.role_source`
+            (study_schema's `role_source`).
         outcome:
           type: string
           nullable: true
@@ -2600,7 +2601,8 @@ components:
             - null
           description: >-
             Whether anything survived the analysis's threshold (study_schema
-            AnalysisOutcome), from the extraction record. Set only on results.
+            AnalysisOutcome), from the extraction record. The ingester sets it only on
+            results.
         from_prior_study:
           type: boolean
           nullable: true
