@@ -323,7 +323,10 @@ paths:
             or name a replacement it does not hold), RUN_ID_REUSED (the run_id already
             stored a different document for the paper), and STALE_ENTITY_HASHES (on
             base_study_id: the paper's stored entities are hashed under an older entity
-            hash version, so the upload is refused until they are rehashed).
+            hash version, so the upload is refused until they are rehashed), and
+            VERDICT_KEY_NOT_IN_REVISION (on coordinate_parse/verdicts/<i>/key: an accept or
+            relabel verdict names a key the revision lacks; distinct from MISSING and
+            UNKNOWN_KEY).
           content:
             application/json:
               schema:
@@ -1963,7 +1966,12 @@ components:
                     description: How many claims the entity holds.
                   reason:
                     type: string
-                    description: Why the claims stayed; free text.
+                    enum: [no_successor, alias_conflict, not_carried]
+                    description: >
+                      Why the claims stayed. not_carried: the upload is a revision and the
+                      analysis is neither linked nor split or merged. alias_conflict: an
+                      original parse, and the key is in alias_conflicts. no_successor:
+                      an original parse with no successor.
         carried:
           $ref: '#/components/schemas/study-schema-carried'
         set_aside_resolved:
@@ -2040,7 +2048,8 @@ components:
                           type: string
                           enum: [both_directions, shared_name]
                           description: >
-                            both_directions: the cell is listed both positive and negative.
+                            both_directions: a level is given both positive and negative; one
+                            conflict per level, even when it appears under two labels.
                             shared_name: two cells would name the same condition.
                         name:
                           type: string
