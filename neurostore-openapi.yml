@@ -697,6 +697,7 @@ paths:
         - $ref: '#/components/parameters/authors'
         - $ref: '#/components/parameters/user_id'
         - $ref: '#/components/parameters/data_type'
+        - $ref: '#/components/parameters/role'
         - $ref: '#/components/parameters/map_type'
         - $ref: '#/components/parameters/studyset_owner'
         - $ref: '#/components/parameters/level'
@@ -824,6 +825,7 @@ paths:
           description: Filter tables by study id
           schema:
             type: string
+        - $ref: '#/components/parameters/role'
         - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/nested'
         - $ref: '#/components/parameters/image_metadata'
@@ -2573,6 +2575,38 @@ components:
           x-stoplight:
             id: wibxycovy2j3g
           nullable: true
+        role:
+          type: string
+          nullable: true
+          description: >-
+            What the coordinates are for (study_schema CoordinateRole): `result`,
+            `anchor`, `localization`, `reference` or `other`; an open vocabulary, so the
+            source's own wording may appear. Only a result is released in a studyset.
+            Null on an analysis from before roles, which is read as a result, except on
+            a set the study_schema ingester wrote, which is unclassified.
+        relabelled_by:
+          type: string
+          nullable: true
+          description: >-
+            The parse_id of the reviewed revision whose relabel verdict set `role`; a
+            later parse does not replace a relabelled role. Null while the role is the
+            classifier's, whose name and version are in `metadata.role_source`
+            (study_schema's `role_source`).
+        outcome:
+          type: string
+          nullable: true
+          enum:
+            - significant_effect
+            - no_significant_effect
+            - null
+          description: >-
+            Whether anything survived the analysis's threshold (study_schema
+            AnalysisOutcome), from the extraction record. The ingester sets it only on
+            results.
+        from_prior_study:
+          type: boolean
+          nullable: true
+          description: The coordinates are quoted from an earlier study, not this one's.
     analysis-return:
       title: analysis-return
       allOf:
@@ -3819,6 +3853,24 @@ components:
       schema:
         type: boolean
       description: return endpoint data in consumable/readable format
+    role:
+      name: role
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - result
+          - anchor
+          - localization
+          - reference
+          - other
+      description: >-
+        Only analyses with this coordinate role (study_schema CoordinateRole); on the
+        studies list, only studies with such an analysis. `result` also matches an
+        analysis with no role (one from before roles, or one added through the API),
+        except a set the study_schema ingester wrote to the pipeline's versions with no
+        role, which matches no value. Without `role`, analyses of every role are listed.
     data_type:
       name: data_type
       in: query
