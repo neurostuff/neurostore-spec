@@ -2082,6 +2082,54 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '422':
           $ref: '#/components/responses/422'
+  /review/imports/:
+    post:
+      summary: Load the papers of a study_schema layout zip for review
+      description: >
+        Lead reviewers only (admin-reviewer and admin). Each paper is checked and stored on
+        its own: the report names what loaded, what was already loaded and what failed, and
+        why. A file that is not a layout is refused whole.
+      operationId: neurostore.resources.review.ReviewImportsView.post
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: A zip of a study_schema layout, at most 200 MB.
+      responses:
+        '200':
+          description: The report of what each paper did
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-import-report'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '413':
+          description: The file is over 200 MB
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: The file is not a study_schema layout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     review-progress:
@@ -2141,6 +2189,57 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/review-source'
+    review-import-report:
+      type: object
+      required:
+        - loaded
+        - skipped
+        - failed
+      properties:
+        loaded:
+          type: array
+          items:
+            type: object
+            required:
+              - study_id
+              - source_id
+              - base_study_id
+            properties:
+              study_id:
+                type: string
+              source_id:
+                type: string
+              base_study_id:
+                type: string
+        skipped:
+          type: array
+          items:
+            type: object
+            required:
+              - study_id
+              - source_id
+              - reason
+            properties:
+              study_id:
+                type: string
+              source_id:
+                type: string
+              reason:
+                type: string
+        failed:
+          type: array
+          items:
+            type: object
+            required:
+              - study_id
+              - problems
+            properties:
+              study_id:
+                type: string
+              problems:
+                type: array
+                items:
+                  type: string
     review-state:
       type: string
       enum:
