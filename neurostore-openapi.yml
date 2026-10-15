@@ -1868,7 +1868,6 @@ paths:
   /review/sources/:
     get:
       summary: List papers loaded for review, with each reviewer's progress
-      operationId: neurostore.resources.review.ReviewSourcesView.search
       tags:
         - review
       security:
@@ -1920,7 +1919,6 @@ paths:
         required: true
     get:
       summary: Everything the review app needs to open one paper for the caller
-      operationId: neurostore.resources.review.ReviewBundlesView.get
       tags:
         - review
       security:
@@ -1950,7 +1948,6 @@ paths:
       description: >
         Starts the caller's review, in_progress, from the source's extraction record. A repeat
         call returns the existing review.
-      operationId: neurostore.resources.review.SourceReviewsView.put
       tags:
         - review
       security:
@@ -1984,7 +1981,6 @@ paths:
     get:
       summary: One reviewer's review of a paper
       description: Any reviewer may read any review.
-      operationId: neurostore.resources.review.ReviewsView.get
       tags:
         - review
       security:
@@ -2007,7 +2003,6 @@ paths:
       description: >
         The owner moves in_progress to submitted and back. Only an admin sets reference, and
         a paper has at most one reference review.
-      operationId: neurostore.resources.review.ReviewsView.patch
       tags:
         - review
       security:
@@ -2049,7 +2044,6 @@ paths:
         Only the review's owner. The batch applies whole or not at all. A batch whose every
         client_op_id is already stored is a replay: it returns the stored ops and applies
         nothing.
-      operationId: neurostore.resources.review.ReviewOpsView.post
       tags:
         - review
       security:
@@ -2105,7 +2099,6 @@ paths:
         record is never changed by the export; run/provenance/<id>.json beside it names the
         review, its state and the source record it derives from.
         The whole zip is built in memory before the response is sent.
-      operationId: neurostore.resources.review.ReviewExportView.get
       tags:
         - review
       security:
@@ -2138,7 +2131,6 @@ paths:
         filter list means no filter. include_unreviewed cannot be combined with user_ids or
         states; that request is refused with 422. The whole zip is built in memory before the
         response is sent, so split a large export with source_ids or base_study_ids.
-      operationId: neurostore.resources.review.ReviewExportsView.post
       tags:
         - review
       security:
@@ -2200,7 +2192,6 @@ paths:
         Lead reviewers only (admin-reviewer and admin). Each paper is checked and stored on
         its own: the report names what loaded, what was already loaded and what failed, and
         why. A file that is not a layout is refused whole.
-      operationId: neurostore.resources.review.ReviewImportsView.post
       tags:
         - review
       security:
