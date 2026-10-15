@@ -1722,6 +1722,8 @@ paths:
                 properties:
                   id:
                     type: string
+        '401':
+          description: Unauthorized
         '403':
           description: Forbidden
         '404':
@@ -1731,7 +1733,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/base-study-delete-conflict'
+                $ref: '#/components/schemas/ErrorResponse'
   /annotation-analyses/:
     get:
       summary: Get annotation analyses
@@ -1866,7 +1868,6 @@ paths:
   /review/sources/:
     get:
       summary: List papers loaded for review, with each reviewer's progress
-      description: admin-reviewer only.
       operationId: neurostore.resources.review.ReviewSourcesView.search
       tags:
         - review
@@ -1904,6 +1905,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/review-source-list'
+        '400':
+          description: Bad Request
         '401':
           description: Unauthorized
         '403':
@@ -1917,7 +1920,6 @@ paths:
         required: true
     get:
       summary: Everything the review app needs to open one paper for the caller
-      description: admin-reviewer only.
       operationId: neurostore.resources.review.ReviewBundlesView.get
       tags:
         - review
@@ -1946,8 +1948,8 @@ paths:
     put:
       summary: Start the caller's review of a paper
       description: >
-        admin-reviewer only. Idempotent: the review starts from the paper's extraction record
-        as loaded, in_progress; a second call returns the review the first one started.
+        Starts the caller's review, in_progress, from the source's extraction record. A repeat
+        call returns the existing review.
       operationId: neurostore.resources.review.SourceReviewsView.put
       tags:
         - review
@@ -1981,7 +1983,7 @@ paths:
         required: true
     get:
       summary: One reviewer's review of a paper
-      description: admin-reviewer only. Any reviewer may read any review.
+      description: Any reviewer may read any review.
       operationId: neurostore.resources.review.ReviewsView.get
       tags:
         - review
@@ -2003,8 +2005,8 @@ paths:
     patch:
       summary: Submit, reopen, or mark as the reference review
       description: >
-        admin-reviewer only. The owner moves in_progress to submitted and back. Only an
-        admin sets reference, and a paper has at most one reference review.
+        The owner moves in_progress to submitted and back. Only an admin sets reference, and
+        a paper has at most one reference review.
       operationId: neurostore.resources.review.ReviewsView.patch
       tags:
         - review
@@ -2033,7 +2035,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/review-conflict'
+                $ref: '#/components/schemas/ErrorResponse'
   '/review/reviews/{id}/ops':
     parameters:
       - schema:
@@ -2044,9 +2046,9 @@ paths:
     post:
       summary: Apply a batch of the owner's ops to their review
       description: >
-        admin-reviewer only, and only the review's owner. The batch applies whole or not at
-        all. A batch whose every client_op_id is already stored is a replay: it returns the
-        stored ops and applies nothing.
+        Only the review's owner. The batch applies whole or not at all. A batch whose every
+        client_op_id is already stored is a replay: it returns the stored ops and applies
+        nothing.
       operationId: neurostore.resources.review.ReviewOpsView.post
       tags:
         - review
@@ -2077,13 +2079,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/review-conflict'
+                $ref: '#/components/schemas/ErrorResponse'
         '422':
-          description: An op cannot be applied, or leaves an invalid document
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/review-problems'
+          $ref: '#/components/responses/422'
 components:
   schemas:
     review-progress:
@@ -2199,14 +2197,12 @@ components:
     review-bundle:
       type: object
       description: >
-        A JSON Schema 2020-12 document OpenAPI 3.0 cannot hold:
-        store/backend/neurostore/review/schema/review-bundle.schema.json.
+        Defined by store/backend/neurostore/review/schema/review-bundle.schema.json.
     review-op:
       type: object
       description: >
-        One op of review-ops, a JSON Schema 2020-12 document OpenAPI 3.0 cannot hold:
-        store/backend/neurostore/review/schema/review-ops.schema.json (its $defs/Op). The
-        service validates each op.
+        One op, defined by $defs/Op of store/backend/neurostore/review/schema/review-ops.schema.json.
+        The service validates each op.
     review-stored-op:
       type: object
       description: >
@@ -2225,6 +2221,8 @@ components:
           description: The review's last_seq the batch was made against.
         ops:
           type: array
+          minItems: 1
+          maxItems: 500
           items:
             $ref: '#/components/schemas/review-op'
     review-op-result:
@@ -2245,39 +2243,9 @@ components:
           type: object
         annotations:
           type: object
-    review-conflict:
-      type: object
-      required:
-        - detail
-      properties:
-        detail:
-          type: string
-        last_seq:
-          type: integer
-          description: The review's last_seq, when expected_last_seq was stale.
-    review-problems:
-      type: object
-      required:
-        - detail
-        - problems
-      properties:
-        detail:
-          type: string
-        problems:
-          type: array
-          items:
-            type: string
-    base-study-delete-conflict:
-      type: object
-      required:
-        - detail
-        - under_review
-      properties:
-        detail:
-          type: string
-        under_review:
-          type: integer
-          description: How many papers loaded for review read this base study's text.
+        hidden:
+          type: object
+          description: The hidden set of the new record, as in the bundle.
     study-schema-upload:
       type: object
       additionalProperties: false
@@ -2618,6 +2586,7 @@ components:
 
     ErrorResponse:
       type: object
+      additionalProperties: true
       required:
         - status
         - title
@@ -4399,6 +4368,7 @@ components:
       description: authentication method
 tags:
   - name: review
+    description: admin-reviewer only.
   - name: neurostore-studyset-releases
   - name: analyses
   - name: studysets
