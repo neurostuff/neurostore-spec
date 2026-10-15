@@ -2094,6 +2094,7 @@ paths:
       description: >
         Any reviewer may export any review. The zip holds the paper's documents and text, the
         review's record, its coordinate revision when it has one, and its ops in seq order.
+        The whole zip is built in memory before the response is sent.
       operationId: neurostore.resources.review.ReviewExportView.get
       tags:
         - review
@@ -2123,8 +2124,10 @@ paths:
       summary: Export the reviews that match the filters as a zip of layout trees
       description: >
         One layout tree per reviewer, under the reviewer's id. A source with no review is
-        included, as loaded under _source/, only when include_unreviewed is true and no
-        reviewer or state filter is given.
+        included, as loaded under _source/, only when include_unreviewed is true. An empty
+        filter list means no filter. include_unreviewed cannot be combined with user_ids or
+        states; that request is refused with 422. The whole zip is built in memory before the
+        response is sent, so split a large export with source_ids or base_study_ids.
       operationId: neurostore.resources.review.ReviewExportsView.post
       tags:
         - review
@@ -2178,6 +2181,8 @@ paths:
           description: Unauthorized
         '403':
           description: Forbidden
+        '422':
+          description: include_unreviewed was combined with a reviewer or state filter
   /review/imports/:
     post:
       summary: Load the papers of a study_schema layout zip for review
