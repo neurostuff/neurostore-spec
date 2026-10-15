@@ -2082,6 +2082,102 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '422':
           $ref: '#/components/responses/422'
+  '/review/reviews/{id}/export':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Export one review as a study_schema layout zip
+      description: >
+        Any reviewer may export any review. The zip holds the paper's documents and text, the
+        review's record, its coordinate revision when it has one, and its ops in seq order.
+      operationId: neurostore.resources.review.ReviewExportView.get
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: A zip of the review's layout
+          headers:
+            Content-Disposition:
+              description: An attachment named review-<id>.zip
+              schema:
+                type: string
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          $ref: '#/components/responses/404'
+  /review/exports/:
+    post:
+      summary: Export the reviews that match the filters as a zip of layout trees
+      description: >
+        One layout tree per reviewer, under the reviewer's id. A source with no review is
+        included, as loaded under _source/, only when include_unreviewed is true and no
+        reviewer or state filter is given.
+      operationId: neurostore.resources.review.ReviewExportsView.post
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                source_ids:
+                  type: array
+                  items:
+                    type: string
+                base_study_ids:
+                  type: array
+                  items:
+                    type: string
+                user_ids:
+                  type: array
+                  items:
+                    type: string
+                states:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - in_progress
+                      - submitted
+                      - reference
+                include_unreviewed:
+                  type: boolean
+                  default: false
+      responses:
+        '200':
+          description: A zip of the layout trees
+          headers:
+            Content-Disposition:
+              description: An attachment named review-exports.zip
+              schema:
+                type: string
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
   /review/imports/:
     post:
       summary: Load the papers of a study_schema layout zip for review
