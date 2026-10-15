@@ -2455,6 +2455,11 @@ components:
         hidden:
           type: object
           description: The hidden set of the new record, as in the bundle.
+        entities:
+          type: array
+          description: The entity index of the new record, as in the bundle.
+          items:
+            type: object
     study-schema-upload:
       type: object
       additionalProperties: false
