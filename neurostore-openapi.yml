@@ -2120,16 +2120,15 @@ paths:
           description: Forbidden
         '413':
           description: The file is over 200 MB
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '422':
-          description: The file is not a study_schema layout
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/422'
 components:
   schemas:
     review-progress:
