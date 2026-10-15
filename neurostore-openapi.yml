@@ -2081,7 +2081,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '422':
-          $ref: '#/components/responses/422'
+          description: >
+            The batch does not validate, an op cannot be applied, or the record would fail
+            study_schema. Each refused op is one error: field ops/<index>, code REJECTED, and
+            context with op_index (an integer) and client_op_id. The message names the problem.
+            A problem with the batch as a whole has field ops and no op index. Nothing is applied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   '/review/reviews/{id}/export':
     parameters:
       - schema:
@@ -2093,7 +2101,9 @@ paths:
       summary: Export one review as a study_schema layout zip
       description: >
         Any reviewer may export any review. The zip holds the paper's documents and text, the
-        review's record, its coordinate revision when it has one, and its ops in seq order.
+        review's record, its coordinate revision when it has one, and its ops in seq order. The
+        record is never changed by the export; run/provenance/<id>.json beside it names the
+        review, its state and the source record it derives from.
         The whole zip is built in memory before the response is sent.
       operationId: neurostore.resources.review.ReviewExportView.get
       tags:
