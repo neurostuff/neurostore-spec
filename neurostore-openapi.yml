@@ -1971,6 +1971,15 @@ paths:
           description: Forbidden
         '404':
           $ref: '#/components/responses/404'
+        '409':
+          description: >
+            The source's stored documents no longer validate against study_schema (for example
+            after a schema upgrade), so no review is started. Each problem is one error with
+            code source_invalid; re-import the source.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   '/review/reviews/{id}':
     parameters:
       - schema:
