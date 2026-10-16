@@ -1897,6 +1897,13 @@ paths:
           schema:
             type: boolean
             default: false
+        - name: assigned
+          in: query
+          description: Only the sources whose paper is assigned to the caller.
+          schema:
+            type: string
+            enum:
+              - me
       responses:
         '200':
           description: OK
@@ -2292,6 +2299,177 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  '/review/base-studies/{id}/assignments':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: The base study (paper).
+    get:
+      summary: The users a paper is assigned to
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-assignee-list'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/404'
+  '/review/base-studies/{id}/assignments/{user_id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: The base study (paper).
+      - schema:
+          type: string
+        name: user_id
+        in: path
+        required: true
+        description: The assignee. A reviewer may name only themselves; a lead reviewer may name anyone.
+    put:
+      summary: Assign a paper to a reviewer, or reassign it
+      description: >
+        A reviewer assigns a paper to themselves. A lead reviewer (admin-reviewer and admin)
+        assigns it to any admin-reviewer. Assigning an already assigned user changes nothing
+        and answers 200. The assignee must hold the admin-reviewer role, or the request is
+        refused with 422.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: The user was already assigned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-assignment'
+        '201':
+          description: The user was assigned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-assignment'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: A reviewer named another user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          description: The assignee does not hold the admin-reviewer role
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Release a paper from a reviewer
+      description: >
+        A reviewer releases their own assignment; a lead reviewer releases anyone's. Releasing
+        a user who is not assigned changes nothing and answers 204.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '204':
+          description: The assignment is released, or was not there
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: A reviewer named another user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/404'
+  /review/reviewers/:
+    get:
+      summary: The admin-reviewers, to assign papers to
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-reviewer-list'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /review/me:
+    get:
+      summary: The caller, as a reviewer
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-me'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /review/imports/:
     post:
       summary: Load the papers of a study_schema layout zip for review
@@ -2434,6 +2612,14 @@ components:
         reviewed:
           type: integer
           description: Judgeable targets of the source that the reviewer verified, edited, added or removed. Unlike edited and verified, which count every provenance key, this counts only among the source's judgeable targets.
+        op_count:
+          type: integer
+          description: The ops the reviewer has applied to this review.
+        last_edit_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the reviewer last applied an op; null before any.
     review-source:
       type: object
       properties:
@@ -2460,6 +2646,71 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/review-progress'
+        assignees:
+          type: array
+          description: The users the paper (base study) is assigned to.
+          items:
+            $ref: '#/components/schemas/review-assignee'
+    review-assignee:
+      type: object
+      required:
+        - user_id
+        - name
+      properties:
+        user_id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    review-assignee-list:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/review-assignee'
+    review-assignment:
+      type: object
+      required:
+        - base_study_id
+        - user_id
+        - name
+        - assigned_by_id
+      properties:
+        base_study_id:
+          type: string
+        user_id:
+          type: string
+        name:
+          type: string
+          nullable: true
+        assigned_by_id:
+          type: string
+          nullable: true
+    review-me:
+      type: object
+      required:
+        - user_id
+        - name
+        - lead
+      properties:
+        user_id:
+          type: string
+        name:
+          type: string
+          nullable: true
+        lead:
+          type: boolean
+          description: Whether the caller is a lead reviewer (admin-reviewer and admin).
+    review-reviewer-list:
+      type: object
+      required:
+        - results
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/review-assignee'
     review-source-list:
       type: object
       properties:
