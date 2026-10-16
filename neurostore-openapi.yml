@@ -1906,10 +1906,22 @@ paths:
                 $ref: '#/components/schemas/review-source-list'
         '400':
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   '/review/sources/{id}/bundle':
     parameters:
       - schema:
@@ -1932,8 +1944,16 @@ paths:
                 $ref: '#/components/schemas/review-bundle'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           $ref: '#/components/responses/404'
   '/review/sources/{id}/review':
@@ -1967,8 +1987,16 @@ paths:
                 $ref: '#/components/schemas/review-summary'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           $ref: '#/components/responses/404'
         '409':
@@ -2003,8 +2031,16 @@ paths:
                 $ref: '#/components/schemas/review-detail'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           $ref: '#/components/responses/404'
     patch:
@@ -2030,8 +2066,16 @@ paths:
                 $ref: '#/components/schemas/review-summary'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           $ref: '#/components/responses/404'
         '409':
@@ -2071,14 +2115,36 @@ paths:
                 $ref: '#/components/schemas/review-op-result'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: >
+            The body is not a batch: empty, more than 500 ops, or an op that is not an object.
+            The error names the rule that failed, not the batch.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           $ref: '#/components/responses/404'
         '409':
           description: >
             The review is not in_progress, expected_last_seq is not the review's last_seq
             (the body carries last_seq), or only some of the batch's client_op_ids are stored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '413':
+          description: The request body is over the review body limit (8 MiB)
           content:
             application/json:
               schema:
@@ -2129,10 +2195,24 @@ paths:
                 format: binary
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           $ref: '#/components/responses/404'
+        '422':
+          description: The paper of a review's source has no article_id, so it cannot be exported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /review/exports/:
     post:
       summary: Export the reviews that match the filters as a zip of layout trees
@@ -2192,10 +2272,24 @@ paths:
                 format: binary
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '422':
-          description: include_unreviewed was combined with a reviewer or state filter
+          description: >
+            include_unreviewed was combined with a reviewer or state filter, or a source's
+            paper has no article_id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /review/imports/:
     post:
       summary: Load the papers of a study_schema layout zip for review
@@ -2229,8 +2323,16 @@ paths:
                 $ref: '#/components/schemas/review-import-report'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '413':
           description: The file is over 200 MB
           headers:
@@ -2269,7 +2371,7 @@ components:
           description: Targets the reviewer checked and left unchanged.
         reviewed:
           type: integer
-          description: Judgeable targets of the source that the reviewer verified, edited, added or removed.
+          description: Judgeable targets of the source that the reviewer verified, edited, added or removed. Unlike edited and verified, which count every provenance key, this counts only among the source's judgeable targets.
     review-source:
       type: object
       properties:
@@ -2282,6 +2384,7 @@ components:
           nullable: true
         origin:
           type: string
+          description: pipeline_run when the source names a pipeline config and a run, else upload.
           enum:
             - upload
             - pipeline_run
