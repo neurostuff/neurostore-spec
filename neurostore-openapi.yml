@@ -2044,10 +2044,11 @@ paths:
         '404':
           $ref: '#/components/responses/404'
     patch:
-      summary: Submit, reopen, or mark as the reference review
+      summary: Submit, reopen, set aside, or mark as the reference review
       description: >
-        The owner moves in_progress to submitted and back. Only an admin sets reference, and
-        a paper has at most one reference review.
+        The owner moves in_progress to submitted and back, and sets an unusable paper aside
+        (set_aside, with a reason) and resumes it (back to in_progress). Only an admin sets
+        reference, and a paper has at most one reference review.
       tags:
         - review
       security:
@@ -2254,6 +2255,7 @@ paths:
                       - in_progress
                       - submitted
                       - reference
+                      - set_aside
                 include_unreviewed:
                   type: boolean
                   default: false
@@ -2415,6 +2417,8 @@ components:
           nullable: true
         state:
           $ref: '#/components/schemas/review-state'
+        set_aside:
+          $ref: '#/components/schemas/review-set-aside'
         last_seq:
           type: integer
         updated_at:
@@ -2525,6 +2529,28 @@ components:
         - in_progress
         - submitted
         - reference
+        - set_aside
+    review-set-aside-reason:
+      type: string
+      description: Why the paper was set aside; other needs a note.
+      enum:
+        - no_usable_text
+        - out_of_scope
+        - no_results
+        - duplicate
+        - other
+    review-set-aside:
+      type: object
+      description: Present only while the review is set aside.
+      required:
+        - reason
+        - note
+      properties:
+        reason:
+          $ref: '#/components/schemas/review-set-aside-reason'
+        note:
+          type: string
+          nullable: true
     review-summary:
       type: object
       properties:
@@ -2536,6 +2562,8 @@ components:
           type: string
         state:
           $ref: '#/components/schemas/review-state'
+        set_aside:
+          $ref: '#/components/schemas/review-set-aside'
         last_seq:
           type: integer
         created_at:
@@ -2572,6 +2600,11 @@ components:
       properties:
         state:
           $ref: '#/components/schemas/review-state'
+        reason:
+          $ref: '#/components/schemas/review-set-aside-reason'
+        note:
+          type: string
+          maxLength: 10000
     review-bundle:
       type: object
       description: >
