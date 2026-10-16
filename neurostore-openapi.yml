@@ -2135,8 +2135,8 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '400':
           description: >
-            The body is not a batch: empty, more than 500 ops, or an op that is not an object.
-            The error names the rule that failed, not the batch.
+            The body is not a batch: a negative expected_last_seq, or an op that is not an
+            object. The error names the rule that failed, not the batch.
           content:
             application/json:
               schema:
@@ -2159,8 +2159,9 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '422':
           description: >
-            The batch does not validate, an op cannot be applied, or the record would fail
-            study_schema. Each refused op is one error: field ops/<index>, code REJECTED, and
+            The batch does not validate (no ops, more ops than the review-ops contract allows, or
+            an op outside it), an op cannot be applied, or the record would fail study_schema. Each
+            refused op is one error: field ops/<index>, code REJECTED, and
             context with op_index (an integer) and client_op_id. The message names the problem.
             A problem with the batch as a whole has field ops and no op index. Nothing is applied.
           content:
@@ -2493,7 +2494,7 @@ paths:
                 file:
                   type: string
                   format: binary
-                  description: A zip of a study_schema layout, at most 200 MB.
+                  description: A zip of a study_schema layout. The whole request body is at most 200 MiB.
       responses:
         '200':
           description: The report of what each paper did
@@ -2514,7 +2515,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '413':
-          description: The file is over 200 MB
+          description: The request body is over 200 MiB
           headers:
             X-Request-ID:
               $ref: '#/components/headers/RequestId'
@@ -2531,19 +2532,20 @@ paths:
         name: name
         in: path
         required: true
-        description: extraction-record or coordinate-parse
+        description: extraction-record, coordinate-parse, review-bundle or review-ops
       - schema:
           type: string
         name: If-None-Match
         in: header
         required: false
     get:
-      summary: One study_schema JSON Schema the review app reads
+      summary: One JSON Schema of the review API
       description: >
-        The extraction-record or coordinate-parse JSON Schema of the study_schema version the
-        server runs, with its description annotations removed (a property named description is
-        kept). The ETag is a hash of the body; a request whose If-None-Match holds it is
-        answered with 304.
+        extraction-record and coordinate-parse are the JSON Schemas of the study_schema version
+        the server runs, with their description annotations removed (a property named
+        description is kept). review-bundle and review-ops are the JSON Schema 2020-12
+        contracts of the review bundle and of a batch of review ops, whole. The ETag is a hash
+        of the body; a request whose If-None-Match holds it is answered with 304.
       tags:
         - review
       security:
@@ -2587,6 +2589,17 @@ components:
     review-progress:
       type: object
       description: One reviewer's review of a paper, as the paper list shows it.
+      required:
+        - user_id
+        - user_name
+        - state
+        - last_seq
+        - updated_at
+        - edited
+        - verified
+        - reviewed
+        - op_count
+        - last_edit_at
       properties:
         user_id:
           type: string
@@ -2622,6 +2635,15 @@ components:
           description: When the reviewer last applied an op; null before any.
     review-source:
       type: object
+      required:
+        - id
+        - base_study_id
+        - label
+        - origin
+        - created_at
+        - total
+        - reviews
+        - assignees
       properties:
         id:
           type: string
@@ -2664,6 +2686,8 @@ components:
           nullable: true
     review-assignee-list:
       type: object
+      required:
+        - results
       properties:
         results:
           type: array
@@ -2713,9 +2737,14 @@ components:
             $ref: '#/components/schemas/review-assignee'
     review-source-list:
       type: object
+      required:
+        - metadata
+        - results
       properties:
         metadata:
           type: object
+          required:
+            - total_count
           properties:
             total_count:
               type: integer
@@ -2804,6 +2833,14 @@ components:
           nullable: true
     review-summary:
       type: object
+      required:
+        - id
+        - source_id
+        - user_id
+        - state
+        - last_seq
+        - created_at
+        - updated_at
       properties:
         id:
           type: string
@@ -2859,17 +2896,18 @@ components:
     review-bundle:
       type: object
       description: >
-        Defined by store/backend/neurostore/review/schema/review-bundle.schema.json.
+        Everything the review app needs to open one paper. Opaque here: its JSON Schema 2020-12
+        contract is served at GET /api/review/schemas/review-bundle.
     review-op:
       type: object
       description: >
-        One op, defined by $defs/Op of store/backend/neurostore/review/schema/review-ops.schema.json.
-        The service validates each op.
+        One op. Opaque here: it is $defs/Op of the JSON Schema 2020-12 contract served at
+        GET /api/review/schemas/review-ops, which the server validates each op against.
     review-stored-op:
       type: object
       description: >
-        An applied op as the review stores it: StoredOp of
-        store/backend/neurostore/review/schema/review-bundle.schema.json.
+        An applied op as the review stores it: $defs/StoredOp of the contract served at
+        GET /api/review/schemas/review-bundle.
         In an op result each one also carries `inverse`, the ops that undo it
         without their client_op_ids, unless it is a note; the
         bundle's stored ops do not.
@@ -2893,12 +2931,21 @@ components:
           description: The review's last_seq the batch was made against.
         ops:
           type: array
-          minItems: 1
-          maxItems: 500
+          description: >
+            The batch's ops, at least and at most as many as the contract served at
+            GET /api/review/schemas/review-ops allows.
           items:
             $ref: '#/components/schemas/review-op'
     review-op-result:
       type: object
+      required:
+        - ops
+        - last_seq
+        - record
+        - coordinate_revision
+        - provenance
+        - annotations
+        - hidden
       properties:
         ops:
           type: array
