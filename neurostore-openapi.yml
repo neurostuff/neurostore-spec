@@ -2344,6 +2344,64 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '422':
           $ref: '#/components/responses/422'
+  '/review/schemas/{name}':
+    parameters:
+      - schema:
+          type: string
+        name: name
+        in: path
+        required: true
+        description: extraction-record or coordinate-parse
+      - schema:
+          type: string
+        name: If-None-Match
+        in: header
+        required: false
+    get:
+      summary: One study_schema JSON Schema the review app reads
+      description: >
+        The extraction-record or coordinate-parse JSON Schema of the study_schema version the
+        server runs, with its description annotations removed (a property named description is
+        kept). The ETag is a hash of the body; a request whose If-None-Match holds it is
+        answered with 304.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: The JSON Schema
+          headers:
+            ETag:
+              schema:
+                type: string
+            Cache-Control:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+        '304':
+          description: The schema has not changed since the ETag in If-None-Match
+          headers:
+            ETag:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/404'
 components:
   schemas:
     review-progress:
