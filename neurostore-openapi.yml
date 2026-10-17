@@ -1702,6 +1702,38 @@ paths:
       tags:
         - store
         - studies
+    delete:
+      summary: Delete a base study
+      description: >
+        Owner or admin. Refused while a paper loaded for review reads one of the base
+        study's texts.
+      tags:
+        - store
+        - studies
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          $ref: '#/components/responses/404'
+        '409':
+          description: The base study has papers loaded for review
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /annotation-analyses/:
     get:
       summary: Get annotation analyses
@@ -1833,8 +1865,1187 @@ paths:
                 $ref: '#/components/schemas/pipeline-embedding'
         '404':
           $ref: '#/components/responses/404'
+  /review/sources/:
+    get:
+      summary: List papers loaded for review, with each reviewer's progress
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: base_study_id
+          in: query
+          description: Only the sources of this base study.
+          schema:
+            type: string
+        - name: mine
+          in: query
+          description: Only the sources the caller has a review of.
+          schema:
+            type: boolean
+            default: false
+        - name: assigned
+          in: query
+          description: Only the sources whose paper is assigned to the caller.
+          schema:
+            type: string
+            enum:
+              - me
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-source-list'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  '/review/sources/{id}/bundle':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Everything the review app needs to open one paper for the caller
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-bundle'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/404'
+  '/review/sources/{id}/review':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    put:
+      summary: Start the caller's review of a paper
+      description: >
+        Starts the caller's review, in_progress, from the source's extraction record. A repeat
+        call returns the existing review.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: The caller's review already existed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-summary'
+        '201':
+          description: The caller's review was started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-summary'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/404'
+        '409':
+          description: >
+            The source's stored documents no longer validate against study_schema (for example
+            after a schema upgrade), so no review is started. Each problem is one error with
+            code source_invalid; re-import the source.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  '/review/reviews/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: One reviewer's review of a paper
+      description: Any reviewer may read any review.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-detail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/404'
+    patch:
+      summary: Submit, reopen, set aside, or mark as the reference review
+      description: >
+        The owner moves in_progress to submitted and back, and sets an unusable paper aside
+        (set_aside, with a reason) and resumes it (back to in_progress). Only an admin sets
+        reference, and a paper has at most one reference review.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/review-state-patch'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-summary'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/404'
+        '409':
+          description: The transition is not allowed, or the paper already has a reference review
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  '/review/reviews/{id}/ops':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    post:
+      summary: Apply a batch of the owner's ops to their review
+      description: >
+        Only the review's owner. The batch applies whole or not at all. A batch whose every
+        client_op_id is already stored is a replay: it returns the stored ops and applies
+        nothing.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/review-op-batch'
+      responses:
+        '200':
+          description: The ops applied, or the stored ops of a replay
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-op-result'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: >
+            The body is not a batch: a negative expected_last_seq, or an op that is not an
+            object. The error names the rule that failed, not the batch.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/404'
+        '409':
+          description: >
+            The review is not in_progress, expected_last_seq is not the review's last_seq
+            (the body carries last_seq), or only some of the batch's client_op_ids are stored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '413':
+          description: The request body is over the review body limit (8 MiB)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: >
+            The batch does not validate (no ops, more ops than the review-ops contract allows, or
+            an op outside it), an op cannot be applied, or the record would fail study_schema. Each
+            refused op is one error: field ops/<index>, code REJECTED, and
+            context with op_index (an integer) and client_op_id. The message names the problem.
+            A problem with the batch as a whole has field ops and no op index. Nothing is applied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  '/review/reviews/{id}/export':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Export one review as a study_schema layout zip
+      description: >
+        Any reviewer may export any review. The zip holds the paper's documents and text, the
+        review's record, its coordinate revision when it has one (each analysis's verdict taken
+        from the review's provenance, a rejected analysis written as omit), and its ops in seq
+        order. The record is never changed by the export; run/provenance/<id>.json beside it
+        names the review, its state, whether it was reviewed and whether its record was edited,
+        and the source record it derives from.
+        The whole zip is built in memory before the response is sent.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: A zip of the review's layout
+          headers:
+            Content-Disposition:
+              description: An attachment named review-<id>.zip
+              schema:
+                type: string
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          description: The paper of a review's source has no article_id, so it cannot be exported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /review/exports/:
+    post:
+      summary: Export the reviews that match the filters as a zip of layout trees
+      description: >
+        One layout tree per reviewer, under the reviewer's id. A source with no review is
+        included, as loaded under unreviewed/, only when include_unreviewed is true. An empty
+        filter list means no filter. include_unreviewed cannot be combined with user_ids or
+        states; that request is refused with 422. The whole zip is built in memory before the
+        response is sent, so split a large export with source_ids or base_study_ids.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                source_ids:
+                  type: array
+                  items:
+                    type: string
+                base_study_ids:
+                  type: array
+                  items:
+                    type: string
+                user_ids:
+                  type: array
+                  items:
+                    type: string
+                states:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - in_progress
+                      - submitted
+                      - reference
+                      - set_aside
+                include_unreviewed:
+                  type: boolean
+                  default: false
+      responses:
+        '200':
+          description: A zip of the layout trees
+          headers:
+            Content-Disposition:
+              description: An attachment named review-exports.zip
+              schema:
+                type: string
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: >
+            include_unreviewed was combined with a reviewer or state filter, or a source's
+            paper has no article_id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  '/review/base-studies/{id}/assignments':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: The base study (paper).
+    get:
+      summary: The users a paper is assigned to
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-assignee-list'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/404'
+  '/review/base-studies/{id}/assignments/{user_id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: The base study (paper).
+      - schema:
+          type: string
+        name: user_id
+        in: path
+        required: true
+        description: The assignee. A reviewer may name only themselves; a lead reviewer may name anyone.
+    put:
+      summary: Assign a paper to a reviewer, or reassign it
+      description: >
+        A reviewer assigns a paper to themselves. A lead reviewer (admin-reviewer and admin)
+        assigns it to any admin-reviewer. Assigning an already assigned user changes nothing
+        and answers 200. The assignee must hold the admin-reviewer role, or the request is
+        refused with 422.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: The user was already assigned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-assignment'
+        '201':
+          description: The user was assigned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-assignment'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: A reviewer named another user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          description: The assignee does not hold the admin-reviewer role
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Release a paper from a reviewer
+      description: >
+        A reviewer releases their own assignment; a lead reviewer releases anyone's. Releasing
+        a user who is not assigned changes nothing and answers 204.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '204':
+          description: The assignment is released, or was not there
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: A reviewer named another user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/404'
+  /review/reviewers/:
+    get:
+      summary: The admin-reviewers, to assign papers to
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-reviewer-list'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /review/me:
+    get:
+      summary: The caller, as a reviewer
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-me'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /review/imports/:
+    post:
+      summary: Load the papers of a study_schema layout zip for review
+      description: >
+        Lead reviewers only (admin-reviewer and admin). Each paper is checked and stored on
+        its own: the report names what loaded, what was already loaded and what failed, and
+        why. A file that is not a layout is refused whole.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: A zip of a study_schema layout. The whole request body is at most 200 MiB.
+      responses:
+        '200':
+          description: The report of what each paper did
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-import-report'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '413':
+          description: The request body is over 200 MiB
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          $ref: '#/components/responses/422'
+  /review/imports/pipeline:
+    post:
+      summary: Load the records of a pipeline run already in neurostore for review
+      description: >
+        Lead reviewers only (admin-reviewer and admin). Each record the run stored under the
+        config loads with the coordinate parse it read, and with the pipeline's revision when
+        it read one. Neurostore keeps no parsed paper or text, so the zip holds each paper's
+        parsed paper and text as a study_schema layout; its parses and records are not read.
+        A text whose sha256 is not the one the run read fails its paper.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - config_id
+                - run_id
+                - file
+              properties:
+                config_id:
+                  type: string
+                  description: The pipeline config whose records to load.
+                run_id:
+                  type: string
+                  description: The run of that config.
+                file:
+                  type: string
+                  format: binary
+                  description: A zip of a study_schema layout with each paper's parsed paper and text. The whole request body is at most 200 MiB.
+      responses:
+        '200':
+          description: The report of what each paper did
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-import-report'
+        '400':
+          description: The form has no config_id, run_id or file
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The config is unknown, or the run stored no record under it
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '413':
+          description: The request body is over 200 MiB
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          $ref: '#/components/responses/422'
+  '/review/schemas/{name}':
+    parameters:
+      - schema:
+          type: string
+        name: name
+        in: path
+        required: true
+        description: extraction-record, coordinate-parse, review-bundle or review-ops
+      - schema:
+          type: string
+        name: If-None-Match
+        in: header
+        required: false
+    get:
+      summary: One JSON Schema of the review API
+      description: >
+        extraction-record and coordinate-parse are the JSON Schemas of the study_schema version
+        the server runs, with their description annotations removed (a property named
+        description is kept). review-bundle and review-ops are the JSON Schema 2020-12
+        contracts of the review bundle and of a batch of review ops, whole. The ETag is a hash
+        of the body; a request whose If-None-Match holds it is answered with 304.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: The JSON Schema
+          headers:
+            ETag:
+              schema:
+                type: string
+            Cache-Control:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+        '304':
+          description: The schema has not changed since the ETag in If-None-Match
+          headers:
+            ETag:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/404'
 components:
   schemas:
+    review-progress:
+      type: object
+      description: One reviewer's review of a paper, as the paper list shows it.
+      required:
+        - user_id
+        - user_name
+        - state
+        - last_seq
+        - updated_at
+        - edited
+        - verified
+        - reviewed
+        - op_count
+        - last_edit_at
+      properties:
+        user_id:
+          type: string
+        user_name:
+          type: string
+          nullable: true
+        state:
+          $ref: '#/components/schemas/review-state'
+        set_aside:
+          $ref: '#/components/schemas/review-set-aside'
+        last_seq:
+          type: integer
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+        edited:
+          type: integer
+          description: Targets the reviewer edited, added or removed.
+        verified:
+          type: integer
+          description: Targets the reviewer checked and left unchanged.
+        reviewed:
+          type: integer
+          description: Judgeable targets of the source that the reviewer verified, edited, added or removed. Unlike edited and verified, which count every provenance key, this counts only among the source's judgeable targets.
+        op_count:
+          type: integer
+          description: The ops the reviewer has applied to this review.
+        last_edit_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the reviewer last applied an op; null before any.
+    review-source:
+      type: object
+      required:
+        - id
+        - base_study_id
+        - label
+        - origin
+        - created_at
+        - total
+        - reviews
+        - assignees
+      properties:
+        id:
+          type: string
+        base_study_id:
+          type: string
+        label:
+          type: string
+          nullable: true
+        origin:
+          type: string
+          description: pipeline_run when the source names a pipeline config and a run, else upload.
+          enum:
+            - upload
+            - pipeline_run
+        created_at:
+          type: string
+          format: date-time
+        total:
+          type: integer
+          description: Targets a reviewer can judge in the source's record, its extracted values and its coordinate parse's analyses.
+        reviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/review-progress'
+        assignees:
+          type: array
+          description: The users the paper (base study) is assigned to.
+          items:
+            $ref: '#/components/schemas/review-assignee'
+    review-assignee:
+      type: object
+      required:
+        - user_id
+        - name
+      properties:
+        user_id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    review-assignee-list:
+      type: object
+      required:
+        - results
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/review-assignee'
+    review-assignment:
+      type: object
+      required:
+        - base_study_id
+        - user_id
+        - name
+        - assigned_by_id
+      properties:
+        base_study_id:
+          type: string
+        user_id:
+          type: string
+        name:
+          type: string
+          nullable: true
+        assigned_by_id:
+          type: string
+          nullable: true
+    review-me:
+      type: object
+      required:
+        - user_id
+        - name
+        - lead
+      properties:
+        user_id:
+          type: string
+        name:
+          type: string
+          nullable: true
+        lead:
+          type: boolean
+          description: Whether the caller is a lead reviewer (admin-reviewer and admin).
+    review-reviewer-list:
+      type: object
+      required:
+        - results
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/review-assignee'
+    review-source-list:
+      type: object
+      required:
+        - metadata
+        - results
+      properties:
+        metadata:
+          type: object
+          required:
+            - total_count
+          properties:
+            total_count:
+              type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/review-source'
+    review-import-report:
+      type: object
+      required:
+        - loaded
+        - skipped
+        - failed
+      properties:
+        loaded:
+          type: array
+          items:
+            type: object
+            required:
+              - study_id
+              - source_id
+              - base_study_id
+            properties:
+              study_id:
+                type: string
+              source_id:
+                type: string
+              base_study_id:
+                type: string
+        skipped:
+          type: array
+          items:
+            type: object
+            required:
+              - study_id
+              - source_id
+              - reason
+            properties:
+              study_id:
+                type: string
+              source_id:
+                type: string
+              reason:
+                type: string
+        failed:
+          type: array
+          items:
+            type: object
+            required:
+              - study_id
+              - problems
+            properties:
+              study_id:
+                type: string
+              problems:
+                type: array
+                items:
+                  type: string
+    review-state:
+      type: string
+      enum:
+        - in_progress
+        - submitted
+        - reference
+        - set_aside
+    review-set-aside-reason:
+      type: string
+      description: Why the paper was set aside; other needs a note.
+      enum:
+        - no_usable_text
+        - out_of_scope
+        - no_results
+        - duplicate
+        - other
+    review-set-aside:
+      type: object
+      description: Present only while the review is set aside.
+      required:
+        - reason
+        - note
+      properties:
+        reason:
+          $ref: '#/components/schemas/review-set-aside-reason'
+        note:
+          type: string
+          nullable: true
+    review-summary:
+      type: object
+      required:
+        - id
+        - source_id
+        - user_id
+        - state
+        - last_seq
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+        source_id:
+          type: string
+        user_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/review-state'
+        set_aside:
+          $ref: '#/components/schemas/review-set-aside'
+        last_seq:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+    review-detail:
+      allOf:
+        - $ref: '#/components/schemas/review-summary'
+        - type: object
+          properties:
+            record:
+              type: object
+              description: The extraction record with the review's ops applied.
+            coordinate_revision:
+              type: object
+              nullable: true
+            provenance:
+              type: object
+            annotations:
+              type: object
+            ops:
+              type: array
+              items:
+                $ref: '#/components/schemas/review-stored-op'
+    review-state-patch:
+      type: object
+      additionalProperties: false
+      required:
+        - state
+      properties:
+        state:
+          $ref: '#/components/schemas/review-state'
+        reason:
+          $ref: '#/components/schemas/review-set-aside-reason'
+        note:
+          type: string
+          maxLength: 10000
+    review-bundle:
+      type: object
+      description: >
+        Everything the review app needs to open one paper. Opaque here: its JSON Schema 2020-12
+        contract is served at GET /api/review/schemas/review-bundle.
+    review-op:
+      type: object
+      description: >
+        One op. Opaque here: it is $defs/Op of the JSON Schema 2020-12 contract served at
+        GET /api/review/schemas/review-ops, which the server validates each op against.
+    review-stored-op:
+      type: object
+      description: >
+        An applied op as the review stores it: $defs/StoredOp of the contract served at
+        GET /api/review/schemas/review-bundle.
+        In an op result each one also carries `inverse`, the ops that undo it
+        without their client_op_ids, unless it is a note; the
+        bundle's stored ops do not.
+      properties:
+        inverse:
+          type: array
+          items:
+            type: object
+            required:
+              - type
+    review-op-batch:
+      type: object
+      additionalProperties: false
+      required:
+        - expected_last_seq
+        - ops
+      properties:
+        expected_last_seq:
+          type: integer
+          minimum: 0
+          description: The review's last_seq the batch was made against.
+        ops:
+          type: array
+          description: >
+            The batch's ops, at least and at most as many as the contract served at
+            GET /api/review/schemas/review-ops allows.
+          items:
+            $ref: '#/components/schemas/review-op'
+    review-op-result:
+      type: object
+      required:
+        - ops
+        - last_seq
+        - record
+        - coordinate_revision
+        - provenance
+        - annotations
+        - hidden
+      properties:
+        ops:
+          type: array
+          items:
+            $ref: '#/components/schemas/review-stored-op'
+        last_seq:
+          type: integer
+        record:
+          type: object
+        coordinate_revision:
+          type: object
+          nullable: true
+        provenance:
+          type: object
+        annotations:
+          type: object
+        hidden:
+          type: object
+          description: The hidden set of the new record, as in the bundle.
+        entities:
+          type: array
+          description: The entity index of the new record, as in the bundle.
+          items:
+            type: object
     study-schema-upload:
       type: object
       additionalProperties: false
@@ -2175,6 +3386,7 @@ components:
 
     ErrorResponse:
       type: object
+      additionalProperties: true
       required:
         - status
         - title
@@ -3955,6 +5167,8 @@ components:
       scheme: bearer
       description: authentication method
 tags:
+  - name: review
+    description: admin-reviewer only.
   - name: neurostore-studyset-releases
   - name: analyses
   - name: studysets
