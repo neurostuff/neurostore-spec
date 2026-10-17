@@ -2525,6 +2525,82 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '422':
           $ref: '#/components/responses/422'
+  /review/imports/pipeline:
+    post:
+      summary: Load the records of a pipeline run already in neurostore for review
+      description: >
+        Lead reviewers only (admin-reviewer and admin). Each record the run stored under the
+        config loads with the coordinate parse it read, and with the pipeline's revision when
+        it read one. Neurostore keeps no parsed paper or text, so the zip holds each paper's
+        parsed paper and text as a study_schema layout; its parses and records are not read.
+        A text whose sha256 is not the one the run read fails its paper.
+      tags:
+        - review
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - config_id
+                - run_id
+                - file
+              properties:
+                config_id:
+                  type: string
+                  description: The pipeline config whose records to load.
+                run_id:
+                  type: string
+                  description: The run of that config.
+                file:
+                  type: string
+                  format: binary
+                  description: A zip of a study_schema layout with each paper's parsed paper and text. The whole request body is at most 200 MiB.
+      responses:
+        '200':
+          description: The report of what each paper did
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review-import-report'
+        '400':
+          description: The form has no config_id, run_id or file
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The config is unknown, or the run stored no record under it
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '413':
+          description: The request body is over 200 MiB
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          $ref: '#/components/responses/422'
   '/review/schemas/{name}':
     parameters:
       - schema:
