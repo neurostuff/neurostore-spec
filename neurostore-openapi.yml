@@ -1632,6 +1632,13 @@ paths:
         - {}
     post:
       summary: ''
+      description: >
+        Creates a base study, or returns the active base study one or more of the posted
+        identifiers (any bucket) already belong to, adding the identifiers it lacks. When
+        the identifiers belong to several active base studies the one holding the strongest
+        (version of record doi, pmid, pmcid, then a preprint's, then an alternative; the
+        oldest on a tie) is returned, identifiers another base study holds are not taken,
+        and the base studies are recorded as merge candidates.
       responses:
         '200':
           description: OK
@@ -4733,6 +4740,58 @@ components:
           x-stoplight:
             id: s29tro516g5zs
           nullable: true
+        publication_status:
+          type: string
+          enum:
+            - preprint
+            - published
+          nullable: true
+          description: >
+            study_schema's publication_status: `preprint` while only a preprint's
+            identifiers are known, `published` once a version of record's are.
+        preprint_dois:
+          type: array
+          description: >
+            DOIs a preprint server registered for the paper, with the server
+            (a study_schema PreprintServer). A base study holds an identifier once:
+            on a POST, one another base study holds is not taken.
+          items:
+            type: object
+            required:
+              - doi
+              - server
+            properties:
+              doi:
+                type: string
+              server:
+                type: string
+        preprint_pmids:
+          type: array
+          description: PubMed's records of the paper's preprint.
+          items:
+            type: string
+        preprint_pmcids:
+          type: array
+          description: PubMed Central's copies of the paper's preprint.
+          items:
+            type: string
+        alternative_dois:
+          type: array
+          description: >
+            Any other DOI of the paper that is neither the version of record's `doi`
+            nor a preprint's.
+          items:
+            type: string
+        alternative_pmids:
+          type: array
+          description: Any other PMID of the paper that is neither `pmid` nor a preprint's.
+          items:
+            type: string
+        alternative_pmcids:
+          type: array
+          description: Any other PMCID of the paper that is neither `pmcid` nor a preprint's.
+          items:
+            type: string
     base-study-return:
       title: base-study-return
       x-stoplight:
