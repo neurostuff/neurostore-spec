@@ -1632,6 +1632,16 @@ paths:
         - {}
     post:
       summary: ''
+      description: >
+        Creates a base study, or returns the active base study one or more of the posted
+        identifiers (any bucket) already belong to, adding the identifiers it lacks. When
+        the identifiers belong to several active base studies the one holding the strongest
+        (version of record doi, pmid, pmcid, then a preprint's, then an alternative; the
+        oldest on a tie) is returned, identifiers another base study holds are not taken,
+        and the base studies are recorded as merge candidates. A POST is not refused for
+        this. A single object is resolved like a list, and a new base study (one object or
+        a list) is created with its first version, owned by the caller. Identifiers are
+        returned normalized: DOIs in lower case, PMCIDs as `PMC` and digits.
       responses:
         '200':
           description: OK
@@ -1685,6 +1695,12 @@ paths:
         - $ref: '#/components/parameters/nested'
     put:
       summary: ''
+      description: >
+        The edit is taken as it is. The preprint and alternative identifier lists are added
+        to, never removed from; a changed `doi`, `pmid` or `pmcid` replaces the stored one,
+        which the base study then no longer holds. An identifier another base study holds
+        stays with that base study, and the pair is recorded as a merge candidate: a PUT is
+        not refused for it.
       responses:
         '200':
           description: OK
@@ -4733,6 +4749,92 @@ components:
           x-stoplight:
             id: s29tro516g5zs
           nullable: true
+        publication_status:
+          type: string
+          enum:
+            - preprint
+            - published
+          nullable: true
+          description: >
+            study_schema's publication_status: `preprint` while only a preprint's
+            identifiers are known, `published` once a version of record's are.
+        preprint_dois:
+          type: array
+          description: >
+            DOIs a preprint server registered for the paper, with the server. An
+            identifier is held by one active base study: one another base study holds is
+            not taken (see POST /base-studies). Returned normalized: DOIs in lower case.
+          items:
+            type: object
+            required:
+              - doi
+              - server
+            properties:
+              doi:
+                type: string
+              server:
+                type: string
+                description: The preprint server that registered the DOI (study_schema's PreprintServer).
+                enum:
+                  - biorxiv
+                  - medrxiv
+                  - arxiv
+                  - researchsquare
+                  - osf_preprints
+                  - elife
+                  - arabixiv
+                  - metaarxiv
+                  - engrxiv
+                  - focus_archive
+                  - frenxiv
+                  - ina_rxiv
+                  - lawarxiv
+                  - lis_scholarship_archive
+                  - marxiv
+                  - mindrxiv
+                  - nutrixiv
+                  - paleorxiv
+                  - psyarxiv
+                  - socarxiv
+                  - sportrxiv
+                  - africarxiv
+                  - mediarxiv
+                  - bodoarxiv
+                  - edarxiv
+                  - biohackrxiv
+                  - ssrn
+                  - preprints_org
+                  - authorea
+                  - techrxiv
+                  - chemrxiv
+                  - jmir_preprints
+        preprint_pmids:
+          type: array
+          description: PubMed's records of the paper's preprint.
+          items:
+            type: string
+        preprint_pmcids:
+          type: array
+          description: PubMed Central's copies of the paper's preprint.
+          items:
+            type: string
+        alternative_dois:
+          type: array
+          description: >
+            Any other DOI of the paper that is neither the version of record's `doi`
+            nor a preprint's.
+          items:
+            type: string
+        alternative_pmids:
+          type: array
+          description: Any other PMID of the paper that is neither `pmid` nor a preprint's.
+          items:
+            type: string
+        alternative_pmcids:
+          type: array
+          description: Any other PMCID of the paper that is neither `pmcid` nor a preprint's.
+          items:
+            type: string
     base-study-return:
       title: base-study-return
       x-stoplight:
