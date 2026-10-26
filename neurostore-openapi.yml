@@ -572,9 +572,6 @@ paths:
         - $ref: '#/components/parameters/nested'
         - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/description'
-        - $ref: '#/components/parameters/source_id'
-        - $ref: '#/components/parameters/unique'
-        - $ref: '#/components/parameters/source'
         - $ref: '#/components/parameters/authors'
         - $ref: '#/components/parameters/user_id'
       security:
@@ -815,7 +812,6 @@ paths:
               examples: {}
       description: List all analyses performed across studies.
       parameters:
-        - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/desc'
@@ -928,7 +924,6 @@ paths:
                 $ref: '#/components/schemas/table-list'
       description: List all tables across studies.
       parameters:
-        - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/desc'
@@ -1123,7 +1118,6 @@ paths:
                 $ref: '#/components/schemas/image-list'
       description: Retrieve and list images.
       parameters:
-        - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/desc'
@@ -1230,7 +1224,6 @@ paths:
                 $ref: '#/components/schemas/condition-list'
       description: Get all conditions
       parameters:
-        - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/desc'
