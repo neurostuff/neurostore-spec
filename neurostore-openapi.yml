@@ -1490,6 +1490,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/base-study-list'
+        '502':
+          description: The embedding service used by `semantic_search` is unreachable, failed, or answered unusably.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Semantic search is not configured on this server (no embedding credentials).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       parameters:
         - $ref: '#/components/parameters/nested'
         - name: year_min
