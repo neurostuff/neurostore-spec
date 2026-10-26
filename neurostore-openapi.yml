@@ -1602,6 +1602,16 @@ paths:
           schema:
             type: boolean
         - $ref: '#/components/parameters/search'
+        - name: search_full_text
+          in: query
+          description: >-
+            Also match `search` against the text of the paper. Without it a search
+            matches titles and abstracts only. Records found only in the text are
+            listed after those found in a title or abstract.
+          required: false
+          schema:
+            type: boolean
+            default: false
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/desc'
