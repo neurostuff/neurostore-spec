@@ -4722,9 +4722,10 @@ components:
         authors:
           type: string
           description: >-
-            The authors in published order, separated by "; ". When a paper's
-            structured author list has been uploaded the server derives this from it,
-            and a value sent in a PUT is ignored.
+            The authors in published order. New values are joined with "; ", since
+            a name may hold ", "; older values may be joined with ", " or ";". When a
+            paper's structured author list has been uploaded the server derives this
+            from it, and a value sent in a PUT, including null, is ignored.
           x-stoplight:
             id: 6tz6016l564pj
           nullable: true
