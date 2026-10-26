@@ -4743,6 +4743,12 @@ components:
           nullable: true
         authors:
           type: string
+          description: >-
+            The authors in published order, separated by "; " because a name may
+            hold ", ". When a paper's structured author list has been uploaded the
+            server derives this from it, and a value sent in a PUT, including null,
+            is ignored. Values written before this was fixed may still be separated
+            by ", " or ";".
           x-stoplight:
             id: 6tz6016l564pj
           nullable: true
