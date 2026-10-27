@@ -1618,8 +1618,10 @@ paths:
           in: query
           description: >-
             Also match `search` against the text of the paper. Without it a search
-            matches titles and abstracts only. Records found only in the text are
-            listed after those found in a title or abstract.
+            matches titles and abstracts only. Results are ranked by relevance, in
+            which a match in a title counts most, then one in an abstract, then one
+            in the text; a record found only in the text can still rank above a
+            weak title or abstract match.
           required: false
           schema:
             type: boolean
