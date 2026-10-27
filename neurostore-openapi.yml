@@ -4990,10 +4990,10 @@ components:
         example: imagin
       description: >-
         Words to find in the name and description. Each word is matched whole
-        after English stemming, not as a substring or a prefix, and every word
-        must match; quoted phrases, AND, OR, NOT, a leading `-` and parentheses
-        are understood. A search of digits only is matched against the PMID
-        instead, on records that have one.
+        after English stemming, not as a substring or a prefix. Words must all
+        match unless joined by OR; quoted phrases, AND, NOT, a leading `-` and
+        parentheses are understood too. A search of digits only is matched
+        against the PMID instead, on records that have one.
     sort:
       name: sort
       in: query
