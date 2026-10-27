@@ -1617,9 +1617,13 @@ paths:
         - name: search_full_text
           in: query
           description: >-
-            Also match `search` against the text of the paper. Without it a search
-            matches titles and abstracts only. Records found only in the text are
-            listed after those found in a title or abstract.
+            Also match `search` against the paper's preferred full text, the copy
+            its `fulltext_id` names (other copies are not searched): each word may
+            match the title, the abstract or that text, and a quoted phrase must sit
+            within one of them. Without it a search matches titles and abstracts
+            only. A match in a title counts most, then one in an abstract, then one
+            in the text, so records found only in the text usually rank below the
+            others; that order is not guaranteed.
           required: false
           schema:
             type: boolean
@@ -4984,7 +4988,12 @@ components:
         type: string
         minLength: 1
         example: imagin
-      description: search for entries that contain the substring
+      description: >-
+        Words to find in the name and description. Each word is matched whole
+        after English stemming, not as a substring or a prefix. Words must all
+        match unless joined by OR; quoted phrases, AND, NOT, a leading `-` and
+        parentheses are understood too. A search of digits only is matched
+        against the PMID instead, on records that have one.
     sort:
       name: sort
       in: query
