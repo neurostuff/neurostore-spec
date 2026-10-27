@@ -1617,11 +1617,11 @@ paths:
         - name: search_full_text
           in: query
           description: >-
-            Also match `search` against the text of the paper. Without it a search
-            matches titles and abstracts only. Results are ranked by relevance, in
-            which a match in a title counts most, then one in an abstract, then one
-            in the text; a record found only in the text can still rank above a
-            weak title or abstract match.
+            Also match `search` against the text of the paper: each word may match
+            the title, the abstract or the text. Without it a search matches titles
+            and abstracts only. A match in a title counts most, then one in an
+            abstract, then one in the text, so records found only in the text
+            usually rank below the others; that order is not guaranteed.
           required: false
           schema:
             type: boolean
