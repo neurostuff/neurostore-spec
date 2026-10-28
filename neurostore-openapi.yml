@@ -317,7 +317,10 @@ paths:
         '422':
           description: >
             Unprocessable. Field error codes: SCHEMA (a document fails study_schema's JSON
-            Schema), KEY_MISMATCH (an analysis key is not the one its name, space and
+            Schema), SCHEMA_VERSION (a document states a schema_version other than the one
+            the service is pinned to; every upload of that version gets the same answer),
+            TEXT_MISMATCH (text's sha256 is not parsed_paper's text_sha256, or text is sent
+            without parsed_paper), KEY_MISMATCH (an analysis key is not the one its name, space and
             points give), DUPLICATE_KEY (two analyses of the parse have one key),
             NOT_CURRENT (a stored parse that is no longer current, or a revision of one),
             UNKNOWN_PARSE (a record's parse_id or a revision's revision_of is not stored
@@ -3097,6 +3100,12 @@ components:
           type: object
           description: The ParsedPaper the parse read, for table captions and the bibliography.
           additionalProperties: true
+        text:
+          type: string
+          description: >
+            The parsed paper's text, whose sha256 is the parsed paper's text_sha256. Stored
+            as one of the base study's full texts, with the licence of the copy it was read
+            from. Needs parsed_paper.
         parse_id:
           type: string
           description: For a record uploaded alone, the parse_id of the stored parse it read.
@@ -3133,6 +3142,19 @@ components:
           enum: [parse, parse_and_record, record, revision]
         base_study_id:
           type: string
+        merged_from:
+          type: array
+          description: >
+            The base study the upload named, and each one between it and base_study_id,
+            when it was merged into base_study_id and the upload followed the merge.
+            Absent otherwise.
+          items:
+            type: string
+        took_ownership_from:
+          type: string
+          description: >
+            The user who owned the base study before this upload, which leaves it owned by
+            no one and public. Absent when no one did.
         study_id:
           type: string
           description: The paper's pipeline-owned study.
