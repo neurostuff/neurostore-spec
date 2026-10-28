@@ -4799,40 +4799,12 @@ components:
                 type: string
               server:
                 type: string
-                description: The preprint server that registered the DOI (study_schema's PreprintServer).
-                enum:
-                  - biorxiv
-                  - medrxiv
-                  - arxiv
-                  - researchsquare
-                  - osf_preprints
-                  - elife
-                  - arabixiv
-                  - metaarxiv
-                  - engrxiv
-                  - focus_archive
-                  - frenxiv
-                  - ina_rxiv
-                  - lawarxiv
-                  - lis_scholarship_archive
-                  - marxiv
-                  - mindrxiv
-                  - nutrixiv
-                  - paleorxiv
-                  - psyarxiv
-                  - socarxiv
-                  - sportrxiv
-                  - africarxiv
-                  - mediarxiv
-                  - bodoarxiv
-                  - edarxiv
-                  - biohackrxiv
-                  - ssrn
-                  - preprints_org
-                  - authorea
-                  - techrxiv
-                  - chemrxiv
-                  - jmir_preprints
+                minLength: 1
+                description: >
+                  The preprint server that registered the DOI: one of study_schema's
+                  PreprintServer values (biorxiv, medrxiv, arxiv, researchsquare,
+                  osf_preprints, psyarxiv, ssrn and others), or any other non-empty name
+                  for a server it does not list.
         preprint_pmids:
           type: array
           description: PubMed's records of the paper's preprint.
