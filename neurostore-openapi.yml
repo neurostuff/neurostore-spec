@@ -1404,6 +1404,76 @@ paths:
       tags:
         - store
         - annotations
+  /api-keys/:
+    get:
+      summary: List your API keys
+      description: List the caller's API keys, revoked ones included. Requires a login token, not an API key.
+      tags:
+        - store
+        - user
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api-key-list'
+    post:
+      summary: Create an API key
+      description: Create an API key that works on Neurostore and Neurosynth Compose until it is revoked. The key is returned only in this response. Requires a login token, not an API key.
+      tags:
+        - store
+        - user
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api-key-request'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api-key-created'
+  '/api-keys/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    delete:
+      summary: Revoke an API key
+      description: Revoke one of the caller's API keys. Requires a login token, not an API key.
+      tags:
+        - store
+        - user
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '204':
+          description: Revoked
+  /api-keys/introspect:
+    get:
+      summary: Describe the API key making the request
+      description: Return the owner and scopes of the API key sent as the bearer token.
+      tags:
+        - store
+        - user
+      security:
+        - JSON-Web-Token: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api-key-introspection'
   /users/:
     get:
       summary: Your GET endpoint
@@ -4539,6 +4609,96 @@ components:
           description: full name of user
         neuroid:
           type: string
+      x-tags:
+        - user
+    api-key-scopes:
+      type: array
+      title: api-key-scopes
+      description: '`read` allows GET requests; `write` allows every method.'
+      minItems: 1
+      uniqueItems: true
+      items:
+        type: string
+        enum:
+          - read
+          - write
+      x-tags:
+        - user
+    api-key-request:
+      type: object
+      title: api-key-request
+      required:
+        - name
+        - scopes
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          minLength: 1
+        scopes:
+          $ref: '#/components/schemas/api-key-scopes'
+      x-tags:
+        - user
+    api-key:
+      type: object
+      title: api-key
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        prefix:
+          type: string
+          description: the first characters of the key, to tell keys apart
+        scopes:
+          $ref: '#/components/schemas/api-key-scopes'
+        created_at:
+          type: string
+          format: date-time
+        last_used_at:
+          type: string
+          format: date-time
+          nullable: true
+        revoked_at:
+          type: string
+          format: date-time
+          nullable: true
+      x-tags:
+        - user
+    api-key-created:
+      title: api-key-created
+      allOf:
+        - $ref: '#/components/schemas/api-key'
+        - type: object
+          properties:
+            key:
+              type: string
+              description: the full key; it cannot be retrieved again
+      x-tags:
+        - user
+    api-key-list:
+      title: api-key-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/api-key'
+      x-tags:
+        - user
+    api-key-introspection:
+      title: api-key-introspection
+      type: object
+      properties:
+        user:
+          type: string
+          description: the owner's external id
+        name:
+          type: string
+          nullable: true
+          description: the owner's display name
+        scopes:
+          $ref: '#/components/schemas/api-key-scopes'
       x-tags:
         - user
     user-list:
