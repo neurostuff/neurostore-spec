@@ -1224,7 +1224,7 @@ paths:
         - data-sources
       description: >-
         List the named studies (cohorts), consortia and repositories a paper's data can
-        come from, with the aliases used to find them in text.
+        come from.
       parameters:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/page'
@@ -1243,12 +1243,6 @@ paths:
               - consortium
               - repository
           description: only data sources of this kind
-        - name: slug
-          in: query
-          required: false
-          schema:
-            type: string
-          description: only the data source with this slug
       responses:
         '200':
           description: OK
@@ -1258,7 +1252,7 @@ paths:
                 $ref: '#/components/schemas/data-source-list'
     post:
       summary: POST/Create a data source
-      description: Create a data source. Admins only.
+      description: Create a data source under the id given in the body. Admins only.
       security:
         - JSON-Web-Token: []
       tags:
@@ -1278,6 +1272,8 @@ paths:
                 $ref: '#/components/schemas/data-source-return'
         '403':
           description: Only an admin can change data sources.
+        '422':
+          $ref: '#/components/responses/422'
   '/data-sources/{id}':
     parameters:
       - schema:
@@ -1290,7 +1286,7 @@ paths:
       tags:
         - store
         - data-sources
-      description: Retrieve a data source and its aliases.
+      description: Retrieve a data source.
       responses:
         '200':
           description: OK
@@ -1302,7 +1298,7 @@ paths:
           $ref: '#/components/responses/404'
     put:
       summary: PUT/update a data source
-      description: Update a data source; given aliases replace its aliases. Admins only.
+      description: Update a data source; its id cannot change. Admins only.
       security:
         - JSON-Web-Token: []
       tags:
@@ -4458,39 +4454,16 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - image
-    data-source-alias:
-      title: data-source-alias
-      type: object
-      required:
-        - alias
-        - tier
-      properties:
-        id:
-          type: string
-          readOnly: true
-        alias:
-          type: string
-        tier:
-          type: string
-          enum:
-            - name
-            - safe
-            - context
-            - defined
-            - qualified
-          description: >-
-            What a match on the alias needs: `name`, a full name matched case-insensitively;
-            `safe`, an acronym that stands alone; `context`, an acronym needing a dataset or
-            imaging word nearby; `defined`, an acronym needing one of the data source's names
-            in the same paper; `qualified`, a common word needing a qualifier such as
-            "dataset" or an accession.
     data-source-common:
       title: data-source-common
       type: object
       properties:
-        slug:
+        id:
           type: string
-          description: A short stable key, e.g. `ukb`.
+          pattern: '^[a-z0-9][a-z0-9_]*$'
+          description: >-
+            The data source's key, e.g. `ukb`, given when it is created and never changed,
+            so records made outside neurostore can name it before it is uploaded.
         name:
           type: string
         description:
@@ -4529,25 +4502,16 @@ components:
           type: array
           items:
             type: string
-        listed_in:
-          type: array
-          items:
-            type: string
-          description: The catalogues the data source was found in.
-        aliases:
-          type: array
-          items:
-            $ref: '#/components/schemas/data-source-alias'
     data-source-request:
       title: data-source-request
       allOf:
         - $ref: '#/components/schemas/data-source-common'
-        - $ref: '#/components/schemas/writeable-resource-attributes'
     data-source-return:
       title: data-source-return
       allOf:
         - $ref: '#/components/schemas/data-source-common'
-        - $ref: '#/components/schemas/resource-attributes'
+        - $ref: '#/components/schemas/readable-resource-attributes'
+        - $ref: '#/components/schemas/user-resource-attributes'
     data-source-list:
       title: data-source-list
       type: object
@@ -4564,8 +4528,6 @@ components:
       readOnly: true
       properties:
         id:
-          type: string
-        slug:
           type: string
         name:
           type: string
