@@ -684,6 +684,7 @@ paths:
               examples: {}
       description: List studies
       parameters:
+        - $ref: '#/components/parameters/data_sources'
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/page'
@@ -760,6 +761,7 @@ paths:
           $ref: '#/components/responses/404'
       description: Get a study.
       parameters:
+        - $ref: '#/components/parameters/data_sources'
         - $ref: '#/components/parameters/nested'
         - $ref: '#/components/parameters/studyset_owner'
         - $ref: '#/components/parameters/flat'
@@ -815,6 +817,7 @@ paths:
               examples: {}
       description: List all analyses performed across studies.
       parameters:
+        - $ref: '#/components/parameters/data_sources'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/desc'
@@ -876,6 +879,7 @@ paths:
           $ref: '#/components/responses/404'
       description: Information pertaining to a particular analysis within a study.
       parameters:
+        - $ref: '#/components/parameters/data_sources'
         - $ref: '#/components/parameters/nested'
         - $ref: '#/components/parameters/image_metadata'
         - $ref: '#/components/parameters/image_value_summary'
@@ -1212,6 +1216,127 @@ paths:
       tags:
         - store
         - images
+  /data-sources/:
+    get:
+      summary: GET data sources
+      tags:
+        - store
+        - data-sources
+      description: >-
+        List the named studies (cohorts), consortia and repositories a paper's data can
+        come from, with the aliases used to find them in text.
+      parameters:
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/paginate'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/description'
+        - name: kind
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - study
+              - consortium
+              - repository
+          description: only data sources of this kind
+        - name: slug
+          in: query
+          required: false
+          schema:
+            type: string
+          description: only the data source with this slug
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/data-source-list'
+    post:
+      summary: POST/Create a data source
+      description: Create a data source. Admins only.
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - store
+        - data-sources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/data-source-request'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/data-source-return'
+        '403':
+          description: Only an admin can change data sources.
+  '/data-sources/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: GET a data source
+      tags:
+        - store
+        - data-sources
+      description: Retrieve a data source and its aliases.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/data-source-return'
+        '404':
+          $ref: '#/components/responses/404'
+    put:
+      summary: PUT/update a data source
+      description: Update a data source; given aliases replace its aliases. Admins only.
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - store
+        - data-sources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/data-source-request'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/data-source-return'
+        '403':
+          description: Only an admin can change data sources.
+        '422':
+          $ref: '#/components/responses/422'
+    delete:
+      summary: DELETE a data source
+      description: Delete a data source and its analysis links. Admins only.
+      security:
+        - JSON-Web-Token: []
+      tags:
+        - store
+        - data-sources
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Only an admin can change data sources.
   /conditions/:
     get:
       summary: GET Conditions
@@ -1576,6 +1701,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       parameters:
+        - $ref: '#/components/parameters/data_sources'
         - $ref: '#/components/parameters/nested'
         - name: year_min
           in: query
@@ -1782,6 +1908,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/base-study-return'
       parameters:
+        - $ref: '#/components/parameters/data_sources'
         - $ref: '#/components/parameters/flat'
         - $ref: '#/components/parameters/info'
         - $ref: '#/components/parameters/nested'
@@ -3740,6 +3867,8 @@ components:
         - $ref: '#/components/schemas/study-return-relationships'
         - type: object
           properties:
+            data_sources:
+              $ref: '#/components/schemas/data-source-summaries'
             studysets:
               type: array
               items:
@@ -3937,6 +4066,8 @@ components:
               type: boolean
             has_beta_and_variance_maps:
               type: boolean
+            data_sources:
+              $ref: '#/components/schemas/data-source-summaries'
       x-tags:
         - analysis
     analysis-request:
@@ -3946,6 +4077,14 @@ components:
         - $ref: '#/components/schemas/analysis-request-relationships'
         - $ref: '#/components/schemas/writeable-resource-attributes'
         - $ref: '#/components/schemas/analysis-common'
+        - type: object
+          properties:
+            data_sources:
+              type: array
+              writeOnly: true
+              description: The ids of the data sources the analysis's data come from; replaces its links.
+              items:
+                type: string
       x-tags:
         - analysis
     analysis-return-relationships:
@@ -4319,6 +4458,127 @@ components:
           $ref: '#/components/schemas/metadata'
       x-tags:
         - image
+    data-source-alias:
+      title: data-source-alias
+      type: object
+      required:
+        - alias
+        - tier
+      properties:
+        id:
+          type: string
+          readOnly: true
+        alias:
+          type: string
+        tier:
+          type: string
+          enum:
+            - name
+            - safe
+            - context
+            - defined
+            - qualified
+          description: >-
+            What a match on the alias needs: `name`, a full name matched case-insensitively;
+            `safe`, an acronym that stands alone; `context`, an acronym needing a dataset or
+            imaging word nearby; `defined`, an acronym needing one of the data source's names
+            in the same paper; `qualified`, a common word needing a qualifier such as
+            "dataset" or an accession.
+    data-source-common:
+      title: data-source-common
+      type: object
+      properties:
+        slug:
+          type: string
+          description: A short stable key, e.g. `ukb`.
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        kinds:
+          type: array
+          items:
+            type: string
+            enum:
+              - study
+              - consortium
+              - repository
+        modalities:
+          type: array
+          items:
+            type: string
+        part_of:
+          type: string
+          nullable: true
+          description: The data source (repository or consortium) this one is hosted by or part of.
+        url:
+          type: string
+          nullable: true
+        url_kind:
+          type: string
+          nullable: true
+          description: >-
+            Where the url came from or what it points to, e.g. `rrid`, `re3data`, `jpnd`,
+            `checked:official`, `checked:registry`, `checked:publication`.
+        rrids:
+          type: array
+          items:
+            type: string
+        re3data_ids:
+          type: array
+          items:
+            type: string
+        listed_in:
+          type: array
+          items:
+            type: string
+          description: The catalogues the data source was found in.
+        aliases:
+          type: array
+          items:
+            $ref: '#/components/schemas/data-source-alias'
+    data-source-request:
+      title: data-source-request
+      allOf:
+        - $ref: '#/components/schemas/data-source-common'
+        - $ref: '#/components/schemas/writeable-resource-attributes'
+    data-source-return:
+      title: data-source-return
+      allOf:
+        - $ref: '#/components/schemas/data-source-common'
+        - $ref: '#/components/schemas/resource-attributes'
+    data-source-list:
+      title: data-source-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/data-source-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    data-source-summary:
+      title: data-source-summary
+      type: object
+      readOnly: true
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        url:
+          type: string
+          nullable: true
+    data-source-summaries:
+      title: data-source-summaries
+      type: array
+      readOnly: true
+      description: Present only when the request sets `data_sources=true`.
+      items:
+        $ref: '#/components/schemas/data-source-summary'
     condition-return:
       title: condition-return
       allOf:
@@ -5034,6 +5294,8 @@ components:
           type: boolean
         features:
           type: object
+        data_sources:
+          $ref: '#/components/schemas/data-source-summaries'
     base-study-list:
       title: base-study-list
       x-stoplight:
@@ -5402,6 +5664,16 @@ components:
       required: false
       schema:
         type: boolean
+    data_sources:
+      name: data_sources
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: false
+      description: >-
+        include `data_sources`: on an analysis, the data sources linked to it; on a study
+        or base study, those of all its analyses. Withheld by default.
     image_metadata:
       name: image_metadata
       in: query
