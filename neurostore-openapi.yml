@@ -3213,24 +3213,39 @@ components:
                 The runs that made the record: its record run, and the evidence and
                 normalize runs that filled it in, at most one per stage. The record's
                 config holds them in stage order with every field present, so uploads made
-                by the same runs share one config and any other run gets another. Without
-                runs the config is keyed as before. Validated by the service (422 SCHEMA,
+                by the same runs share one config, and a run of another model, adapter,
+                prompt or fit gets another. A rerun with the same model and inputs is the
+                same run and joins its config. Without runs the config is keyed as before. Validated by the service (422 SCHEMA,
                 DUPLICATE_STAGE, DUPLICATE_RUN_ID, RUN_CONFLICT).
               items:
                 $ref: '#/components/schemas/study-schema-run'
     study-schema-run:
       type: object
-      description: One run behind a record, as the pipeline's runs table holds it.
+      description: >
+        One run behind a record, as the pipeline's runs table first stored it. A run is
+        one combination of model and inputs; reruns of it carry the same run_id and fields.
       properties:
         run_id:
           type: string
           description: Required. Names one run; a run_id stored with other fields is refused (RUN_CONFLICT).
+        kind:
+          type: string
+          nullable: true
+          description: model (a model made the output) or migration (an older output carried over).
         stage:
           type: string
           description: Required. record, evidence or normalize.
         source:
           type: string
           description: Required. The record source the run made or read.
+        pipeline:
+          type: string
+          nullable: true
+          description: The pipeline that ran the stage.
+        version:
+          type: string
+          nullable: true
+          description: The pipeline's version.
         model:
           type: string
           nullable: true
@@ -3250,6 +3265,12 @@ components:
         machine:
           type: string
           nullable: true
+        fit:
+          type: string
+          nullable: true
+          description: >
+            For a normalize run, the fingerprint of the fitted normalization model (the
+            task and contrast clustering) it assigned with. A refit is a new run.
         created_at:
           type: string
           description: Required. When the run was made, ISO 8601.
