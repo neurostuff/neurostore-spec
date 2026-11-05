@@ -920,6 +920,88 @@ paths:
       tags:
         - store
         - analyses
+  /analysis-queries/:
+    post:
+      summary: Select analyses by what their extraction records say
+      description: >
+        Runs a query over each pipeline analysis's features, read from its paper's latest
+        extraction record. Every criterion is optional and criteria combine with AND; a
+        list means any of its values, and `or` takes sub-queries. Text criteria match whole
+        words, case-insensitively, with `*` for any run of characters and `?` for one; a
+        pattern needs three consecutive letters or digits. A criterion with ids (diagnosis,
+        task, contrast set) also matches a value that is one of the analysis's ids. An
+        analysis whose record is silent on a criterion does not match it unless the
+        criterion says `when_silent: include`. Nothing is stored; the response names every
+        selected analysis's study, for a studyset, and with `funnel` says what each
+        criterion dropped.
+      tags:
+        - store
+        - analyses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/analysis-query-request'
+      responses:
+        '200':
+          description: The selected analyses, and what each criterion dropped
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/analysis-query-result'
+        '400':
+          description: >
+            The query is not valid. Field error codes: UNKNOWN_FIELD, INVALID_VALUE,
+            MISSING_VALUE, and PATTERN_TOO_BROAD for a text pattern without three
+            consecutive letters or digits.
+  /analysis-terms/:
+    get:
+      summary: The values an analysis query field takes
+      description: >
+        Each value of one field across the pipeline analyses' features, with its label and
+        how many analyses and papers carry it, most common first.
+      tags:
+        - store
+        - analyses
+      parameters:
+        - in: query
+          name: field
+          required: true
+          schema:
+            type: string
+            enum:
+              - diagnosis
+              - task
+              - contrast_set
+              - arm_kind
+              - species
+              - spatial_scope
+              - measure_type
+              - measure_family
+              - details_type
+              - effect_kind
+              - allocation
+              - assignment_structure
+              - blinding
+        - in: query
+          name: search
+          description: Keep the values or labels that contain this text, case-insensitively.
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 50
+      responses:
+        '200':
+          description: The field's values
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/analysis-term-list'
   /tables/:
     get:
       summary: GET list of tables
@@ -3281,6 +3363,248 @@ components:
           description: The entity index of the new record, as in the bundle.
           items:
             type: object
+    analysis-query-values:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        any:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            minLength: 1
+        all:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            minLength: 1
+        none:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            minLength: 1
+        when_silent:
+          $ref: '#/components/schemas/analysis-query-when-silent'
+    analysis-query-when-silent:
+      type: string
+      enum:
+        - exclude
+        - include
+      default: exclude
+      description: Whether an analysis whose record says nothing on the criterion matches it.
+    analysis-query-text:
+      description: A value, a list of values (any of them), or any/all/none lists.
+      oneOf:
+        - type: string
+          minLength: 1
+        - type: array
+          minItems: 1
+          items:
+            type: string
+            minLength: 1
+        - $ref: '#/components/schemas/analysis-query-values'
+    analysis-query-boolean:
+      oneOf:
+        - type: boolean
+        - type: object
+          additionalProperties: false
+          required:
+            - is
+          properties:
+            is:
+              type: boolean
+            when_silent:
+              $ref: '#/components/schemas/analysis-query-when-silent'
+    analysis-query-range:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        min:
+          type: number
+        max:
+          type: number
+        when_silent:
+          $ref: '#/components/schemas/analysis-query-when-silent'
+    analysis-query:
+      type: object
+      additionalProperties: false
+      description: >
+        Criteria on a pipeline analysis. Group criteria (diagnosis, species, has_patients,
+        has_healthy) match when any group the analysis ran on matches.
+      properties:
+        diagnosis:
+          $ref: '#/components/schemas/analysis-query-text'
+        has_patients:
+          $ref: '#/components/schemas/analysis-query-boolean'
+        has_healthy:
+          $ref: '#/components/schemas/analysis-query-boolean'
+        species:
+          $ref: '#/components/schemas/analysis-query-text'
+        task:
+          $ref: '#/components/schemas/analysis-query-text'
+        spatial_scope:
+          $ref: '#/components/schemas/analysis-query-text'
+        coordinate_space:
+          $ref: '#/components/schemas/analysis-query-text'
+        measure_type:
+          $ref: '#/components/schemas/analysis-query-text'
+        measure_family:
+          $ref: '#/components/schemas/analysis-query-text'
+        details_type:
+          $ref: '#/components/schemas/analysis-query-text'
+        is_meta_analysis:
+          $ref: '#/components/schemas/analysis-query-boolean'
+        n:
+          $ref: '#/components/schemas/analysis-query-range'
+        has_coordinates:
+          $ref: '#/components/schemas/analysis-query-boolean'
+        role:
+          $ref: '#/components/schemas/analysis-query-text'
+        contrast:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            positive:
+              $ref: '#/components/schemas/analysis-query-text'
+            negative:
+              $ref: '#/components/schemas/analysis-query-text'
+            set:
+              $ref: '#/components/schemas/analysis-query-text'
+            kind:
+              $ref: '#/components/schemas/analysis-query-text'
+            groups:
+              description: between (more than one group) or within (one group).
+              $ref: '#/components/schemas/analysis-query-text'
+        design:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            allocation:
+              $ref: '#/components/schemas/analysis-query-text'
+            assignment_structure:
+              $ref: '#/components/schemas/analysis-query-text'
+            blinding:
+              $ref: '#/components/schemas/analysis-query-text'
+            arm_kind:
+              $ref: '#/components/schemas/analysis-query-text'
+            longitudinal:
+              $ref: '#/components/schemas/analysis-query-boolean'
+        or:
+          type: array
+          minItems: 2
+          description: >
+            Sub-queries, any of which may match; each takes this object's criteria. (Not a
+            $ref to this schema, which resolvers that inline references cannot expand.)
+          items:
+            type: object
+            additionalProperties: true
+    analysis-query-request:
+      type: object
+      additionalProperties: false
+      required:
+        - query
+      properties:
+        query:
+          $ref: '#/components/schemas/analysis-query'
+        limit:
+          type: integer
+          minimum: 0
+          maximum: 1000
+          default: 100
+          description: How many selected analyses to list; counts and study_ids cover them all.
+        funnel:
+          type: boolean
+          default: false
+          description: >
+            Also return `searched` and `funnel`: what each criterion in turn keeps and drops,
+            and how many analyses it finds silent. It counts once per criterion, so it costs
+            most when criteria keep most analyses.
+    analysis-query-result:
+      type: object
+      properties:
+        query:
+          type: object
+          additionalProperties: true
+          description: The query in canonical form, every criterion as any/all/none lists.
+        counts:
+          type: object
+          properties:
+            analyses:
+              type: integer
+            studies:
+              type: integer
+            base_studies:
+              type: integer
+        searched:
+          type: object
+          description: With `funnel`, how many analyses and papers have features.
+          properties:
+            analyses:
+              type: integer
+            base_studies:
+              type: integer
+        funnel:
+          type: array
+          description: With `funnel`, the criteria in order, each with what remains after it.
+          items:
+            type: object
+            properties:
+              criterion:
+                type: string
+              analyses:
+                type: integer
+              base_studies:
+                type: integer
+              dropped:
+                type: integer
+              silent:
+                type: integer
+                nullable: true
+                description: Analyses left by the criteria before this one whose record says nothing on it.
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              analysis:
+                type: string
+              study:
+                type: string
+              base_study:
+                type: string
+              name:
+                type: string
+                nullable: true
+              features:
+                type: object
+                additionalProperties: true
+        study_ids:
+          type: array
+          items:
+            type: string
+    analysis-term-list:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+              label:
+                type: string
+                nullable: true
+              analyses:
+                type: integer
+              base_studies:
+                type: integer
     study-schema-upload:
       type: object
       additionalProperties: false
@@ -4805,6 +5129,36 @@ components:
                 items:
                   type: string
                 description: Feature columns to add to each annotation note.
+        analysis_query:
+          type: object
+          writeOnly: true
+          additionalProperties: false
+          required:
+            - query
+          description: >
+            Run an analysis query over the annotation's studyset and write its result into
+            the notes: `column` (boolean) is true for each analysis the query selects and
+            false for every other, and each of `feature_columns` (string) carries that
+            analysis's feature, or null where its record says nothing.
+          properties:
+            query:
+              $ref: '#/components/schemas/analysis-query'
+            column:
+              type: string
+              minLength: 1
+              default: included
+            feature_columns:
+              type: array
+              items:
+                type: string
+                enum:
+                  - diagnosis
+                  - task
+                  - contrast
+                  - contrast_set
+                  - spatial_scope
+                  - measure_type
+                  - n
     annotation-list:
       title: annotation-list
       type: object
