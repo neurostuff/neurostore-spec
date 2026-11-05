@@ -326,7 +326,11 @@ paths:
             UNKNOWN_PARSE (a record's parse_id or a revision's revision_of is not stored
             for the paper), MISSING / UNKNOWN_KEY (a revision's verdicts leave a key out,
             or name a replacement it does not hold), RUN_ID_REUSED (the run_id already
-            stored a different document for the paper), and STALE_ENTITY_HASHES (on
+            stored a different document for the paper), SCHEMA / DUPLICATE_STAGE /
+            DUPLICATE_RUN_ID (on pipeline/runs: a run lacks run_id, stage, source or
+            created_at, names an unknown stage or field, or a stage or run_id is named
+            twice, or no run is the record run), RUN_CONFLICT (on pipeline/runs/<i>: the
+            run_id is stored with other fields), and STALE_ENTITY_HASHES (on
             base_study_id: the paper's stored entities are hashed under an older entity
             hash version, so the upload is refused until they are rehashed), and
             VERDICT_KEY_NOT_IN_REVISION (on coordinate_parse/verdicts/<i>/key: an accept or
@@ -3326,6 +3330,73 @@ components:
             commit:
               type: string
               description: The commit of the code that produced the record. Two commits of one version are different configs.
+            runs:
+              type: array
+              description: >
+                The runs that made the record: its record run, and the evidence and
+                normalize runs that filled it in, at most one per stage. The record's
+                config holds them in stage order with every field present, so uploads made
+                by the same runs share one config, and a run of another model, adapter,
+                prompt or fit gets another. A rerun with the same model and inputs is the
+                same run and joins its config. Without runs the config is keyed as before. Validated by the service (422 SCHEMA,
+                DUPLICATE_STAGE, DUPLICATE_RUN_ID, RUN_CONFLICT).
+              items:
+                $ref: '#/components/schemas/study-schema-run'
+    study-schema-run:
+      type: object
+      description: >
+        One run behind a record, as the pipeline's runs table first stored it. A run is
+        one combination of model and inputs; reruns of it carry the same run_id and fields.
+      properties:
+        run_id:
+          type: string
+          description: Required. Names one run; a run_id stored with other fields is refused (RUN_CONFLICT).
+        kind:
+          type: string
+          nullable: true
+          description: model (a model made the output) or migration (an older output carried over).
+        stage:
+          type: string
+          description: Required. record, evidence or normalize.
+        source:
+          type: string
+          description: Required. The record source the run made or read.
+        pipeline:
+          type: string
+          nullable: true
+          description: The pipeline that ran the stage.
+        version:
+          type: string
+          nullable: true
+          description: The pipeline's version.
+        model:
+          type: string
+          nullable: true
+        adapter:
+          type: string
+          nullable: true
+          description: repo@revision of the adapter the model ran with.
+        prompt_version:
+          type: string
+          nullable: true
+        schema_version:
+          type: string
+          nullable: true
+        code_commit:
+          type: string
+          nullable: true
+        machine:
+          type: string
+          nullable: true
+        fit:
+          type: string
+          nullable: true
+          description: >
+            For a normalize run, the fingerprint of the fitted normalization model (the
+            task and contrast clustering) it assigned with. A refit is a new run.
+        created_at:
+          type: string
+          description: Required. When the run was made, ISO 8601.
     study-schema-upload-summary:
       type: object
       description: What one upload changed. Keys appear for the parts uploaded.
@@ -3601,6 +3672,12 @@ components:
           type: object
           description: The parse's producer (name, version, stage, model, prompt_version).
           additionalProperties: true
+        runs:
+          type: array
+          nullable: true
+          description: For a record uploaded with runs, the runs its config holds; null otherwise.
+          items:
+            $ref: '#/components/schemas/study-schema-run'
         date_executed:
           type: string
           format: date-time
