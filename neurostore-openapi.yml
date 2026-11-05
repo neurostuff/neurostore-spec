@@ -689,6 +689,7 @@ paths:
       description: List studies
       parameters:
         - $ref: '#/components/parameters/data_sources'
+        - $ref: '#/components/parameters/journal_id'
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/page'
@@ -1337,6 +1338,65 @@ paths:
           description: OK
         '403':
           description: Only an admin can change data sources.
+  /journals/:
+    get:
+      summary: GET journals
+      tags:
+        - store
+        - journals
+      description: >-
+        List the journals, preprint servers and conference series papers appeared in, each
+        one OpenAlex source.
+      parameters:
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/paginate'
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+          description: >-
+            Journals whose title or abbreviation contains these words, or one of whose ISSNs
+            equals it.
+        - name: kind
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/journal-kind'
+          description: only journals of this kind
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/journal-list'
+  '/journals/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: GET a journal
+      tags:
+        - store
+        - journals
+      description: Retrieve a journal.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/journal-return'
+        '404':
+          description: No journal has this id.
   /conditions/:
     get:
       summary: GET Conditions
@@ -1839,6 +1899,7 @@ paths:
         - $ref: '#/components/parameters/map_type'
         - $ref: '#/components/parameters/is_oa'
         - $ref: '#/components/parameters/publication'
+        - $ref: '#/components/parameters/journal_id'
         - $ref: '#/components/parameters/pmid'
         - $ref: '#/components/parameters/doi'
         - $ref: '#/components/parameters/neurovault_id'
@@ -3942,6 +4003,8 @@ components:
           properties:
             data_sources:
               $ref: '#/components/schemas/data-source-summaries'
+            journal:
+              $ref: '#/components/schemas/journal-summary'
             studysets:
               type: array
               items:
@@ -4618,6 +4681,83 @@ components:
       description: Present only when the request sets `data_sources=true`.
       items:
         $ref: '#/components/schemas/data-source-summary'
+    journal-kind:
+      title: journal-kind
+      type: string
+      description: OpenAlex's source type.
+      enum:
+        - journal
+        - repository
+        - conference
+        - book series
+        - ebook platform
+        - other
+    journal-return:
+      title: journal-return
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              readOnly: true
+            openalex_id:
+              type: string
+              pattern: '^S\d+$'
+              description: OpenAlex's source id, bare (`S121666818`).
+            title:
+              type: string
+              description: OpenAlex's name for the source.
+            abbreviation:
+              type: string
+              nullable: true
+              description: NLM's ISO abbreviation, else its MEDLINE abbreviation.
+            kind:
+              $ref: '#/components/schemas/journal-kind'
+            issns:
+              type: array
+              description: Every ISSN of the title, print and electronic.
+              items:
+                type: string
+                pattern: '^\d{4}-\d{3}[\dX]$'
+            issn_l:
+              type: string
+              nullable: true
+              description: Which of `issns` links the title's print and electronic versions.
+            nlm_id:
+              type: string
+              nullable: true
+              description: The NLM Catalog's id for the title.
+            wikidata_id:
+              type: string
+              nullable: true
+              description: Wikidata's item for the title (`Q5936947`).
+        - $ref: '#/components/schemas/readable-resource-attributes'
+    journal-list:
+      title: journal-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/journal-return'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    journal-summary:
+      title: journal-summary
+      type: object
+      readOnly: true
+      nullable: true
+      description: >-
+        The journal the paper appeared in, as neurostore identified it; null when it could
+        not be identified. `publication` keeps the name as the source printed it.
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        abbreviation:
+          type: string
+          nullable: true
     condition-return:
       title: condition-return
       allOf:
@@ -5321,6 +5461,8 @@ components:
         - $ref: '#/components/schemas/base-study'
         - $ref: '#/components/schemas/resource-attributes'
       properties:
+        journal:
+          $ref: '#/components/schemas/journal-summary'
         has_coordinates:
           type: boolean
         has_images:
@@ -5750,6 +5892,13 @@ components:
       schema:
         type: boolean
       description: return the content as gzipped content
+    journal_id:
+      name: journal_id
+      in: query
+      required: false
+      schema:
+        type: string
+      description: only papers neurostore identified as appearing in this journal
     paginate:
       name: paginate
       in: query
@@ -5766,6 +5915,7 @@ components:
 tags:
   - name: review
     description: admin-reviewer only.
+  - name: journals
   - name: neurostore-studyset-releases
   - name: analyses
   - name: studysets
