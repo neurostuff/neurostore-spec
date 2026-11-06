@@ -929,12 +929,15 @@ paths:
         extraction record. Every criterion is optional and criteria combine with AND; a
         list means any of its values, and `or` takes sub-queries. Text criteria match whole
         words, case-insensitively, with `*` for any run of characters and `?` for one; a
-        pattern needs three consecutive letters or digits. A criterion with ids
-        (medical_condition, task, contrast set) also matches a value that is one of the analysis's ids. An
-        analysis whose record is silent on a criterion does not match it unless the
-        criterion says `when_silent: include`. Nothing is stored; the response names every
-        selected analysis's study, for a studyset, and with `funnel` says what each
-        criterion dropped.
+        pattern needs three consecutive letters or digits. A normalized criterion
+        (medical_condition, task, contrast.set) takes `ids`, the terms a normalizer mapped
+        the record's wording to, which match their descendants unless `descendants` is
+        false, and `text`, a pattern over the wording and the terms' labels; either may
+        match. `when_unmapped` decides the analyses whose record states the feature but
+        maps none of it. An analysis whose record is silent on a criterion does not match
+        it unless the criterion says `when_silent: include`. Nothing is stored; the
+        response names every selected analysis's study, for a studyset, and how it matched
+        each normalized criterion, and with `funnel` says what each criterion dropped.
       tags:
         - store
         - analyses
@@ -3476,6 +3479,94 @@ components:
             type: string
             minLength: 1
         - $ref: '#/components/schemas/analysis-query-values'
+    analysis-query-strings:
+      oneOf:
+        - type: string
+          minLength: 1
+        - type: array
+          minItems: 1
+          items:
+            type: string
+            minLength: 1
+    analysis-query-terms:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        ids:
+          $ref: '#/components/schemas/analysis-query-strings'
+        text:
+          $ref: '#/components/schemas/analysis-query-strings'
+    analysis-query-ids:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        ids:
+          $ref: '#/components/schemas/analysis-query-strings'
+    analysis-query-descendants:
+      type: boolean
+      default: true
+      description: Whether an id also matches the terms below it in its vocabulary.
+    analysis-query-normalized:
+      description: >
+        Text (a pattern, or a list of them, any of which may match), or ids and text.
+        `ids` and `text` are any-of, and either may match; `all` needs every one and
+        `none` refuses each. `when_unmapped` decides an analysis whose record states the
+        feature but maps none of it: `exclude`, `include`, or `text`, matching it by its
+        wording alone.
+      oneOf:
+        - $ref: '#/components/schemas/analysis-query-strings'
+        - type: object
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            ids:
+              $ref: '#/components/schemas/analysis-query-strings'
+            text:
+              $ref: '#/components/schemas/analysis-query-strings'
+            all:
+              $ref: '#/components/schemas/analysis-query-terms'
+            none:
+              $ref: '#/components/schemas/analysis-query-terms'
+            descendants:
+              $ref: '#/components/schemas/analysis-query-descendants'
+            when_unmapped:
+              type: string
+              enum:
+                - exclude
+                - include
+                - text
+              default: text
+            when_silent:
+              $ref: '#/components/schemas/analysis-query-when-silent'
+    analysis-query-normalized-ids:
+      description: >
+        Ids (an id, or a list of them, any of which may match), as
+        analysis-query-normalized without text. An analysis whose record states the
+        feature but maps none of it is excluded unless `when_unmapped` is `include`.
+      oneOf:
+        - $ref: '#/components/schemas/analysis-query-strings'
+        - type: object
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            ids:
+              $ref: '#/components/schemas/analysis-query-strings'
+            all:
+              $ref: '#/components/schemas/analysis-query-ids'
+            none:
+              $ref: '#/components/schemas/analysis-query-ids'
+            descendants:
+              $ref: '#/components/schemas/analysis-query-descendants'
+            when_unmapped:
+              type: string
+              enum:
+                - exclude
+                - include
+              default: exclude
+            when_silent:
+              $ref: '#/components/schemas/analysis-query-when-silent'
     analysis-query-boolean:
       oneOf:
         - type: boolean
@@ -3507,7 +3598,7 @@ components:
         has_patients, has_healthy) match when any group the analysis ran on matches.
       properties:
         medical_condition:
-          $ref: '#/components/schemas/analysis-query-text'
+          $ref: '#/components/schemas/analysis-query-normalized'
         has_patients:
           $ref: '#/components/schemas/analysis-query-boolean'
         has_healthy:
@@ -3515,7 +3606,7 @@ components:
         species:
           $ref: '#/components/schemas/analysis-query-text'
         task:
-          $ref: '#/components/schemas/analysis-query-text'
+          $ref: '#/components/schemas/analysis-query-normalized'
         spatial_scope:
           $ref: '#/components/schemas/analysis-query-text'
         coordinate_space:
@@ -3544,7 +3635,7 @@ components:
             negative:
               $ref: '#/components/schemas/analysis-query-text'
             set:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-normalized-ids'
             kind:
               $ref: '#/components/schemas/analysis-query-text'
             groups:
@@ -3601,7 +3692,9 @@ components:
         query:
           type: object
           additionalProperties: true
-          description: The query in canonical form, every criterion as any/all/none lists.
+          description: >
+            The query in canonical form: a normalized criterion as ids, text, all, none,
+            descendants, when_unmapped and when_silent, every other as any/all/none lists.
         counts:
           type: object
           properties:
@@ -3637,6 +3730,12 @@ components:
                 type: integer
                 nullable: true
                 description: Analyses left by the criteria before this one whose record says nothing on it.
+              unmapped:
+                type: integer
+                nullable: true
+                description: >
+                  For a normalized criterion, the analyses left by the criteria before this
+                  one whose record states the feature but maps none of it.
         results:
           type: array
           items:
@@ -3651,6 +3750,19 @@ components:
               name:
                 type: string
                 nullable: true
+              matched_by:
+                type: object
+                description: >
+                  How the analysis matched each normalized criterion, by its path
+                  (`medical_condition`, `or[0].task`): by id, by text, as unmapped or as
+                  silent (under `include`). Absent where it matched only through `none`.
+                additionalProperties:
+                  type: string
+                  enum:
+                    - id
+                    - text
+                    - unmapped
+                    - silent
               features:
                 type: object
                 additionalProperties: true
