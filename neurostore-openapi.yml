@@ -997,6 +997,8 @@ paths:
               - task_family
               - contrast_key
               - contrast_set
+              - contrast_positive_facet
+              - contrast_negative_facet
               - arm_kind
               - species
               - spatial_scope
@@ -3810,6 +3812,35 @@ components:
           type: number
         when_silent:
           $ref: '#/components/schemas/analysis-query-when-silent'
+    analysis-query-contrast-side:
+      description: >
+        Criteria on one side of the contrast: what the cells signed onto it carry, through
+        their factor levels. `name` is the side's text (its cells' labels or levels and
+        their conditions' names); has_patients, has_healthy and medical_condition read the
+        side's groups as the top-level criteria read the analysis's; `timepoint` is a
+        timepoint's relation_to_intervention, `arm_kind` an arm's kind, and `facet` one of
+        the side's contrast-key facets (`valence:negative`, `~wording`, a baseline kind
+        such as `fixation`). A text criterion in its place is shorthand for its `name`.
+      oneOf:
+        - $ref: '#/components/schemas/analysis-query-text'
+        - type: object
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            name:
+              $ref: '#/components/schemas/analysis-query-text'
+            has_patients:
+              $ref: '#/components/schemas/analysis-query-boolean'
+            has_healthy:
+              $ref: '#/components/schemas/analysis-query-boolean'
+            medical_condition:
+              $ref: '#/components/schemas/analysis-query-normalized'
+            timepoint:
+              $ref: '#/components/schemas/analysis-query-text'
+            arm_kind:
+              $ref: '#/components/schemas/analysis-query-text'
+            facet:
+              $ref: '#/components/schemas/analysis-query-text'
     analysis-query:
       type: object
       additionalProperties: false
@@ -3854,9 +3885,9 @@ components:
           minProperties: 1
           properties:
             positive:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-contrast-side'
             negative:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-contrast-side'
             key:
               description: >
                 ns-pond's contrast keys (family|target|baseline), deterministic from the
