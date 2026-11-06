@@ -23,6 +23,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Get User Info by User ID
       tags:
         - compose
@@ -58,6 +61,9 @@ paths:
   /users:
     parameters: []
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET list of Users
       responses:
         '200':
@@ -156,6 +162,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET meta-analysis information
       responses:
         '200':
@@ -214,6 +223,9 @@ paths:
         - JSON-Web-Token: []
   /snapshot-studysets:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Get a list of Studysets
       tags:
         - compose
@@ -275,6 +287,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Get information about a Studyset
       tags:
         - compose
@@ -323,6 +338,9 @@ paths:
       description: update an existing serialized/referenced studyset
   /snapshot-annotations:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET a list of annotations
       tags:
         - compose
@@ -383,6 +401,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET information about an annotation
       tags:
         - compose
@@ -431,6 +452,9 @@ paths:
       description: update an existing annotation
   /specifications:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Get a list of Specifications
       responses:
         '200':
@@ -492,6 +516,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Get information about a Specification
       responses:
         '200':
@@ -540,6 +567,9 @@ paths:
         - put
   /meta-analysis-results:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: List meta-analysis results
       tags:
         - compose
@@ -669,6 +699,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Get a meta-analysis result by ID
       tags:
         - compose
@@ -707,6 +740,9 @@ paths:
         - upload_key: []
   /neurovault-collections:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Get neurovault collections
       tags:
         - compose
@@ -743,6 +779,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Your GET endpoint
       tags:
         - compose
@@ -774,6 +813,9 @@ paths:
       x-internal: true
   /neurovault-files:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Your GET endpoint
       tags:
         - compose
@@ -818,6 +860,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Your GET endpoint
       tags:
         - compose
@@ -912,6 +957,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Your GET endpoint
       tags:
         - compose
@@ -961,6 +1009,9 @@ paths:
         - projects
   /neurostore-studies:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Your GET endpoint
       tags:
         - compose
@@ -998,6 +1049,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Your GET endpoint
       tags:
         - compose
@@ -1085,6 +1139,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Get information about a Tag
       tags:
         - compose
@@ -1099,6 +1156,9 @@ paths:
                 $ref: '#/components/schemas/tag-return'
   /neurostore-studysets:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: List Neurostore studyset references
       tags:
         - compose
@@ -1122,6 +1182,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Get a Neurostore studyset reference by Neurostore ID
       tags:
         - compose
@@ -1145,6 +1208,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Get a Neurostore annotation reference by Neurostore ID
       tags:
         - compose
@@ -1416,6 +1482,8 @@ components:
       properties:
         external_id:
           type: string
+          nullable: true
+          description: The user's Auth0 id, served only to that user; null for anyone else.
       description: attributes of the user object
       x-tags:
         - users
@@ -1439,7 +1507,7 @@ components:
           readOnly: true
         user:
           type: string
-          description: Who owns the resource.
+          description: The owner's Auth0 id, served only to the owner; null for anyone else, who sees `username`.
           nullable: true
         username:
           type: string

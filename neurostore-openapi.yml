@@ -616,6 +616,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET a studyset
       tags:
         - store
@@ -750,6 +753,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET a study
       tags:
         - store
@@ -808,6 +814,9 @@ paths:
         - studies
   /analyses/:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET list of analyses
       tags:
         - store
@@ -869,6 +878,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET an analysis
       tags:
         - store
@@ -1005,6 +1017,9 @@ paths:
                 $ref: '#/components/schemas/analysis-term-list'
   /tables/:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET list of tables
       tags:
         - store
@@ -1055,6 +1070,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET a table
       tags:
         - store
@@ -1107,6 +1125,9 @@ paths:
         - tables
   /points/:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Get Points
       tags:
         - store
@@ -1149,6 +1170,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET a point
       tags:
         - store
@@ -1199,6 +1223,9 @@ paths:
         - points
   /images/:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET a list of images
       tags:
         - store
@@ -1252,6 +1279,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET an image
       tags:
         - store
@@ -1305,6 +1335,9 @@ paths:
         - images
   /data-sources/:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET data sources
       tags:
         - store
@@ -1369,6 +1402,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET a data source
       tags:
         - store
@@ -1490,6 +1526,9 @@ paths:
           description: No journal has this id.
   /conditions/:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET Conditions
       tags:
         - store
@@ -1538,6 +1577,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: GET a condition
       tags:
         - store
@@ -1589,6 +1631,9 @@ paths:
   /annotations/:
     parameters: []
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Your GET endpoint
       tags:
         - store
@@ -1635,6 +1680,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Your GET endpoint
       tags:
         - store
@@ -1794,6 +1842,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Individual User Profile
       tags:
         - store
@@ -2048,6 +2099,9 @@ paths:
         in: path
         required: true
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Your GET endpoint
       tags:
         - store
@@ -2123,6 +2177,9 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /annotation-analyses/:
     get:
+      security:
+        - JSON-Web-Token: []
+        - {}
       summary: Get annotation analyses
       tags:
         - store
@@ -5559,7 +5616,7 @@ components:
       properties:
         user:
           type: string
-          description: who owns the resource
+          description: The owner's Auth0 id, served only to the owner; null for anyone else, who sees `username`.
           nullable: true
           readOnly: true
         username:
