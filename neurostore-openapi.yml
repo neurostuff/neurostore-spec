@@ -3514,7 +3514,7 @@ components:
         `ids` and `text` are any-of, and either may match; `all` needs every one and
         `none` refuses each. `when_unmapped` decides an analysis whose record states the
         feature but maps none of it: `exclude`, `include`, or `text`, matching it by its
-        wording alone.
+        wording alone, so a criterion without text excludes it.
       oneOf:
         - $ref: '#/components/schemas/analysis-query-strings'
         - type: object
@@ -3755,7 +3755,8 @@ components:
                 description: >
                   How the analysis matched each normalized criterion, by its path
                   (`medical_condition`, `or[0].task`): by id, by text, as unmapped or as
-                  silent (under `include`). Absent where it matched only through `none`.
+                  silent (under `include`). Absent where a mapped analysis matched only
+                  through `none`.
                 additionalProperties:
                   type: string
                   enum:
