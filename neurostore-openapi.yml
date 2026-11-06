@@ -929,8 +929,8 @@ paths:
         extraction record. Every criterion is optional and criteria combine with AND; a
         list means any of its values, and `or` takes sub-queries. Text criteria match whole
         words, case-insensitively, with `*` for any run of characters and `?` for one; a
-        pattern needs three consecutive letters or digits. A criterion with ids (diagnosis,
-        task, contrast set) also matches a value that is one of the analysis's ids. An
+        pattern needs three consecutive letters or digits. A criterion with ids
+        (medical_condition, task, contrast set) also matches a value that is one of the analysis's ids. An
         analysis whose record is silent on a criterion does not match it unless the
         criterion says `when_silent: include`. Nothing is stored; the response names every
         selected analysis's study, for a studyset, and with `funnel` says what each
@@ -971,7 +971,7 @@ paths:
           schema:
             type: string
             enum:
-              - diagnosis
+              - medical_condition
               - task
               - contrast_set
               - arm_kind
@@ -3503,10 +3503,10 @@ components:
       type: object
       additionalProperties: false
       description: >
-        Criteria on a pipeline analysis. Group criteria (diagnosis, species, has_patients,
-        has_healthy) match when any group the analysis ran on matches.
+        Criteria on a pipeline analysis. Group criteria (medical_condition, species,
+        has_patients, has_healthy) match when any group the analysis ran on matches.
       properties:
-        diagnosis:
+        medical_condition:
           $ref: '#/components/schemas/analysis-query-text'
         has_patients:
           $ref: '#/components/schemas/analysis-query-boolean'
@@ -5301,7 +5301,7 @@ components:
               items:
                 type: string
                 enum:
-                  - diagnosis
+                  - medical_condition
                   - task
                   - contrast
                   - contrast_set
