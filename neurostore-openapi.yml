@@ -1435,15 +1435,24 @@ paths:
         - $ref: '#/components/parameters/desc'
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/paginate'
-        - name: search
+        - name: title
           in: query
           required: false
           schema:
             type: string
-            minLength: 1
-          description: >-
-            Journals whose title or abbreviation contains these words, or one of whose ISSNs
-            equals it.
+          description: journals whose title contains this text
+        - name: abbreviation
+          in: query
+          required: false
+          schema:
+            type: string
+          description: journals whose abbreviation contains this text
+        - name: issn
+          in: query
+          required: false
+          schema:
+            type: string
+          description: the journal one of whose ISSNs (print or electronic) is this one
         - name: kind
           in: query
           required: false
