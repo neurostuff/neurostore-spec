@@ -929,12 +929,19 @@ paths:
         extraction record. Every criterion is optional and criteria combine with AND; a
         list means any of its values, and `or` takes sub-queries. Text criteria match whole
         words, case-insensitively, with `*` for any run of characters and `?` for one; a
-        pattern needs three consecutive letters or digits. A criterion with ids (diagnosis,
-        task, contrast set) also matches a value that is one of the analysis's ids. An
-        analysis whose record is silent on a criterion does not match it unless the
-        criterion says `when_silent: include`. Nothing is stored; the response names every
-        selected analysis's study, for a studyset, and with `funnel` says what each
-        criterion dropped.
+        pattern needs three consecutive letters or digits. A normalized criterion
+        (medical_condition, task, contrast.key, contrast.set) takes `ids`, the terms a
+        normalizer mapped the record's wording to, which match their descendants (a task
+        family its tasks, a family its contrast keys and sets) unless `descendants` is
+        false, and `text`, a pattern over the wording and the terms' labels; either may
+        match. Contrast keys and sets are directional: a term with `:reversed` is the
+        contrast stated the other way round. `when_unmapped` decides the analyses whose
+        record states the feature but maps none of it, excluded by default; a healthy
+        group's condition, or a value read as an absence, is silent. An analysis whose
+        record is silent on a criterion does not match
+        it unless the criterion says `when_silent: include`. Nothing is stored; the
+        response names every selected analysis's study, for a studyset, and how it matched
+        each normalized criterion, and with `funnel` says what each criterion dropped.
       tags:
         - store
         - analyses
@@ -959,8 +966,10 @@ paths:
     get:
       summary: The values an analysis query field takes
       description: >
-        Each value of one field across the pipeline analyses' features, with its label and
-        how many analyses and papers carry it, most common first.
+        Each value of one field across the pipeline analyses' features, with its label,
+        parent, children and synonyms and how many analyses and papers carry it, most
+        common first. A directional contrast key or set is listed in each direction it
+        occurs in.
       tags:
         - store
         - analyses
@@ -971,8 +980,10 @@ paths:
           schema:
             type: string
             enum:
-              - diagnosis
+              - medical_condition
               - task
+              - task_family
+              - contrast_key
               - contrast_set
               - arm_kind
               - species
@@ -986,7 +997,14 @@ paths:
               - blinding
         - in: query
           name: search
-          description: Keep the values or labels that contain this text, case-insensitively.
+          description: >
+            Keep the values whose id, label or a synonym contains this text,
+            case-insensitively.
+          schema:
+            type: string
+        - in: query
+          name: parent
+          description: Keep the values directly under this term.
           schema:
             type: string
         - in: query
@@ -3476,6 +3494,133 @@ components:
             type: string
             minLength: 1
         - $ref: '#/components/schemas/analysis-query-values'
+    analysis-query-strings:
+      oneOf:
+        - type: string
+          minLength: 1
+        - type: array
+          minItems: 1
+          items:
+            type: string
+            minLength: 1
+    analysis-query-terms:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        ids:
+          $ref: '#/components/schemas/analysis-query-strings'
+        text:
+          $ref: '#/components/schemas/analysis-query-strings'
+    analysis-query-ids:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        ids:
+          $ref: '#/components/schemas/analysis-query-strings'
+    analysis-query-descendants:
+      type: boolean
+      default: true
+      description: Whether an id also matches the terms below it in its vocabulary.
+    analysis-query-normalized:
+      description: >
+        Text (a pattern, or a list of them, any of which may match), or ids and text.
+        `ids` and `text` are any-of, and either may match; `all` needs every one and
+        `none` refuses each. `when_unmapped` decides an analysis whose record states the
+        feature but maps none of it: `exclude` (the default), `include`, or `text`,
+        matching it by its wording alone, so a criterion without text excludes it.
+      oneOf:
+        - $ref: '#/components/schemas/analysis-query-strings'
+        - type: object
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            ids:
+              $ref: '#/components/schemas/analysis-query-strings'
+            text:
+              $ref: '#/components/schemas/analysis-query-strings'
+            all:
+              $ref: '#/components/schemas/analysis-query-terms'
+            none:
+              $ref: '#/components/schemas/analysis-query-terms'
+            descendants:
+              $ref: '#/components/schemas/analysis-query-descendants'
+            when_unmapped:
+              type: string
+              enum:
+                - exclude
+                - include
+                - text
+              default: exclude
+            when_silent:
+              $ref: '#/components/schemas/analysis-query-when-silent'
+    analysis-query-medical-condition:
+      description: >
+        analysis-query-normalized, and `role` (primary, comorbid, none), which narrows the
+        ids to the conditions ns-pond gave that role; a criterion with a role takes ids
+        and no text.
+      oneOf:
+        - $ref: '#/components/schemas/analysis-query-strings'
+        - type: object
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            ids:
+              $ref: '#/components/schemas/analysis-query-strings'
+            text:
+              $ref: '#/components/schemas/analysis-query-strings'
+            all:
+              $ref: '#/components/schemas/analysis-query-terms'
+            none:
+              $ref: '#/components/schemas/analysis-query-terms'
+            descendants:
+              $ref: '#/components/schemas/analysis-query-descendants'
+            role:
+              oneOf:
+                - type: string
+                  enum: [primary, comorbid, none]
+                - type: array
+                  minItems: 1
+                  items:
+                    type: string
+                    enum: [primary, comorbid, none]
+            when_unmapped:
+              type: string
+              enum:
+                - exclude
+                - include
+                - text
+              default: exclude
+            when_silent:
+              $ref: '#/components/schemas/analysis-query-when-silent'
+    analysis-query-normalized-ids:
+      description: >
+        Ids (an id, or a list of them, any of which may match), as
+        analysis-query-normalized without text. An analysis whose record states the
+        feature but maps none of it is excluded unless `when_unmapped` is `include`.
+      oneOf:
+        - $ref: '#/components/schemas/analysis-query-strings'
+        - type: object
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            ids:
+              $ref: '#/components/schemas/analysis-query-strings'
+            all:
+              $ref: '#/components/schemas/analysis-query-ids'
+            none:
+              $ref: '#/components/schemas/analysis-query-ids'
+            descendants:
+              $ref: '#/components/schemas/analysis-query-descendants'
+            when_unmapped:
+              type: string
+              enum:
+                - exclude
+                - include
+              default: exclude
+            when_silent:
+              $ref: '#/components/schemas/analysis-query-when-silent'
     analysis-query-boolean:
       oneOf:
         - type: boolean
@@ -3503,11 +3648,14 @@ components:
       type: object
       additionalProperties: false
       description: >
-        Criteria on a pipeline analysis. Group criteria (diagnosis, species, has_patients,
-        has_healthy) match when any group the analysis ran on matches.
+        Criteria on a pipeline analysis. Group criteria (medical_condition, species,
+        has_patients, has_healthy) match when any group the analysis ran on matches.
       properties:
-        diagnosis:
+        name:
+          description: The analysis's name as its record gives it.
           $ref: '#/components/schemas/analysis-query-text'
+        medical_condition:
+          $ref: '#/components/schemas/analysis-query-medical-condition'
         has_patients:
           $ref: '#/components/schemas/analysis-query-boolean'
         has_healthy:
@@ -3515,7 +3663,7 @@ components:
         species:
           $ref: '#/components/schemas/analysis-query-text'
         task:
-          $ref: '#/components/schemas/analysis-query-text'
+          $ref: '#/components/schemas/analysis-query-normalized'
         spatial_scope:
           $ref: '#/components/schemas/analysis-query-text'
         coordinate_space:
@@ -3543,8 +3691,16 @@ components:
               $ref: '#/components/schemas/analysis-query-text'
             negative:
               $ref: '#/components/schemas/analysis-query-text'
+            key:
+              description: >
+                ns-pond's contrast keys (family|target|baseline), deterministic from the
+                record; `:reversed` for the contrast stated the other way round.
+              $ref: '#/components/schemas/analysis-query-normalized-ids'
             set:
-              $ref: '#/components/schemas/analysis-query-text'
+              description: >
+                Contrast sets of one fit; `#n` for the set's stated direction,
+                `#n:reversed` for its reversed members.
+              $ref: '#/components/schemas/analysis-query-normalized-ids'
             kind:
               $ref: '#/components/schemas/analysis-query-text'
             groups:
@@ -3601,7 +3757,9 @@ components:
         query:
           type: object
           additionalProperties: true
-          description: The query in canonical form, every criterion as any/all/none lists.
+          description: >
+            The query in canonical form: a normalized criterion as ids, text, all, none,
+            descendants, when_unmapped and when_silent, every other as any/all/none lists.
         counts:
           type: object
           properties:
@@ -3637,6 +3795,12 @@ components:
                 type: integer
                 nullable: true
                 description: Analyses left by the criteria before this one whose record says nothing on it.
+              unmapped:
+                type: integer
+                nullable: true
+                description: >
+                  For a normalized criterion, the analyses left by the criteria before this
+                  one whose record states the feature but maps none of it.
         results:
           type: array
           items:
@@ -3651,6 +3815,20 @@ components:
               name:
                 type: string
                 nullable: true
+              matched_by:
+                type: object
+                description: >
+                  How the analysis matched each normalized criterion, by its path
+                  (`medical_condition`, `or[0].task`): by id, by text, as unmapped or as
+                  silent (under `include`). Absent where a mapped analysis matched only
+                  through `none`.
+                additionalProperties:
+                  type: string
+                  enum:
+                    - id
+                    - text
+                    - unmapped
+                    - silent
               features:
                 type: object
                 additionalProperties: true
@@ -3671,6 +3849,19 @@ components:
               label:
                 type: string
                 nullable: true
+              parent:
+                type: string
+                nullable: true
+                description: The term directly above it (a task's or a contrast's family).
+              children:
+                type: array
+                items:
+                  type: string
+                description: The terms directly under it.
+              synonyms:
+                type: array
+                items:
+                  type: string
               analyses:
                 type: integer
               base_studies:
@@ -5288,7 +5479,10 @@ components:
             Run an analysis query over the annotation's studyset and write its result into
             the notes: `column` (boolean) is true for each analysis the query selects and
             false for every other, and each of `feature_columns` (string) carries that
-            analysis's feature, or null where its record says nothing.
+            analysis's feature, or null where its record says nothing. The annotation's
+            `metadata.analysis_queries.<column>` keeps the selection frozen: the canonical
+            query, the selected analysis ids, the normalizers and fits (`mapping_tools`)
+            their features came from, and when.
           properties:
             query:
               $ref: '#/components/schemas/analysis-query'
@@ -5301,9 +5495,10 @@ components:
               items:
                 type: string
                 enum:
-                  - diagnosis
+                  - medical_condition
                   - task
                   - contrast
+                  - contrast_key
                   - contrast_set
                   - spatial_scope
                   - measure_type
