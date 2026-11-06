@@ -1033,6 +1033,115 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/analysis-term-list'
+  /query/:
+    get:
+      summary: The datasets a public query reads
+      description: >
+        Every dataset a public query can read, with its columns, their types, and whether
+        each may be grouped and aggregated. A dataset holds public records only and is
+        refreshed nightly; `refreshed_at` says when.
+      tags:
+        - store
+        - query
+      security:
+        - JSON-Web-Token: []
+        - {}
+      responses:
+        '200':
+          description: The datasets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/query-dataset-list'
+  '/query/{dataset}':
+    parameters:
+      - schema:
+          type: string
+        name: dataset
+        in: path
+        required: true
+        description: A dataset named by `GET /query/`.
+    get:
+      summary: Run an aggregate query over one dataset
+      description: >
+        A subset of Socrata's SoQL. Each parameter takes an expression over the dataset's
+        columns: literals, `= != < <= > >= + -`, `AND OR NOT`, `IS [NOT] NULL`,
+        `[NOT] IN (…)`, `BETWEEN … AND …`, `LIKE` and `starts_with(column, 'text')`;
+        the aggregates `count(*)`, `count(column)`, `count(distinct column)`, `sum`, `avg`,
+        `min` and `max`; and `date_trunc_y`, `date_trunc_ym`, `date_extract_y`, `lower`,
+        `upper`, `coalesce` and `case(condition, value, …)`. Nothing else compiles. A
+        query whose planned cost exceeds the caller's limit is refused; an API key with
+        `read` scope has a higher limit.
+      tags:
+        - store
+        - query
+      security:
+        - JSON-Web-Token: []
+        - {}
+      parameters:
+        - in: query
+          name: $select
+          description: Comma-separated expressions, each optionally `AS alias`; `*` for every column.
+          schema:
+            type: string
+        - in: query
+          name: $where
+          description: A condition over columns; no aggregates.
+          schema:
+            type: string
+        - in: query
+          name: $group
+          description: Comma-separated columns, expressions or `$select` aliases.
+          schema:
+            type: string
+        - in: query
+          name: $having
+          description: A condition over aggregates and `$select` aliases.
+          schema:
+            type: string
+        - in: query
+          name: $order
+          description: Comma-separated expressions or aliases, each optionally `ASC` or `DESC`.
+          schema:
+            type: string
+        - in: query
+          name: $limit
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000
+            default: 100
+        - in: query
+          name: $offset
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10000
+            default: 0
+        - in: query
+          name: $q
+          description: Words to search for in titles and abstracts, as base-study search reads them; `base-studies` only.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The rows
+          headers:
+            ETag:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/query-result'
+        '304':
+          description: Unchanged since the ETag sent in `If-None-Match`
+        '400':
+          description: The query does not parse, or names something outside the dataset
+        '422':
+          description: The query's planned cost exceeds the caller's limit, or it ran past the time limit
+        '503':
+          description: Too many queries are running; retry after the `Retry-After` header's seconds
   /tables/:
     get:
       security:
@@ -3893,6 +4002,82 @@ components:
           type: array
           items:
             type: string
+    query-dataset-list:
+      title: query-dataset-list
+      type: object
+      properties:
+        refreshed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the datasets were last refreshed.
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/query-dataset'
+    query-dataset:
+      title: query-dataset
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        key:
+          type: array
+          description: The columns that identify a row.
+          items:
+            type: string
+        columns:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+                enum:
+                  - text
+                  - integer
+                  - boolean
+                  - timestamp
+              description:
+                type: string
+    query-result:
+      title: query-result
+      type: object
+      properties:
+        dataset:
+          type: string
+        query:
+          type: object
+          description: The query as it was read, one key per `$` parameter given.
+          additionalProperties:
+            type: string
+        columns:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+        rows:
+          type: array
+          description: One array per row, in the order of `columns`.
+          items:
+            type: array
+            items: {}
+        limit:
+          type: integer
+        offset:
+          type: integer
+        refreshed_at:
+          type: string
+          format: date-time
+          nullable: true
     analysis-term-list:
       type: object
       properties:
