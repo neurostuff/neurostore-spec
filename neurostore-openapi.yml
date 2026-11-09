@@ -954,6 +954,9 @@ paths:
         it unless the criterion says `when_silent: include`. Nothing is stored; the
         response names every selected analysis's study, for a studyset, and how it matched
         each normalized criterion, and with `funnel` says what each criterion dropped.
+        `base_study_ids` or `study_ids` restrict everything to those papers or studies,
+        so an empty query with them returns their analyses' features; `offset` and
+        `next_offset` page through the listing.
       tags:
         - store
         - analyses
@@ -3941,6 +3944,31 @@ components:
           maximum: 1000
           default: 100
           description: How many selected analyses to list; counts and study_ids cover them all.
+        offset:
+          type: integer
+          minimum: 0
+          default: 0
+          description: >
+            How many selected analyses to skip before listing `limit` of them, in the
+            listing's order (by paper, then analysis). With `next_offset`, pages through a
+            selection larger than one listing.
+        base_study_ids:
+          type: array
+          maxItems: 1000
+          items:
+            type: string
+          description: >
+            Only the analyses of these papers. Counts, `study_ids` and the funnel cover the
+            same restricted set, so an empty query lists every analysis with features that
+            these papers have.
+        study_ids:
+          type: array
+          maxItems: 1000
+          items:
+            type: string
+          description: >
+            Only the analyses of these studies (the pipeline studies `study_ids` names).
+            With `base_study_ids`, an analysis must be in both.
         funnel:
           type: boolean
           default: false
@@ -4033,6 +4061,12 @@ components:
           type: array
           items:
             type: string
+        next_offset:
+          type: integer
+          nullable: true
+          description: >
+            The `offset` that lists the next selected analyses, or null when this listing
+            reaches the last of them.
     query-dataset-list:
       title: query-dataset-list
       type: object
