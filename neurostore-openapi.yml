@@ -3921,6 +3921,208 @@ components:
               $ref: '#/components/schemas/analysis-query-text'
             longitudinal:
               $ref: '#/components/schemas/analysis-query-boolean'
+        sample:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: >
+            The groups the analysis ran on; a criterion on an item of each group (an age)
+            matches when any group's does. Ages are in years; counts are summed over the
+            groups.
+          properties:
+            age_mean:
+              $ref: '#/components/schemas/analysis-query-range'
+            age_sd:
+              $ref: '#/components/schemas/analysis-query-range'
+            age_min:
+              $ref: '#/components/schemas/analysis-query-range'
+            age_max:
+              $ref: '#/components/schemas/analysis-query-range'
+            age_median:
+              $ref: '#/components/schemas/analysis-query-range'
+            female_count:
+              $ref: '#/components/schemas/analysis-query-range'
+            male_count:
+              $ref: '#/components/schemas/analysis-query-range'
+            female_percent:
+              $ref: '#/components/schemas/analysis-query-range'
+            handedness:
+              $ref: '#/components/schemas/analysis-query-text'
+            enrolled_count:
+              $ref: '#/components/schemas/analysis-query-range'
+            acquired_count:
+              $ref: '#/components/schemas/analysis-query-range'
+            excluded_count:
+              $ref: '#/components/schemas/analysis-query-range'
+            diagnostic_instrument:
+              $ref: '#/components/schemas/analysis-query-text'
+            diagnostic_system:
+              $ref: '#/components/schemas/analysis-query-text'
+            clinical_characteristics:
+              $ref: '#/components/schemas/analysis-query-text'
+            education:
+              $ref: '#/components/schemas/analysis-query-text'
+        inference:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: >
+            The analysis's inference settings.
+          properties:
+            level:
+              $ref: '#/components/schemas/analysis-query-text'
+            height_threshold:
+              $ref: '#/components/schemas/analysis-query-range'
+            height_threshold_type:
+              $ref: '#/components/schemas/analysis-query-text'
+            cluster_extent:
+              $ref: '#/components/schemas/analysis-query-range'
+            cluster_threshold:
+              $ref: '#/components/schemas/analysis-query-range'
+            correction:
+              $ref: '#/components/schemas/analysis-query-text'
+            correction_scope:
+              $ref: '#/components/schemas/analysis-query-text'
+            alpha:
+              $ref: '#/components/schemas/analysis-query-range'
+            tfce:
+              $ref: '#/components/schemas/analysis-query-boolean'
+            permutations:
+              $ref: '#/components/schemas/analysis-query-range'
+        acquisition:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: >
+            The analysis's acquisitions; a criterion on a number matches when any
+            acquisition's does. Field strength in tesla, repetition and echo time in
+            seconds, voxel size as the largest dimension in millimetres.
+          properties:
+            modality:
+              $ref: '#/components/schemas/analysis-query-text'
+            field_strength:
+              $ref: '#/components/schemas/analysis-query-range'
+            repetition_time:
+              $ref: '#/components/schemas/analysis-query-range'
+            echo_time:
+              $ref: '#/components/schemas/analysis-query-range'
+            voxel_size:
+              $ref: '#/components/schemas/analysis-query-range'
+            scanner:
+              $ref: '#/components/schemas/analysis-query-text'
+        preprocessing:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: >
+            The preprocessing of the analysis's model and of the models it takes inputs
+            from. Smoothing FWHM in millimetres.
+          properties:
+            smoothing_fwhm:
+              $ref: '#/components/schemas/analysis-query-range'
+            software:
+              $ref: '#/components/schemas/analysis-query-text'
+            steps:
+              $ref: '#/components/schemas/analysis-query-text'
+        model:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: >
+            The analysis's model estimation and the models it takes inputs from.
+          properties:
+            family:
+              $ref: '#/components/schemas/analysis-query-text'
+            type:
+              $ref: '#/components/schemas/analysis-query-text'
+            software:
+              $ref: '#/components/schemas/analysis-query-text'
+            hrf:
+              $ref: '#/components/schemas/analysis-query-text'
+            estimator:
+              $ref: '#/components/schemas/analysis-query-text'
+            term:
+              $ref: '#/components/schemas/analysis-query-text'
+            term_type:
+              $ref: '#/components/schemas/analysis-query-text'
+        statistic:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: >
+            The statistic the analysis reports.
+          properties:
+            family:
+              $ref: '#/components/schemas/analysis-query-text'
+            df_numerator:
+              $ref: '#/components/schemas/analysis-query-range'
+            df_denominator:
+              $ref: '#/components/schemas/analysis-query-range'
+        connectivity:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: >
+            A connectivity analysis's method and inference target, and its seed and target
+            regions' names.
+          properties:
+            method:
+              $ref: '#/components/schemas/analysis-query-text'
+            inference_target:
+              $ref: '#/components/schemas/analysis-query-text'
+            seed:
+              $ref: '#/components/schemas/analysis-query-text'
+            target:
+              $ref: '#/components/schemas/analysis-query-text'
+        region:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: >
+            The regions the analysis names, its seeds and targets, and its coordinate sets'
+            regions.
+          properties:
+            name:
+              $ref: '#/components/schemas/analysis-query-text'
+            atlas:
+              $ref: '#/components/schemas/analysis-query-text'
+            type:
+              $ref: '#/components/schemas/analysis-query-text'
+            definition:
+              $ref: '#/components/schemas/analysis-query-text'
+        coordinates:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: >
+            The coordinate sets that name the analysis.
+          properties:
+            role:
+              $ref: '#/components/schemas/analysis-query-text'
+            result_kind:
+              $ref: '#/components/schemas/analysis-query-text'
+            anchor_kind:
+              $ref: '#/components/schemas/analysis-query-text'
+        task_details:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: >
+            The analysis's tasks beyond their paradigm: stimuli and stimulus content,
+            modalities, design, instructions and performance measures.
+          properties:
+            stimuli:
+              $ref: '#/components/schemas/analysis-query-text'
+            stimulus_modality:
+              $ref: '#/components/schemas/analysis-query-text'
+            response_modality:
+              $ref: '#/components/schemas/analysis-query-text'
+            design_type:
+              $ref: '#/components/schemas/analysis-query-text'
+            instructions:
+              $ref: '#/components/schemas/analysis-query-text'
+            performance:
+              $ref: '#/components/schemas/analysis-query-text'
         or:
           type: array
           minItems: 2
