@@ -4075,7 +4075,24 @@ components:
                     features:
                       type: object
                       additionalProperties: true
-                      description: Only when `detail` is `features`.
+                      description: >
+                        Only when `detail` is `features`. The analysis's display and the
+                        `analysis_features` columns its criteria read, named as stored
+                        (`is_meta_analysis`, `species`, `task_ids`, `task_family_ids`,
+                        `arm_kinds`, `contrast_positive_timepoints`), with the extraction
+                        they were read from.
+                      properties:
+                        config_id:
+                          type: string
+                          nullable: true
+                          description: The pipeline config of the record the features were read from.
+                        updated_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          description: >
+                            When the features were last written. Every re-ingest of the
+                            paper rewrites them, changed or not.
     query-dataset-list:
       title: query-dataset-list
       type: object
