@@ -4285,7 +4285,7 @@ components:
                         `species`, `task_ids`, `medical_condition_role_ids`, `arm_kinds`,
                         `contrast_positive_timepoints`, and the analysis's `role` and
                         `has_coordinates`), with `task_family_ids` and the extraction they
-                        were read from.
+                        were read from. A column the record is silent on is absent.
                       properties:
                         config_id:
                           type: string
