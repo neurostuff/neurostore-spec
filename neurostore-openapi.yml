@@ -3969,6 +3969,7 @@ components:
           type: array
           items:
             type: string
+            minLength: 1
           description: >
             Only the analyses of these papers. The counts, results and funnel cover the
             same restricted set, so an empty query lists every analysis with features that
@@ -3977,6 +3978,7 @@ components:
           type: array
           items:
             type: string
+            minLength: 1
           description: >
             Only the analyses of these studies (the pipeline studies the results name).
             With `base_study_ids`, an analysis must be in both.
@@ -4076,11 +4078,12 @@ components:
                       type: object
                       additionalProperties: true
                       description: >
-                        Only when `detail` is `features`. The analysis's display and the
-                        `analysis_features` columns its criteria read, named as stored
-                        (`is_meta_analysis`, `species`, `task_ids`, `task_family_ids`,
-                        `arm_kinds`, `contrast_positive_timepoints`), with the extraction
-                        they were read from.
+                        Only when `detail` is `features`. The analysis's display and every
+                        column its criteria read, named as stored (`is_meta_analysis`,
+                        `species`, `task_ids`, `medical_condition_role_ids`, `arm_kinds`,
+                        `contrast_positive_timepoints`, and the analysis's `role` and
+                        `has_coordinates`), with `task_family_ids` and the extraction they
+                        were read from.
                       properties:
                         config_id:
                           type: string
