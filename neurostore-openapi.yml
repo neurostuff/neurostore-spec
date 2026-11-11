@@ -4298,6 +4298,15 @@ components:
                           - text
                           - unmapped
                           - silent
+                    role:
+                      type: string
+                      nullable: true
+                      description: >
+                        With `features`, the analysis's coordinate role (the `role`
+                        criterion), which a review can change apart from its features.
+                    has_coordinates:
+                      type: boolean
+                      description: With `features`, whether the analysis has coordinates.
                     config_id:
                       type: string
                       nullable: true
@@ -4373,10 +4382,6 @@ components:
           type: boolean
         n:
           type: integer
-        has_coordinates:
-          type: boolean
-        role:
-          type: string
         contrast:
           type: object
           properties:
