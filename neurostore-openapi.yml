@@ -997,12 +997,11 @@ paths:
             enum:
               - medical_condition
               - task
-              - task_family
               - contrast_key
               - contrast_set
+              - arm_kind
               - contrast_positive_facet
               - contrast_negative_facet
-              - arm_kind
               - species
               - spatial_scope
               - measure_type
@@ -1012,6 +1011,22 @@ paths:
               - allocation
               - assignment_structure
               - blinding
+              - groups.handedness
+              - inference_settings.correction_scope
+              - acquisitions.modality
+              - model_estimation.terms.type
+              - effect.statistic.family
+              - details.connectivity_method
+              - details.inference_target
+              - regions.region_type
+              - regions.definition_method
+              - coordinate_sets.role
+              - coordinate_sets.result_kind
+              - coordinate_sets.anchor_kind
+              - tasks.stimulus_modality
+              - tasks.response_modality
+              - tasks.design_type
+              - task_family
         - in: query
           name: search
           description: >
@@ -3665,6 +3680,19 @@ components:
             type: string
             minLength: 1
         - $ref: '#/components/schemas/analysis-query-values'
+    analysis-query-value:
+      description: >
+        Values matched whole: a value, a list of values (any of them), or any/all/none
+        lists. Unlike a text criterion, no pattern and no minimum length.
+      oneOf:
+        - type: string
+          minLength: 1
+        - type: array
+          minItems: 1
+          items:
+            type: string
+            minLength: 1
+        - $ref: '#/components/schemas/analysis-query-values'
     analysis-query-strings:
       oneOf:
         - type: string
@@ -3839,11 +3867,11 @@ components:
             medical_condition:
               $ref: '#/components/schemas/analysis-query-normalized'
             timepoint:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-value'
             arm_kind:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-value'
             facet:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-value'
     analysis-query:
       type: object
       additionalProperties: false
@@ -3861,19 +3889,19 @@ components:
         has_healthy:
           $ref: '#/components/schemas/analysis-query-boolean'
         species:
-          $ref: '#/components/schemas/analysis-query-text'
+          $ref: '#/components/schemas/analysis-query-value'
         task:
           $ref: '#/components/schemas/analysis-query-normalized'
         spatial_scope:
-          $ref: '#/components/schemas/analysis-query-text'
+          $ref: '#/components/schemas/analysis-query-value'
         coordinate_space:
           $ref: '#/components/schemas/analysis-query-text'
         measure_type:
-          $ref: '#/components/schemas/analysis-query-text'
+          $ref: '#/components/schemas/analysis-query-value'
         measure_family:
-          $ref: '#/components/schemas/analysis-query-text'
+          $ref: '#/components/schemas/analysis-query-value'
         details_type:
-          $ref: '#/components/schemas/analysis-query-text'
+          $ref: '#/components/schemas/analysis-query-value'
         is_meta_analysis:
           $ref: '#/components/schemas/analysis-query-boolean'
         n:
@@ -3881,7 +3909,7 @@ components:
         has_coordinates:
           $ref: '#/components/schemas/analysis-query-boolean'
         role:
-          $ref: '#/components/schemas/analysis-query-text'
+          $ref: '#/components/schemas/analysis-query-value'
         contrast:
           type: object
           additionalProperties: false
@@ -3902,7 +3930,7 @@ components:
                 `#n:reversed` for its reversed members.
               $ref: '#/components/schemas/analysis-query-normalized-ids'
             kind:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-value'
             groups:
               description: between (more than one group) or within (one group).
               $ref: '#/components/schemas/analysis-query-text'
@@ -3912,31 +3940,90 @@ components:
           minProperties: 1
           properties:
             allocation:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-value'
             assignment_structure:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-value'
             blinding:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-value'
             arm_kind:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-value'
             longitudinal:
               $ref: '#/components/schemas/analysis-query-boolean'
-        sample:
+        acquisitions:
           type: object
           additionalProperties: false
           minProperties: 1
-          description: >
-            The groups the analysis ran on; a criterion on an item of each group (an age)
-            matches when any group's does. Ages are in years; counts are summed over the
-            groups.
+          description: The analysis's acquisitions; a number matches when any acquisition's does. The voxel size is an acquisition's largest dimension.
+          properties:
+            modality:
+              $ref: '#/components/schemas/analysis-query-value'
+            magnetic_field_strength_tesla:
+              $ref: '#/components/schemas/analysis-query-range'
+            repetition_time_seconds:
+              $ref: '#/components/schemas/analysis-query-range'
+            echo_time_seconds:
+              $ref: '#/components/schemas/analysis-query-range'
+            acquisition_voxel_size_mm:
+              $ref: '#/components/schemas/analysis-query-range'
+            device:
+              $ref: '#/components/schemas/analysis-query-text'
+        coordinate_sets:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: The coordinate sets that name the analysis.
+          properties:
+            role:
+              $ref: '#/components/schemas/analysis-query-value'
+            result_kind:
+              $ref: '#/components/schemas/analysis-query-value'
+            anchor_kind:
+              $ref: '#/components/schemas/analysis-query-value'
+        details:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: A connectivity analysis's details; regions by their names.
+          properties:
+            connectivity_method:
+              $ref: '#/components/schemas/analysis-query-value'
+            inference_target:
+              $ref: '#/components/schemas/analysis-query-value'
+            seed_regions:
+              $ref: '#/components/schemas/analysis-query-text'
+            target_regions:
+              $ref: '#/components/schemas/analysis-query-text'
+        effect:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: The analysis's effect.
+          properties:
+            statistic:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              description: The statistic the analysis reports.
+              properties:
+                family:
+                  $ref: '#/components/schemas/analysis-query-value'
+                degrees_of_freedom_numerator:
+                  $ref: '#/components/schemas/analysis-query-range'
+                degrees_of_freedom_denominator:
+                  $ref: '#/components/schemas/analysis-query-range'
+        groups:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: The groups the analysis ran on; a number with an item per group (an age) matches when any group's does. Ages are in years; counts are summed over the groups; the female share is of those whose sex (or, where only that is reported, gender) is counted.
           properties:
             age_mean:
               $ref: '#/components/schemas/analysis-query-range'
-            age_sd:
+            age_standard_deviation:
               $ref: '#/components/schemas/analysis-query-range'
-            age_min:
+            age_minimum:
               $ref: '#/components/schemas/analysis-query-range'
-            age_max:
+            age_maximum:
               $ref: '#/components/schemas/analysis-query-range'
             age_median:
               $ref: '#/components/schemas/analysis-query-range'
@@ -3947,7 +4034,7 @@ components:
             female_percent:
               $ref: '#/components/schemas/analysis-query-range'
             handedness:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-value'
             enrolled_count:
               $ref: '#/components/schemas/analysis-query-range'
             acquired_count:
@@ -3960,168 +4047,103 @@ components:
               $ref: '#/components/schemas/analysis-query-text'
             clinical_characteristics:
               $ref: '#/components/schemas/analysis-query-text'
-            education:
+            education_summary:
               $ref: '#/components/schemas/analysis-query-text'
-        inference:
+        inference_settings:
           type: object
           additionalProperties: false
           minProperties: 1
-          description: >
-            The analysis's inference settings.
+          description: The analysis's inference settings.
           properties:
-            level:
+            inference_level:
               $ref: '#/components/schemas/analysis-query-text'
-            height_threshold:
+            height_threshold_value:
               $ref: '#/components/schemas/analysis-query-range'
             height_threshold_type:
               $ref: '#/components/schemas/analysis-query-text'
-            cluster_extent:
+            cluster_extent_threshold:
               $ref: '#/components/schemas/analysis-query-range'
-            cluster_threshold:
+            clusterwise_threshold_value:
               $ref: '#/components/schemas/analysis-query-range'
-            correction:
+            multiple_comparison_method:
               $ref: '#/components/schemas/analysis-query-text'
             correction_scope:
-              $ref: '#/components/schemas/analysis-query-text'
-            alpha:
+              $ref: '#/components/schemas/analysis-query-value'
+            alpha_level:
               $ref: '#/components/schemas/analysis-query-range'
-            tfce:
+            tfce_used:
               $ref: '#/components/schemas/analysis-query-boolean'
-            permutations:
+            permutation_count:
               $ref: '#/components/schemas/analysis-query-range'
-        acquisition:
+        model_estimation:
           type: object
           additionalProperties: false
           minProperties: 1
-          description: >
-            The analysis's acquisitions; a criterion on a number matches when any
-            acquisition's does. Field strength in tesla, repetition and echo time in
-            seconds, voxel size as the largest dimension in millimetres.
+          description: The analysis's model estimation and the models it takes inputs from.
           properties:
-            modality:
+            model_family:
               $ref: '#/components/schemas/analysis-query-text'
-            field_strength:
-              $ref: '#/components/schemas/analysis-query-range'
-            repetition_time:
-              $ref: '#/components/schemas/analysis-query-range'
-            echo_time:
-              $ref: '#/components/schemas/analysis-query-range'
-            voxel_size:
-              $ref: '#/components/schemas/analysis-query-range'
-            scanner:
+            model_type:
               $ref: '#/components/schemas/analysis-query-text'
+            software:
+              $ref: '#/components/schemas/analysis-query-text'
+            hrf_model:
+              $ref: '#/components/schemas/analysis-query-text'
+            estimator:
+              $ref: '#/components/schemas/analysis-query-text'
+            terms:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              description: Those models' terms.
+              properties:
+                name:
+                  $ref: '#/components/schemas/analysis-query-text'
+                type:
+                  $ref: '#/components/schemas/analysis-query-value'
         preprocessing:
           type: object
           additionalProperties: false
           minProperties: 1
-          description: >
-            The preprocessing of the analysis's model and of the models it takes inputs
-            from. Smoothing FWHM in millimetres.
+          description: The preprocessing of the analysis's model and of the models it takes inputs from.
           properties:
-            smoothing_fwhm:
+            smoothing_fwhm_mm:
               $ref: '#/components/schemas/analysis-query-range'
             software:
               $ref: '#/components/schemas/analysis-query-text'
             steps:
               $ref: '#/components/schemas/analysis-query-text'
-        model:
+        regions:
           type: object
           additionalProperties: false
           minProperties: 1
-          description: >
-            The analysis's model estimation and the models it takes inputs from.
-          properties:
-            family:
-              $ref: '#/components/schemas/analysis-query-text'
-            type:
-              $ref: '#/components/schemas/analysis-query-text'
-            software:
-              $ref: '#/components/schemas/analysis-query-text'
-            hrf:
-              $ref: '#/components/schemas/analysis-query-text'
-            estimator:
-              $ref: '#/components/schemas/analysis-query-text'
-            term:
-              $ref: '#/components/schemas/analysis-query-text'
-            term_type:
-              $ref: '#/components/schemas/analysis-query-text'
-        statistic:
-          type: object
-          additionalProperties: false
-          minProperties: 1
-          description: >
-            The statistic the analysis reports.
-          properties:
-            family:
-              $ref: '#/components/schemas/analysis-query-text'
-            df_numerator:
-              $ref: '#/components/schemas/analysis-query-range'
-            df_denominator:
-              $ref: '#/components/schemas/analysis-query-range'
-        connectivity:
-          type: object
-          additionalProperties: false
-          minProperties: 1
-          description: >
-            A connectivity analysis's method and inference target, and its seed and target
-            regions' names.
-          properties:
-            method:
-              $ref: '#/components/schemas/analysis-query-text'
-            inference_target:
-              $ref: '#/components/schemas/analysis-query-text'
-            seed:
-              $ref: '#/components/schemas/analysis-query-text'
-            target:
-              $ref: '#/components/schemas/analysis-query-text'
-        region:
-          type: object
-          additionalProperties: false
-          minProperties: 1
-          description: >
-            The regions the analysis names, its seeds and targets, and its coordinate sets'
-            regions.
+          description: The regions the analysis names, its seeds and targets, and its coordinate sets' regions.
           properties:
             name:
               $ref: '#/components/schemas/analysis-query-text'
             atlas:
               $ref: '#/components/schemas/analysis-query-text'
-            type:
-              $ref: '#/components/schemas/analysis-query-text'
-            definition:
-              $ref: '#/components/schemas/analysis-query-text'
-        coordinates:
+            region_type:
+              $ref: '#/components/schemas/analysis-query-value'
+            definition_method:
+              $ref: '#/components/schemas/analysis-query-value'
+        tasks:
           type: object
           additionalProperties: false
           minProperties: 1
-          description: >
-            The coordinate sets that name the analysis.
-          properties:
-            role:
-              $ref: '#/components/schemas/analysis-query-text'
-            result_kind:
-              $ref: '#/components/schemas/analysis-query-text'
-            anchor_kind:
-              $ref: '#/components/schemas/analysis-query-text'
-        task_details:
-          type: object
-          additionalProperties: false
-          minProperties: 1
-          description: >
-            The analysis's tasks beyond their paradigm: stimuli and stimulus content,
-            modalities, design, instructions and performance measures.
+          description: The analysis's tasks beyond their paradigm; stimuli include their stimulus content.
           properties:
             stimuli:
               $ref: '#/components/schemas/analysis-query-text'
             stimulus_modality:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-value'
             response_modality:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-value'
             design_type:
-              $ref: '#/components/schemas/analysis-query-text'
+              $ref: '#/components/schemas/analysis-query-value'
             instructions:
               $ref: '#/components/schemas/analysis-query-text'
-            performance:
+            performance_measures:
               $ref: '#/components/schemas/analysis-query-text'
         or:
           type: array
@@ -4276,28 +4298,432 @@ components:
                           - text
                           - unmapped
                           - silent
-                    features:
-                      type: object
-                      additionalProperties: true
+                    config_id:
+                      type: string
+                      nullable: true
+                      description: With `features`, the pipeline config of the record they were read from.
+                    updated_at:
+                      type: string
+                      format: date-time
+                      nullable: true
                       description: >
-                        Only when `detail` is `features`. The analysis's display and every
-                        column its criteria read, named as stored (`is_meta_analysis`,
-                        `species`, `task_ids`, `medical_condition_role_ids`, `arm_kinds`,
-                        `contrast_positive_timepoints`, and the analysis's `role` and
-                        `has_coordinates`), with `task_family_ids` and the extraction they
-                        were read from. A column the record is silent on is absent.
-                      properties:
-                        config_id:
-                          type: string
-                          nullable: true
-                          description: The pipeline config of the record the features were read from.
-                        updated_at:
-                          type: string
-                          format: date-time
-                          nullable: true
-                          description: >
-                            When the features were last written. Every re-ingest of the
-                            paper rewrites them, changed or not.
+                        With `features`, when they were last written. Every re-ingest of the
+                        paper rewrites them, changed or not.
+                    features:
+                      $ref: '#/components/schemas/analysis-features'
+
+    analysis-features:
+      type: object
+      description: >
+        Only when `detail` is `features`: what the analysis's record says, in the shape of
+        the query, each criterion's value under its path. A normalized criterion has its
+        mapped `ids` (and `role_ids`, `family_ids`) and the record's wording as `text`; a
+        text criterion has the record's wording. An item the record is silent on is
+        absent.
+      properties:
+        medical_condition:
+          type: object
+          properties:
+            ids:
+              type: array
+              items:
+                type: string
+            role_ids:
+              type: array
+              items:
+                type: string
+            text:
+              type: array
+              items:
+                type: string
+        has_patients:
+          type: boolean
+        has_healthy:
+          type: boolean
+        species:
+          type: array
+          items:
+            type: string
+        task:
+          type: object
+          properties:
+            ids:
+              type: array
+              items:
+                type: string
+            family_ids:
+              type: array
+              items:
+                type: string
+            text:
+              type: array
+              items:
+                type: string
+        spatial_scope:
+          type: string
+        coordinate_space:
+          type: string
+        measure_type:
+          type: string
+        measure_family:
+          type: string
+        details_type:
+          type: string
+        is_meta_analysis:
+          type: boolean
+        n:
+          type: integer
+        has_coordinates:
+          type: boolean
+        role:
+          type: string
+        contrast:
+          type: object
+          properties:
+            key:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+            set:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+            kind:
+              type: string
+            groups:
+              type: string
+              enum:
+                - between
+                - within
+            positive:
+              type: object
+              properties:
+                name:
+                  type: array
+                  items:
+                    type: string
+                has_patients:
+                  type: boolean
+                has_healthy:
+                  type: boolean
+                medical_condition:
+                  type: object
+                  properties:
+                    ids:
+                      type: array
+                      items:
+                        type: string
+                timepoint:
+                  type: array
+                  items:
+                    type: string
+                arm_kind:
+                  type: array
+                  items:
+                    type: string
+                facet:
+                  type: array
+                  items:
+                    type: string
+            negative:
+              type: object
+              properties:
+                name:
+                  type: array
+                  items:
+                    type: string
+                has_patients:
+                  type: boolean
+                has_healthy:
+                  type: boolean
+                medical_condition:
+                  type: object
+                  properties:
+                    ids:
+                      type: array
+                      items:
+                        type: string
+                timepoint:
+                  type: array
+                  items:
+                    type: string
+                arm_kind:
+                  type: array
+                  items:
+                    type: string
+                facet:
+                  type: array
+                  items:
+                    type: string
+        design:
+          type: object
+          properties:
+            allocation:
+              type: string
+            assignment_structure:
+              type: string
+            blinding:
+              type: string
+            arm_kind:
+              type: array
+              items:
+                type: string
+            longitudinal:
+              type: boolean
+        groups:
+          type: object
+          properties:
+            age_mean:
+              type: array
+              items:
+                type: number
+            age_standard_deviation:
+              type: array
+              items:
+                type: number
+            age_minimum:
+              type: array
+              items:
+                type: number
+            age_maximum:
+              type: array
+              items:
+                type: number
+            age_median:
+              type: array
+              items:
+                type: number
+            female_count:
+              type: integer
+            male_count:
+              type: integer
+            female_percent:
+              type: number
+            handedness:
+              type: array
+              items:
+                type: string
+            enrolled_count:
+              type: integer
+            acquired_count:
+              type: integer
+            excluded_count:
+              type: integer
+            diagnostic_instrument:
+              type: array
+              items:
+                type: string
+            diagnostic_system:
+              type: array
+              items:
+                type: string
+            clinical_characteristics:
+              type: array
+              items:
+                type: string
+            education_summary:
+              type: array
+              items:
+                type: string
+        inference_settings:
+          type: object
+          properties:
+            inference_level:
+              type: array
+              items:
+                type: string
+            height_threshold_value:
+              type: number
+            height_threshold_type:
+              type: array
+              items:
+                type: string
+            cluster_extent_threshold:
+              type: integer
+            clusterwise_threshold_value:
+              type: number
+            multiple_comparison_method:
+              type: array
+              items:
+                type: string
+            correction_scope:
+              type: string
+            alpha_level:
+              type: number
+            tfce_used:
+              type: boolean
+            permutation_count:
+              type: integer
+        acquisitions:
+          type: object
+          properties:
+            modality:
+              type: array
+              items:
+                type: string
+            magnetic_field_strength_tesla:
+              type: array
+              items:
+                type: number
+            repetition_time_seconds:
+              type: array
+              items:
+                type: number
+            echo_time_seconds:
+              type: array
+              items:
+                type: number
+            acquisition_voxel_size_mm:
+              type: array
+              items:
+                type: number
+            device:
+              type: array
+              items:
+                type: string
+        preprocessing:
+          type: object
+          properties:
+            smoothing_fwhm_mm:
+              type: array
+              items:
+                type: number
+            software:
+              type: array
+              items:
+                type: string
+            steps:
+              type: array
+              items:
+                type: string
+        model_estimation:
+          type: object
+          properties:
+            model_family:
+              type: array
+              items:
+                type: string
+            model_type:
+              type: array
+              items:
+                type: string
+            software:
+              type: array
+              items:
+                type: string
+            hrf_model:
+              type: array
+              items:
+                type: string
+            estimator:
+              type: array
+              items:
+                type: string
+            terms:
+              type: object
+              properties:
+                name:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: array
+                  items:
+                    type: string
+        effect:
+          type: object
+          properties:
+            statistic:
+              type: object
+              properties:
+                family:
+                  type: string
+                degrees_of_freedom_numerator:
+                  type: number
+                degrees_of_freedom_denominator:
+                  type: number
+        details:
+          type: object
+          properties:
+            connectivity_method:
+              type: string
+            inference_target:
+              type: string
+            seed_regions:
+              type: array
+              items:
+                type: string
+            target_regions:
+              type: array
+              items:
+                type: string
+        regions:
+          type: object
+          properties:
+            name:
+              type: array
+              items:
+                type: string
+            atlas:
+              type: array
+              items:
+                type: string
+            region_type:
+              type: array
+              items:
+                type: string
+            definition_method:
+              type: array
+              items:
+                type: string
+        coordinate_sets:
+          type: object
+          properties:
+            role:
+              type: array
+              items:
+                type: string
+            result_kind:
+              type: array
+              items:
+                type: string
+            anchor_kind:
+              type: array
+              items:
+                type: string
+        tasks:
+          type: object
+          properties:
+            stimuli:
+              type: array
+              items:
+                type: string
+            stimulus_modality:
+              type: array
+              items:
+                type: string
+            response_modality:
+              type: array
+              items:
+                type: string
+            design_type:
+              type: array
+              items:
+                type: string
+            instructions:
+              type: array
+              items:
+                type: string
+            performance_measures:
+              type: array
+              items:
+                type: string
     query-dataset-list:
       title: query-dataset-list
       type: object
