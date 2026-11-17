@@ -1671,6 +1671,79 @@ paths:
                 $ref: '#/components/schemas/journal-return'
         '404':
           description: No journal has this id.
+  /fulltexts/:
+    get:
+      security:
+        - JSON-Web-Token: []
+        - {}
+      summary: GET full texts
+      tags:
+        - store
+        - fulltexts
+      description: >-
+        List the full texts ingestion stored, each the text of one copy of a paper, for the
+        papers the caller may see. A list never carries text: `redistributable` says whether
+        GET /fulltexts/{id} returns it.
+      parameters:
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/desc'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/paginate'
+        - name: base_study_id
+          in: query
+          required: false
+          schema:
+            type: string
+          description: the full texts of this base study
+        - name: source
+          in: query
+          required: false
+          schema:
+            type: string
+          description: only full texts from this ingestion source (`pubget`, `elsevier`, ...)
+        - name: license
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/license-id'
+          description: only full texts whose copy has this licence
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fulltext-list'
+  '/fulltexts/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      security:
+        - JSON-Web-Token: []
+        - {}
+      summary: GET a full text
+      tags:
+        - store
+        - fulltexts
+      description: >-
+        Retrieve a full text: its provenance always, and its text only when the copy it was
+        read from may be passed on (a Creative Commons, CC0 or public-domain licence stated
+        by a named source, in a copy obtained publicly). Otherwise `text` is null and
+        `text_withheld` says why and where the paper can be read.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fulltext-return'
+        '404':
+          description: No full text has this id, or its paper is not visible to the caller.
   /conditions/:
     get:
       security:
@@ -6235,6 +6308,135 @@ components:
             $ref: '#/components/schemas/journal-return'
         metadata:
           $ref: '#/components/schemas/metadata'
+    license-id:
+      title: license-id
+      type: string
+      description: >-
+        study_schema's LicenseId. Every Creative Commons licence, `cc0` and `public_domain`
+        let a text be passed on with attribution; `all_rights_reserved` (including
+        text-mining-only terms) and `other` (such as a publisher's own user licence) do not.
+      enum:
+        - cc_by
+        - cc_by_sa
+        - cc_by_nc
+        - cc_by_nc_sa
+        - cc_by_nd
+        - cc_by_nc_nd
+        - cc0
+        - public_domain
+        - all_rights_reserved
+        - other
+    fulltext-attribution:
+      title: fulltext-attribution
+      type: object
+      readOnly: true
+      description: What to credit when passing the text on.
+      properties:
+        title:
+          type: string
+          nullable: true
+        authors:
+          type: string
+          nullable: true
+        year:
+          type: integer
+          nullable: true
+        publication:
+          type: string
+          nullable: true
+        doi:
+          type: string
+          nullable: true
+        license:
+          allOf:
+            - $ref: '#/components/schemas/license-id'
+          nullable: true
+        license_statement:
+          type: string
+          nullable: true
+          description: The licence as its source stated it (a licence URL, name or copyright line).
+    fulltext-withheld:
+      title: fulltext-withheld
+      type: object
+      readOnly: true
+      nullable: true
+      description: Why the text is not returned; null when it is.
+      properties:
+        reason:
+          type: string
+          enum:
+            - license
+            - access
+            - no_copy_record
+          description: >-
+            `license`: the copy's licence does not allow passing the text on. `access`: the
+            copy was obtained under text-and-data-mining terms, or how it was obtained was not
+            recorded. `no_copy_record`: nothing records the copy, so its licence is unknown.
+        message:
+          type: string
+        read_at:
+          type: string
+          nullable: true
+          description: Where a reader can get the paper (its DOI, else its PubMed Central page).
+    fulltext-summary:
+      title: fulltext-summary
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              readOnly: true
+            base_study_id:
+              type: string
+            source:
+              type: string
+              description: The ingestion source the text came from (`pubget`, `elsevier`, ...).
+            source_version:
+              type: string
+              nullable: true
+            license:
+              allOf:
+                - $ref: '#/components/schemas/license-id'
+              nullable: true
+              description: The licence of the copy the text was read from.
+            sha256:
+              type: string
+              pattern: '^[0-9a-f]{64}$'
+            text_copy:
+              type: object
+              nullable: true
+              description: The copy the text was read from (study_schema's HeldCopy).
+            preferred:
+              type: boolean
+              description: Whether this is the base study's `fulltext_id`.
+            redistributable:
+              type: boolean
+              description: Whether GET /fulltexts/{id} returns the text.
+            attribution:
+              $ref: '#/components/schemas/fulltext-attribution'
+        - $ref: '#/components/schemas/readable-resource-attributes'
+    fulltext-return:
+      title: fulltext-return
+      allOf:
+        - $ref: '#/components/schemas/fulltext-summary'
+        - type: object
+          properties:
+            text:
+              type: string
+              nullable: true
+              description: The text, when `redistributable`; else null.
+            text_withheld:
+              $ref: '#/components/schemas/fulltext-withheld'
+    fulltext-list:
+      title: fulltext-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/fulltext-summary'
+        metadata:
+          $ref: '#/components/schemas/metadata'
     journal-summary:
       title: journal-summary
       type: object
@@ -6990,6 +7192,13 @@ components:
       properties:
         journal:
           $ref: '#/components/schemas/journal-summary'
+        fulltext_id:
+          type: string
+          nullable: true
+          readOnly: true
+          description: >-
+            The paper's preferred full text (GET /fulltexts/{id}); null when it has none.
+            GET /fulltexts/?base_study_id= lists every copy.
         has_coordinates:
           type: boolean
         has_images:
@@ -7443,6 +7652,8 @@ tags:
   - name: review
     description: admin-reviewer only.
   - name: journals
+  - name: fulltexts
+    description: Full texts; the text only where its licence lets it be passed on.
   - name: neurostore-studyset-releases
   - name: analyses
   - name: studysets
