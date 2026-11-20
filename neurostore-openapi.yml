@@ -2093,6 +2093,37 @@ paths:
           schema:
             type: integer
             example: 2020
+        - name: modality
+          in: query
+          description: >-
+            Only papers acquired by any of these modalities: the modalities their extraction
+            record states, else those their methods section names. A paper with several
+            modalities matches each of them. A parent also matches its children: `mri`
+            matches fmri, smri, dmri and mrs, and `other` matches ct, ieeg and
+            physiological. A child matches only itself.
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - fmri
+                - smri
+                - dmri
+                - mrs
+                - mri
+                - eeg
+                - ieeg
+                - meg
+                - fnirs
+                - pet
+                - spect
+                - ct
+                - physiological
+                - other
+              example: pet
         - name: feature_filter
           in: query
           description: >
