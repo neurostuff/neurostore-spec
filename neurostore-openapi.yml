@@ -2096,10 +2096,10 @@ paths:
         - name: modality
           in: query
           description: >-
-            Only papers with at least one analysis acquired by any of these modalities, as
-            `/analysis-terms/?field=acquisitions.modality` lists them (fmri, smri, dmri, pet,
-            eeg, meg, ...). Matched whole and case-insensitively. A paper whose analyses use
-            several modalities matches each of them.
+            Only papers acquired by any of these modalities: the modalities their extraction
+            record states, else those their methods section names. A paper with several
+            modalities matches each of them. A value matches itself only: `mri` is an MRI
+            whose kind was not stated, not a parent of `fmri`.
           required: false
           style: form
           explode: true
@@ -2107,7 +2107,21 @@ paths:
             type: array
             items:
               type: string
-              minLength: 1
+              enum:
+                - fmri
+                - smri
+                - dmri
+                - mrs
+                - mri
+                - eeg
+                - ieeg
+                - meg
+                - fnirs
+                - pet
+                - spect
+                - ct
+                - physiological
+                - other
               example: pet
         - name: feature_filter
           in: query
