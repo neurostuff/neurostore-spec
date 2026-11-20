@@ -2093,6 +2093,22 @@ paths:
           schema:
             type: integer
             example: 2020
+        - name: modality
+          in: query
+          description: >-
+            Only papers with at least one analysis acquired by any of these modalities, as
+            `/analysis-terms/?field=acquisitions.modality` lists them (fmri, smri, dmri, pet,
+            eeg, meg, ...). Matched whole and case-insensitively. A paper whose analyses use
+            several modalities matches each of them.
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              minLength: 1
+              example: pet
         - name: feature_filter
           in: query
           description: >
