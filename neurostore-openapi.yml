@@ -7135,13 +7135,12 @@ components:
           nullable: true
         publication_status:
           type: string
-          enum:
-            - preprint
-            - published
           nullable: true
           description: >
-            study_schema's publication_status: `preprint` while only a preprint's
-            identifiers are known, `published` once a version of record's are.
+            A value of study_schema's `PublicationStatus`
+            (https://github.com/neurostuff/study_schema/blob/main/src/study_schema/linkml/neuroimaging-study-storage/bibliography.yaml):
+            whether only a preprint's identifiers are known, or a version of record's too.
+            Any other value is refused.
         preprint_dois:
           type: array
           description: >
@@ -7160,10 +7159,9 @@ components:
                 type: string
                 minLength: 1
                 description: >
-                  The preprint server that registered the DOI: one of study_schema's
-                  PreprintServer values (biorxiv, medrxiv, arxiv, researchsquare,
-                  osf_preprints, psyarxiv, ssrn and others), or any other non-empty name
-                  for a server it does not list.
+                  The preprint server that registered the DOI: a value of study_schema's
+                  `PreprintServer` (in the same file as `PublicationStatus`), or any other
+                  non-empty name for a server it does not list.
         preprint_pmids:
           type: array
           description: PubMed's records of the paper's preprint.
@@ -7504,15 +7502,12 @@ components:
       required: false
       schema:
         type: string
-        enum:
-          - result
-          - anchor
-          - localization
-          - reference
-          - other
+        minLength: 1
       description: >-
-        Only analyses with this coordinate role (study_schema CoordinateRole); on the
-        studies list, only studies with such an analysis. `result` also matches an
+        Only analyses with this coordinate role, a value of study_schema's `CoordinateRole`
+        (https://github.com/neurostuff/study_schema/blob/main/src/study_schema/linkml/neuroimaging-study-storage/analysis_enums.yaml),
+        such as `result` or `anchor`; any other value is refused. On the studies list, only
+        studies with such an analysis. `result` also matches an
         analysis with no role (one from before roles, or one added through the API),
         except a set the study_schema ingester wrote to the pipeline's versions with no
         role, which matches no value. Without `role`, analyses of every role are listed.
