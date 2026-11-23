@@ -2171,9 +2171,11 @@ paths:
           description: >-
             Only papers acquired by any of these modalities: the modalities their extraction
             record states, else those their methods section names. A paper with several
-            modalities matches each of them. A parent also matches its children: `mri`
-            matches fmri, smri, dmri and mrs, and `other` matches ct, ieeg and
-            physiological. A child matches only itself.
+            modalities matches each of them. The values are study_schema's `Modality`
+            (https://github.com/neurostuff/study_schema/blob/main/src/study_schema/linkml/neuroimaging-study-storage/acquisition.yaml),
+            spelled as it spells them (`fMRI`, `MRI`, `PET`, `other`, ...); any other value is
+            refused. A value also matches the values whose `is_a` names it, so `MRI` matches
+            `fMRI`, `sMRI`, `dMRI` and `MRS` too, and a refined value matches only itself.
           required: false
           style: form
           explode: true
@@ -2181,22 +2183,8 @@ paths:
             type: array
             items:
               type: string
-              enum:
-                - fmri
-                - smri
-                - dmri
-                - mrs
-                - mri
-                - eeg
-                - ieeg
-                - meg
-                - fnirs
-                - pet
-                - spect
-                - ct
-                - physiological
-                - other
-              example: pet
+              minLength: 1
+              example: PET
         - name: feature_filter
           in: query
           description: >
@@ -6343,20 +6331,10 @@ components:
       title: license-id
       type: string
       description: >-
-        study_schema's LicenseId. Every Creative Commons licence, `cc0` and `public_domain`
-        let a text be passed on with attribution; `all_rights_reserved` (including
-        text-mining-only terms) and `other` (such as a publisher's own user licence) do not.
-      enum:
-        - cc_by
-        - cc_by_sa
-        - cc_by_nc
-        - cc_by_nc_sa
-        - cc_by_nd
-        - cc_by_nc_nd
-        - cc0
-        - public_domain
-        - all_rights_reserved
-        - other
+        A value of study_schema's `LicenseId`
+        (https://github.com/neurostuff/study_schema/blob/main/src/study_schema/linkml/neuroimaging-study-storage/license.yaml),
+        such as `cc_by` or `all_rights_reserved`; any other value is refused. The values it
+        annotates `redistributable` let a text be passed on with attribution.
     fulltext-attribution:
       title: fulltext-attribution
       type: object
