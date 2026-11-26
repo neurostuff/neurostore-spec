@@ -2171,9 +2171,11 @@ paths:
           description: >-
             Only papers acquired by any of these modalities: the modalities their extraction
             record states, else those their methods section names. A paper with several
-            modalities matches each of them. A parent also matches its children: `mri`
-            matches fmri, smri, dmri and mrs, and `other` matches ct, ieeg and
-            physiological. A child matches only itself.
+            modalities matches each of them. The values are study_schema's `Modality`
+            (https://github.com/neurostuff/study_schema/blob/main/src/study_schema/linkml/neuroimaging-study-storage/acquisition.yaml),
+            spelled as it spells them (`fMRI`, `MRI`, `PET`, `other`, ...); any other value is
+            refused. A value also matches the values whose `is_a` names it, so `MRI` matches
+            `fMRI`, `sMRI`, `dMRI` and `MRS` too, and a refined value matches only itself.
           required: false
           style: form
           explode: true
@@ -2181,22 +2183,8 @@ paths:
             type: array
             items:
               type: string
-              enum:
-                - fmri
-                - smri
-                - dmri
-                - mrs
-                - mri
-                - eeg
-                - ieeg
-                - meg
-                - fnirs
-                - pet
-                - spect
-                - ct
-                - physiological
-                - other
-              example: pet
+              minLength: 1
+              example: PET
         - name: feature_filter
           in: query
           description: >
@@ -6343,20 +6331,10 @@ components:
       title: license-id
       type: string
       description: >-
-        study_schema's LicenseId. Every Creative Commons licence, `cc0` and `public_domain`
-        let a text be passed on with attribution; `all_rights_reserved` (including
-        text-mining-only terms) and `other` (such as a publisher's own user licence) do not.
-      enum:
-        - cc_by
-        - cc_by_sa
-        - cc_by_nc
-        - cc_by_nc_sa
-        - cc_by_nd
-        - cc_by_nc_nd
-        - cc0
-        - public_domain
-        - all_rights_reserved
-        - other
+        A value of study_schema's `LicenseId`
+        (https://github.com/neurostuff/study_schema/blob/main/src/study_schema/linkml/neuroimaging-study-storage/license.yaml),
+        such as `cc_by` or `all_rights_reserved`; any other value is refused. The values it
+        annotates `redistributable` let a text be passed on with attribution.
     fulltext-attribution:
       title: fulltext-attribution
       type: object
@@ -7157,13 +7135,12 @@ components:
           nullable: true
         publication_status:
           type: string
-          enum:
-            - preprint
-            - published
           nullable: true
           description: >
-            study_schema's publication_status: `preprint` while only a preprint's
-            identifiers are known, `published` once a version of record's are.
+            A value of study_schema's `PublicationStatus`
+            (https://github.com/neurostuff/study_schema/blob/main/src/study_schema/linkml/neuroimaging-study-storage/bibliography.yaml):
+            whether only a preprint's identifiers are known, or a version of record's too.
+            Any other value is refused.
         preprint_dois:
           type: array
           description: >
@@ -7182,10 +7159,9 @@ components:
                 type: string
                 minLength: 1
                 description: >
-                  The preprint server that registered the DOI: one of study_schema's
-                  PreprintServer values (biorxiv, medrxiv, arxiv, researchsquare,
-                  osf_preprints, psyarxiv, ssrn and others), or any other non-empty name
-                  for a server it does not list.
+                  The preprint server that registered the DOI: a value of study_schema's
+                  `PreprintServer` (in the same file as `PublicationStatus`), or any other
+                  non-empty name for a server it does not list.
         preprint_pmids:
           type: array
           description: PubMed's records of the paper's preprint.
@@ -7526,15 +7502,12 @@ components:
       required: false
       schema:
         type: string
-        enum:
-          - result
-          - anchor
-          - localization
-          - reference
-          - other
+        minLength: 1
       description: >-
-        Only analyses with this coordinate role (study_schema CoordinateRole); on the
-        studies list, only studies with such an analysis. `result` also matches an
+        Only analyses with this coordinate role, a value of study_schema's `CoordinateRole`
+        (https://github.com/neurostuff/study_schema/blob/main/src/study_schema/linkml/neuroimaging-study-storage/analysis_enums.yaml),
+        such as `result` or `anchor`; any other value is refused. On the studies list, only
+        studies with such an analysis. `result` also matches an
         analysis with no role (one from before roles, or one added through the API),
         except a set the study_schema ingester wrote to the pipeline's versions with no
         role, which matches no value. Without `role`, analyses of every role are listed.
