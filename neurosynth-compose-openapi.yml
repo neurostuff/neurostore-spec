@@ -975,6 +975,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/info'
         - $ref: '#/components/parameters/include_provenance'
+        - $ref: '#/components/parameters/include_stubs'
     put:
       summary: ''
       responses:
@@ -993,6 +994,7 @@ paths:
         - JSON-Web-Token: []
       parameters:
         - $ref: '#/components/parameters/sync_meta_analyses_public'
+        - $ref: '#/components/parameters/keep_stubs'
       tags:
         - compose
         - projects
@@ -1007,6 +1009,109 @@ paths:
       tags:
         - compose
         - projects
+  '/projects/{id}/curation-stubs':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: List a project's curation stubs
+      description: >-
+        One page of the project's curation stubs, ordered by column and then by
+        each stub's place in its column. Each `stub` is the object the
+        project's provenance holds in `curationMetadata.columns[].stubStudies`.
+      tags:
+        - compose
+        - projects
+        - get
+      security:
+        - JSON-Web-Token: []
+        - {}
+      parameters:
+        - name: column_id
+          in: query
+          required: false
+          schema:
+            type: string
+          description: only stubs in this curation column
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/curation_page_size'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/curation-stub-list'
+        '404':
+          $ref: '#/components/responses/bad-request'
+    post:
+      summary: Change a project's curation stubs
+      description: >-
+        Applies a changeset in one transaction, in this order: `remove`, `add`,
+        `update`, `move`. Only the stubs named change; the project's other
+        provenance stays as it is. The project's `updated_at` changes and is
+        returned.
+      tags:
+        - compose
+        - projects
+        - post
+      security:
+        - JSON-Web-Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/curation-changeset'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/curation-changeset-result'
+        '401':
+          $ref: '#/components/responses/bad-request'
+        '403':
+          $ref: '#/components/responses/bad-request'
+        '404':
+          $ref: '#/components/responses/bad-request'
+        '409':
+          $ref: '#/components/responses/bad-request'
+        '413':
+          $ref: '#/components/responses/bad-request'
+        '422':
+          $ref: '#/components/responses/bad-request'
+  '/projects/{id}/curation-summary':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Count a project's curation stubs
+      description: >-
+        For each curation column, in board order: how many stubs it holds, and
+        how many of them carry each exclusion tag id and each tag id.
+      tags:
+        - compose
+        - projects
+        - get
+      security:
+        - JSON-Web-Token: []
+        - {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/curation-summary'
+        '404':
+          $ref: '#/components/responses/bad-request'
   /neurostore-studies:
     get:
       security:
@@ -2033,6 +2138,148 @@ components:
           x-stoplight:
             id: fxy7tfy8gx1e1
           readOnly: true
+    curation-stub:
+      title: curation-stub
+      type: object
+      additionalProperties: true
+      description: >-
+        A study on a project's curation board, as the frontend writes it in
+        `curationMetadata.columns[].stubStudies` (`id`, `title`, `authors`,
+        `abstractText`, `exclusionTag`, `tags`, `neurostoreId` and so on).
+      properties:
+        id:
+          type: string
+      x-tags:
+        - projects
+    curation-stub-list:
+      title: curation-stub-list
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              column_id:
+                type: string
+              stub:
+                nullable: true
+                description: null for the few stored stubs that are not objects
+                allOf:
+                  - $ref: '#/components/schemas/curation-stub'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+      x-tags:
+        - projects
+    curation-changeset:
+      title: curation-changeset
+      type: object
+      description: >-
+        Stub changes applied together. A stub is named by its `id`. `index` is
+        the place in the target column after the earlier changes in this
+        changeset; 0 is the top and a negative index counts from the bottom
+        (-1 is the last place). Added stubs without an `index` go to the top
+        of their column in the order given.
+      properties:
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: >-
+            the project's `updated_at` the client last saw; a project that has
+            changed since is refused with 409
+        remove:
+          type: array
+          items:
+            type: string
+          description: ids of stubs to delete
+        add:
+          type: array
+          items:
+            type: object
+            required:
+              - stub
+            properties:
+              stub:
+                $ref: '#/components/schemas/curation-stub'
+              column_id:
+                type: string
+                description: the column to add to; the first column when absent
+              index:
+                type: integer
+                nullable: true
+        update:
+          type: array
+          description: >-
+            each item names a stub by `id`; its other keys replace that stub's
+            keys
+          items:
+            allOf:
+              - $ref: '#/components/schemas/curation-stub'
+              - required:
+                  - id
+        move:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - column_id
+            properties:
+              id:
+                type: string
+              column_id:
+                type: string
+              index:
+                type: integer
+                default: 0
+      x-tags:
+        - projects
+    curation-changeset-result:
+      title: curation-changeset-result
+      type: object
+      properties:
+        updated_at:
+          type: string
+          format: date-time
+        removed:
+          type: integer
+        added:
+          type: integer
+        updated:
+          type: integer
+        moved:
+          type: integer
+      x-tags:
+        - projects
+    curation-summary:
+      title: curation-summary
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+                nullable: true
+              stub_count:
+                type: integer
+              exclusions:
+                type: object
+                description: stub count per exclusion tag id
+                additionalProperties:
+                  type: integer
+              tags:
+                type: object
+                description: stub count per tag id
+                additionalProperties:
+                  type: integer
+      x-tags:
+        - projects
     project-return:
       allOf:
         - $ref: '#/components/schemas/read-only'
@@ -2399,6 +2646,38 @@ components:
       schema:
         type: boolean
       description: display additional information about a nested relationship without displaying fully nested object
+    include_stubs:
+      name: include_stubs
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: true
+      description: >-
+        include each curation column's `stubStudies` in the provenance; when
+        false the key is left out and stubs are read from
+        `/projects/{id}/curation-stubs`
+    keep_stubs:
+      name: keep_stubs
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: false
+      description: >-
+        ignore `stubStudies` in the provenance sent and keep the project's
+        stored stubs; removing a column that still holds stubs is refused (409)
+    curation_page_size:
+      name: page_size
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 1000
+        default: 100
+      description: number of stubs to return on a page
     include_provenance:
       name: include_provenance
       in: query
